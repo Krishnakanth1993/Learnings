@@ -15,7 +15,30 @@ This project implements a **compact Convolutional Neural Network (CNN)** with ap
 
 ---
 
-## 🧠 4. CNN Architecture & Parameters
+## �� 2. Training Results
+
+### �� **Best Performance (Epoch 14)**
+- **Training Accuracy:** 99.17%
+- **Validation Accuracy:** 99.38% (9,938/10,000)
+- **Test Accuracy:** 99.49% (9,949/10,000)
+- **Training Loss:** 0.0274
+- **Validation Loss:** 0.0216
+- **Test Loss:** 0.0202
+- **Commit ID :** 5e0f0b0c6ce0d11ba67ca66f85b390455abfaa6e
+- **Repo Link : **[GitHub Link](https://github.com/Krishnakanth1993/Learnings/blob/5e0f0b0c6ce0d11ba67ca66f85b390455abfaa6e/MNIST_Model/Reference/minimal_prameter_model_training.ipynb)
+
+The model achieved **99.4%+ accuracy** on all datasets by epoch 14, demonstrating excellent performance with a compact architecture of only ~19K parameters.
+
+
+---
+
+## 🧠 3. CNN Architecture & Parameters
+
+### 🏗️ **Architecture Features**
+- **Batch Normalization:** Yes
+- **Dropout:** Yes (p=0.15)
+- **Global Average Pooling:** Yes
+- **Fully Connected Layers:** Yes
 
 ### 📊 **Parameter Breakdown**
 
@@ -43,29 +66,11 @@ This project implements a **compact Convolutional Neural Network (CNN)** with ap
 
 **Total Parameters: 19,348**
 
-### 🏗️ **Architecture Features**
-- **Batch Normalization:** Yes
-- **Dropout:** Yes (p=0.15)
-- **Global Average Pooling:** Yes
-- **Fully Connected Layers:** Yes
 
 ---
 
-## �� 5. Training Results
 
-### �� **Best Performance (Epoch 14)**
-- **Training Accuracy:** 99.17%
-- **Validation Accuracy:** 99.38% (9,938/10,000)
-- **Test Accuracy:** 99.49% (9,949/10,000)
-- **Training Loss:** 0.0274
-- **Validation Loss:** 0.0216
-- **Test Loss:** 0.0202
-
-The model achieved **99.4%+ accuracy** on all datasets by epoch 14, demonstrating excellent performance with a compact architecture of only ~19K parameters.
-
----
-
-## 📊 6. Experiment Log
+## 📊 4. Experiment Log
 
 | Ex_Number | CommitID | Link | Model Details | Accuracy (Epoch 1) | Parameters | Changes | Observations |
 |-----------|----------|------|---------------|-------------------|------------|---------|--------------|
@@ -90,7 +95,7 @@ The model achieved **99.4%+ accuracy** on all datasets by epoch 14, demonstratin
 
 ---
 
-## 📈 7. Key Observations & Learnings
+## 📈 5. Key Observations & Learnings
 
 ### 🎯 **Performance Achievements**
 - **Final Accuracy**: 99.49% test accuracy achieved with only **19,348 parameters**
@@ -130,7 +135,7 @@ The model achieved **99.4%+ accuracy** on all datasets by epoch 14, demonstratin
 
 ---
 
-## 🧠 8. Important Learnings as Insights
+## 🧠 6. Important Learnings as Insights
 
 ### 💡 **Lessons Learned**
 - **Parameter Count ≠ Performance**: Smart architecture design more important than parameter count
@@ -225,5 +230,17 @@ transforms.Compose([
 - Reduces overfitting
 - Improves robustness to real-world variations in handwriting
 - Simulates rotation, translation, and distortion
+
+---
+
+## 👨‍💻 Author
+
+**Krishnakanth**  
+*Deep Learning Enthusiast & CNN Researcher*
+
+- �� **Project Focus**: Compact CNN architectures for MNIST digit classification
+- �� **Achievement**: 99.49% accuracy with only 19,348 parameters
+- 📚 **Learning Journey**: Systematic experimentation with 18 iterations to optimize model performance
+- �� **GitHub**: [Krishnakanth1993](https://github.com/Krishnakanth1993)
 
 ---
