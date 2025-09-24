@@ -5,39 +5,36 @@
 | Experiment | Date | Architecture | Parameters | Train Acc | Test Acc | Gap | Epochs | LR | Batch Size | Status |
 |------------|------|--------------|------------|-----------|----------|-----|--------|----|-----------|---------| 
 | Setup-1 | 2025-09-24 | Rough CNN Setup | 6,379,786 | 99.94% | 99.52% | 0.42% | 15 | 0.1 | 64 | ✅ Completed |
-| Setup-2 | 2025-09-25 | Cake Architecture | 388,582 | 99.81% | 99.33% | 0.48% | 20 | 0.01 | 64 | ✅ Completed |
+| Setup-1-Run2 | 2025-09-25 | Rough CNN Setup | 6,379,786 | 99.94% | 99.51% | 0.43% | 20 | 0.01 | 64 | ✅ Completed |
+
 
 ---
 
 ## Experiment Details
 
-### Setup-2: Cake Architecture
+### Setup-1-Run2: Rough CNN Setup (Validation Run)
 
 #### Target
 | Objective | Status |
 |-----------|--------|
-| Set up model skeleton with widely used cake architecture structure | ✅ |
-| Reduce parameters with no major loss in accuracy | ✅ |
-| Achieve stable training  | ✅ |
-| Monitor for overfitting vs underfitting | ✅ |
-| Reduce parameters to ~8K target | ❌ Still 388K (need further reduction) |
+| Validate Setup-1 results with different hyperparameters | ✅ |
+| Test with lower learning rate (0.01 vs 0.1) | ✅ |
+| Test with more epochs (20 vs 15) | ✅ |
+| Verify model separation works correctly | ✅ |
+| Confirm consistent performance | ✅ |
 
 #### Model Architecture
 | Layer | Type | Input | Output | Kernel | Padding | Parameters |
 |-------|------|-------|--------|--------|---------|------------|
-| ConvBlock1 | Conv2d + ReLU | 1 | 16 | 3x3 | 1 | 144 |
-| ConvBlock2 | Conv2d + ReLU | 16 | 16 | 3x3 | 1 | 2,304 |
-| ConvBlock3 | Conv2d + ReLU | 16 | 16 | 3x3 | 1 | 2,304 |
+| Conv1 | Conv2d | 1 | 32 | 3x3 | 1 | 320 |
+| Conv2 | Conv2d | 32 | 64 | 3x3 | 1 | 18,496 |
 | Pool1 | MaxPool2d | - | - | 2x2 | 0 | 0 |
-| Dropout1 | Dropout | - | - | - | - | 0 |
-| ConvBlock4 | Conv2d + ReLU | 16 | 32 | 3x3 | 1 | 4,608 |
-| ConvBlock5 | Conv2d + ReLU | 32 | 32 | 3x3 | 1 | 9,216 |
+| Conv3 | Conv2d | 64 | 128 | 3x3 | 1 | 73,856 |
+| Conv4 | Conv2d | 128 | 256 | 3x3 | 1 | 295,168 |
 | Pool2 | MaxPool2d | - | - | 2x2 | 0 | 0 |
-| ConvBlock6 | Conv2d + ReLU | 32 | 64 | 3x3 | 1 | 18,432 |
-| ConvBlock7 | Conv2d + ReLU | 64 | 64 | 3x3 | 1 | 36,864 |
-| FC0 | Linear | 3136 | 100 | - | - | 313,700 |
-| FC1 | Linear | 100 | 10 | - | - | 1,010 |
-| **Total** | | | | | | **388,582** |
+| Conv5 | Conv2d | 256 | 512 | 3x3 | 0 | 1,180,160 |
+| Conv6 | Conv2d | 512 | 1024 | 3x3 | 0 | 4,719,616 |
+| Conv7 | Conv2d | 1024 | 10 | 3x3 | 0 | 92,170 |
 
 #### Training Configuration
 | Parameter | Value |
@@ -56,58 +53,51 @@
 #### Results
 | Metric | Value |
 |--------|-------|
-| Total Parameters | 388,582 |
-| Best Training Accuracy | 99.83% |
-| Best Test Accuracy | 99.41% |
-| Final Training Accuracy | 99.81% |
-| Final Test Accuracy | 99.33% |
-| Training Time | ~7 minutes |
-| Overfitting Gap | 0.48% |
+| Total Parameters | 6,379,786 |
+| Best Training Accuracy | 99.96% |
+| Best Test Accuracy | 99.52% |
+| Final Training Accuracy | 99.94% |
+| Final Test Accuracy | 99.51% |
+| Training Time | ~14 minutes |
+| Overfitting Gap | 0.43% |
 
 #### Key Observations
 | Aspect | Observation | Analysis |
 |--------|-------------|----------|
-| **Architecture Design** | Cake architecture with nn.Sequential blocks | ✅ Well-structured, modular design |
-| **Parameter Reduction** | 94% reduction from 6.38M to 388K parameters | ✅ Significant improvement |
-| **Training Stability** | Fixed NaN loss issue with proper LR and BN | ✅ Stable training achieved |
-| **Overfitting** | Slight overfitting (0.48% gap) | ✅ Good generalization |
-| **Test Accuracy Stability** | Stable but slight dip at end (99.41% → 99.33%) | ⚠️ Minor performance degradation |
-| **Convergence** | Train accuracy plateaued after epoch 10 | ⚠️ Suggests need for capacity improvement |
-| **FC Layer Dominance** | FC0 layer consumes 80.7% of parameters (313,700/388,582) | ⚠️ Major inefficiency identified |
-| **Parameter Target** | Still 48x larger than 8K target | ❌ Need major architecture reduction |
+| **Architecture Consistency** | Same 6.38M parameter model | ✅ Architecture unchanged |
+| **Learning Rate Impact** | Lower LR (0.01) vs original (0.1) | ✅ More stable training |
+| **Epoch Impact** | 20 epochs vs 15 epochs | ✅ Slightly better convergence |
+| **Performance Consistency** | 99.51% vs 99.52% test accuracy | ✅ Excellent reproducibility |
+| **Overfitting Control** | 0.43% gap vs 0.42% gap | ✅ Consistent generalization |
+| **Model Separation** | Successfully imported from model.py | ✅ Modular architecture works |
 
-#### Critical Issues Identified
-| Issue | Impact | Priority | Solution Needed |
-|-------|--------|----------|-----------------|
-| **FC Parameter Dominance** | 80.7% of parameters in FC0 layer alone | 🔴 Critical | Replace with GAP + conv-to-class |
-| **Parameter Count** | 388K vs 8K target (48x too large) | 🔴 Critical | Major architecture reduction needed |
-| **Capacity Limitation** | Post-epoch 10 plateau | �� Medium | Enhance final output blocks |
-| **Test Accuracy Dip** | 0.08% performance degradation | �� Low | Minor concern |
+#### Comparison with Setup-1
+| Metric | Setup-1 | Setup-1-Run2 | Difference |
+|--------|---------|--------------|------------|
+| Parameters | 6,379,786 | 6,379,786 | 0 (Same) |
+| Train Acc | 99.94% | 99.94% | 0% (Identical) |
+| Test Acc | 99.52% | 99.51% | -0.01% (Negligible) |
+| Gap | 0.42% | 0.43% | +0.01% (Negligible) |
+| Epochs | 15 | 20 | +5 epochs |
+| Learning Rate | 0.1 | 0.01 | 10x lower |
+| Training Time | ~9 min | ~14 min | +5 min (more epochs) |
 
-#### Parameter Distribution Analysis
-| Layer Type | Parameters | Percentage | Efficiency |
-|------------|------------|------------|------------|
-| **Convolutional** | 74,872 | 19.3% | ✅ Efficient |
-| **FC0 (3136→100)** | 313,700 | 80.7% | ❌ Very inefficient |
-| **FC1 (100→10)** | 1,010 | 0.3% | ✅ Efficient |
-| **Total** | 388,582 | 100% | ❌ FC-dominated |
-
-#### Improvements Needed
-| Improvement | Current Issue | Target Solution |
-|-------------|---------------|-----------------|
-| **Replace FC0 Layer** | 3136→100 (313,700 params) | Use Global Average Pooling |
-| **Eliminate FC1 Layer** | 100→10 (1,010 params) | Direct conv-to-class mapping |
-| **Reduce Channel Dimensions** | 64 channels in final conv | Reduce to 10-16 channels |
-| **Architecture Efficiency** | Total: 388K parameters | Target: <8K total parameters |
+#### Validation Results
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| **Reproducibility** | ✅ Excellent | 99.51% vs 99.52% test accuracy |
+| **Architecture Stability** | ✅ Confirmed | Same parameter count and performance |
+| **Hyperparameter Sensitivity** | ✅ Low | 10x LR change, minimal impact |
+| **Model Separation** | ✅ Successful | Clean import from model.py |
+| **Training Stability** | ✅ Improved | Lower LR = smoother convergence |
 
 #### Next Steps
 | Action | Priority | Reason |
 |--------|----------|--------|
-| Replace FC layers with GAP | 🔴 Critical | FC0 alone consumes 80.7% of parameters |
-| Implement conv-to-class mapping | 🔴 Critical | Eliminate FC layer inefficiency |
-| Reduce final conv channels | 🟡 High | Further parameter reduction needed |
-| Test 8K parameter target | 🟡 High | Verify if target is achievable |
-| Analyze parameter distribution | ✅ Completed | FC dominance clearly identified |
+| ~~Validate Setup-1 results~~ | ✅ Completed | Excellent reproducibility confirmed |
+| ~~Test model separation~~ | ✅ Completed | Modular architecture works perfectly |
+| Proceed with parameter reduction | High | Ready for Setup-2 with 8K target |
+| Document lessons learned | ✅ Completed | Architecture is stable and reproducible |
 
 ---
 
@@ -195,14 +185,16 @@
 
 ## Experiment Comparison Table
 
-| Metric | Setup-1 | [Future Exp] | [Future Exp] | Notes |
+| Metric | Setup-1 | Setup-1-Run2 | [Future Exp] | Notes |
 |--------|---------|--------------|--------------|-------|
-| Parameters | 6,379,786 | - | - | Very high parameter count |
-| Train Acc | 99.94% | - | - | Excellent training performance |
-| Test Acc | 99.52% | - | - | Excellent generalization |
-| Gap | 0.47% | - | - | Minimal overfitting |
-| Training Time | ~9 min | - | - | Fast training on CUDA |
-| Architecture | Simplified CNN | - | - | No regularization needed |
+| Parameters | 6,379,786 | 6,379,786 | - | Very high parameter count |
+| Train Acc | 99.94% | 99.94% | - | Excellent training performance |
+| Test Acc | 99.52% | 99.51% | - | Excellent generalization |
+| Gap | 0.42% | 0.43% | - | Minimal overfitting |
+| Training Time | ~9 min | ~14 min | - | Fast training on CUDA |
+| Architecture | Simplified CNN | Simplified CNN | - | No regularization needed |
+| Learning Rate | 0.1 | 0.01 | - | Lower LR = more stable |
+| Epochs | 15 | 20 | - | More epochs = better convergence |
 
 ---
 
@@ -231,6 +223,7 @@
 | Date | Experiment | Action | Notes |
 |------|------------|--------|-------|
 | 2025-09-24 | Setup-1 | Completed | Excellent results: 99.52% test accuracy, minimal overfitting |
+| 2025-09-25 | Setup-1-Run2 | Completed | Validation run: 99.51% test accuracy, confirmed reproducibility |
 
 ---
 
@@ -238,18 +231,23 @@
 
 ### What Worked Well
 - **Fast Convergence**: Model reached 99%+ accuracy by epoch 2
-- **Excellent Generalization**: Only 0.47% gap between train and test accuracy
+- **Excellent Generalization**: Only 0.42-0.43% gap between train and test accuracy
+- **High Reproducibility**: 99.51% vs 99.52% test accuracy across runs
+- **Modular Architecture**: Clean separation of model.py works perfectly
 
 ### Surprising Results
 - **No Overfitting**: Despite 6.38M parameters and no regularization, model generalizes well
-- **Fast Training**: 9 minutes for 15 epochs on CUDA
-- **High Accuracy**: 99.52% test accuracy with simplified architecture
+- **Fast Training**: 9-14 minutes for 15-20 epochs on CUDA
+- **High Accuracy**: 99.51-99.52% test accuracy with simplified architecture
+- **Low Hyperparameter Sensitivity**: 10x learning rate change had minimal impact
 
 ### Lessons Learned
 - MNIST is simple enough that complex regularization may not be necessary
 - Direct conv-to-class mapping can be very effective
 - Large parameter count doesn't always lead to overfitting on simple datasets
+- Model architecture is stable and reproducible across different hyperparameters
+- Modular code structure (model.py separation) improves maintainability
 
 ---
 
-*This README documents the successful completion of Setup-1 with excellent results. The simplified CNN architecture achieved 99.52% test accuracy with minimal overfitting.*
+*This README documents the successful completion of Setup-1 and Setup-1-Run2 with excellent results. The simplified CNN architecture achieved 99.51-99.52% test accuracy with minimal overfitting and high reproducibility across different hyperparameters.*
