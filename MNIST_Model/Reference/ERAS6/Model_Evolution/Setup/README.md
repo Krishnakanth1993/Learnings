@@ -5,10 +5,111 @@
 | Experiment | Date | Architecture | Parameters | Train Acc | Test Acc | Gap | Epochs | LR | Batch Size | Status |
 |------------|------|--------------|------------|-----------|----------|-----|--------|----|-----------|---------| 
 | Setup-1 | 2025-09-24 | Rough CNN Setup | 6,379,786 | 99.94% | 99.52% | 0.42% | 15 | 0.1 | 64 | ✅ Completed |
+| Setup-2 | 2025-09-25 | Cake Architecture | 388,582 | 99.81% | 99.33% | 0.48% | 20 | 0.01 | 64 | ✅ Completed |
 
 ---
 
 ## Experiment Details
+
+### Setup-2: Cake Architecture
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Set up model skeleton with widely used cake architecture structure | ✅ |
+| Reduce parameters with no major loss in accuracy | ✅ |
+| Achieve stable training  | ✅ |
+| Monitor for overfitting vs underfitting | ✅ |
+| Reduce parameters to ~8K target | ❌ Still 388K (need further reduction) |
+
+#### Model Architecture
+| Layer | Type | Input | Output | Kernel | Padding | Parameters |
+|-------|------|-------|--------|--------|---------|------------|
+| ConvBlock1 | Conv2d + ReLU | 1 | 16 | 3x3 | 1 | 144 |
+| ConvBlock2 | Conv2d + ReLU | 16 | 16 | 3x3 | 1 | 2,304 |
+| ConvBlock3 | Conv2d + ReLU | 16 | 16 | 3x3 | 1 | 2,304 |
+| Pool1 | MaxPool2d | - | - | 2x2 | 0 | 0 |
+| Dropout1 | Dropout | - | - | - | - | 0 |
+| ConvBlock4 | Conv2d + ReLU | 16 | 32 | 3x3 | 1 | 4,608 |
+| ConvBlock5 | Conv2d + ReLU | 32 | 32 | 3x3 | 1 | 9,216 |
+| Pool2 | MaxPool2d | - | - | 2x2 | 0 | 0 |
+| ConvBlock6 | Conv2d + ReLU | 32 | 64 | 3x3 | 1 | 18,432 |
+| ConvBlock7 | Conv2d + ReLU | 64 | 64 | 3x3 | 1 | 36,864 |
+| FC0 | Linear | 3136 | 100 | - | - | 313,700 |
+| FC1 | Linear | 100 | 10 | - | - | 1,010 |
+| **Total** | | | | | | **388,582** |
+
+#### Training Configuration
+| Parameter | Value |
+|-----------|-------|
+| Epochs | 20 |
+| Learning Rate | 0.01 |
+| Batch Size | 64 |
+| Optimizer | SGD |
+| Momentum | 0.9 |
+| Weight Decay | 0.0 |
+| Scheduler | StepLR |
+| Scheduler Step Size | 10 |
+| Scheduler Gamma | 0.1 |
+| Device | CUDA 12.6 |
+
+#### Results
+| Metric | Value |
+|--------|-------|
+| Total Parameters | 388,582 |
+| Best Training Accuracy | 99.83% |
+| Best Test Accuracy | 99.41% |
+| Final Training Accuracy | 99.81% |
+| Final Test Accuracy | 99.33% |
+| Training Time | ~7 minutes |
+| Overfitting Gap | 0.48% |
+
+#### Key Observations
+| Aspect | Observation | Analysis |
+|--------|-------------|----------|
+| **Architecture Design** | Cake architecture with nn.Sequential blocks | ✅ Well-structured, modular design |
+| **Parameter Reduction** | 94% reduction from 6.38M to 388K parameters | ✅ Significant improvement |
+| **Training Stability** | Fixed NaN loss issue with proper LR and BN | ✅ Stable training achieved |
+| **Overfitting** | Slight overfitting (0.48% gap) | ✅ Good generalization |
+| **Test Accuracy Stability** | Stable but slight dip at end (99.41% → 99.33%) | ⚠️ Minor performance degradation |
+| **Convergence** | Train accuracy plateaued after epoch 10 | ⚠️ Suggests need for capacity improvement |
+| **FC Layer Dominance** | FC0 layer consumes 80.7% of parameters (313,700/388,582) | ⚠️ Major inefficiency identified |
+| **Parameter Target** | Still 48x larger than 8K target | ❌ Need major architecture reduction |
+
+#### Critical Issues Identified
+| Issue | Impact | Priority | Solution Needed |
+|-------|--------|----------|-----------------|
+| **FC Parameter Dominance** | 80.7% of parameters in FC0 layer alone | 🔴 Critical | Replace with GAP + conv-to-class |
+| **Parameter Count** | 388K vs 8K target (48x too large) | 🔴 Critical | Major architecture reduction needed |
+| **Capacity Limitation** | Post-epoch 10 plateau | �� Medium | Enhance final output blocks |
+| **Test Accuracy Dip** | 0.08% performance degradation | �� Low | Minor concern |
+
+#### Parameter Distribution Analysis
+| Layer Type | Parameters | Percentage | Efficiency |
+|------------|------------|------------|------------|
+| **Convolutional** | 74,872 | 19.3% | ✅ Efficient |
+| **FC0 (3136→100)** | 313,700 | 80.7% | ❌ Very inefficient |
+| **FC1 (100→10)** | 1,010 | 0.3% | ✅ Efficient |
+| **Total** | 388,582 | 100% | ❌ FC-dominated |
+
+#### Improvements Needed
+| Improvement | Current Issue | Target Solution |
+|-------------|---------------|-----------------|
+| **Replace FC0 Layer** | 3136→100 (313,700 params) | Use Global Average Pooling |
+| **Eliminate FC1 Layer** | 100→10 (1,010 params) | Direct conv-to-class mapping |
+| **Reduce Channel Dimensions** | 64 channels in final conv | Reduce to 10-16 channels |
+| **Architecture Efficiency** | Total: 388K parameters | Target: <8K total parameters |
+
+#### Next Steps
+| Action | Priority | Reason |
+|--------|----------|--------|
+| Replace FC layers with GAP | 🔴 Critical | FC0 alone consumes 80.7% of parameters |
+| Implement conv-to-class mapping | 🔴 Critical | Eliminate FC layer inefficiency |
+| Reduce final conv channels | 🟡 High | Further parameter reduction needed |
+| Test 8K parameter target | 🟡 High | Verify if target is achievable |
+| Analyze parameter distribution | ✅ Completed | FC dominance clearly identified |
+
+---
 
 ### Setup-1: Rough CNN Setup
 

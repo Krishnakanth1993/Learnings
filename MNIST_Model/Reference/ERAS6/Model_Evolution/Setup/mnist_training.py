@@ -68,7 +68,7 @@ class ModelConfig:
 class TrainingConfig:
     """Configuration for training process."""
     epochs: int = 20
-    learning_rate: float = 0.2
+    learning_rate: float = 0.01
     momentum: float = 0.8
     weight_decay: float = 0.0
     scheduler_step_size: int = 10
@@ -463,33 +463,102 @@ class ModelBuilder:
 class MNISTModel(nn.Module):
     """
     MNIST classification model.
-    Implements the CNN architecture from the reference notebook.
+    Implements the CNN architecture aligned with the reference Net class structure.
     """
     
     def __init__(self, config: ModelConfig):
         super(MNISTModel, self).__init__()
         self.config = config
         
-        # Convolutional layers with batch normalization
-        self.conv1 = nn.Conv2d(1, 32, 3, padding=1) # 28>28 | 3
-        self.conv2 = nn.Conv2d(32, 64, 3, padding=1) # 28 > 28 |  5
-        self.pool1 = nn.MaxPool2d(2, 2) # 28 > 14 | 10
-        self.conv3 = nn.Conv2d(64, 128, 3, padding=1) # 14> 14 | 12
-        self.conv4 = nn.Conv2d(128, 256, 3, padding=1) #14 > 14 | 14
-        self.pool2 = nn.MaxPool2d(2, 2) # 14 > 7 | 28
-        self.conv5 = nn.Conv2d(256, 512, 3) # 7 > 5 | 30
-        self.conv6 = nn.Conv2d(512, 1024, 3) # 5 > 3 | 32 | 3*3*1024 | 3x3x1024x10 |
-        self.conv7 = nn.Conv2d(1024, 10, 3) # 3 > 1 | 34 | > 1x1x10
-    
+        # Input Block
+        self.convblock1 = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+
+        # CONVOLUTION BLOCK 1
+        self.convblock2 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+        
+        self.convblock3 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+
+        # TRANSITION BLOCK 1
+        self.pool1 = nn.MaxPool2d(2, 2) # output_size = 14
+        self.dropout1 = nn.Dropout(p=config.dropout_rate)
+
+        # CONVOLUTION BLOCK 2
+        self.convblock4 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(28),
+            nn.ReLU()
+        ) # output_size = 14
+        
+        self.convblock5 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(28),
+            nn.ReLU()
+        ) # output_size = 14
+
+        # TRANSITION BLOCK 2
+        self.pool2 = nn.MaxPool2d(2, 2) # output_size = 7
+        #self.dropout2 = nn.Dropout(p=config.dropout_rate)
+
+        # CONVOLUTION BLOCK 3
+        self.convblock6 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(16),
+            nn.ReLU()
+        ) # output_size = 7
+        
+        self.convblock7 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(16),
+            nn.ReLU()
+        ) # output_size = 7
+
+       
+        
+        # Fully connected layers
+        self.fc0 = nn.Linear(3136, 100)
+        self.fc1 = nn.Linear(100, 10)
+
     def forward(self, x):
-        """Forward pass through the network."""
-        # First block with three conv layers
-        x = self.pool1(F.relu(self.conv2(F.relu(self.conv1(x)))))
-        x = self.pool2(F.relu(self.conv4(F.relu(self.conv3(x)))))
-        x = F.relu(self.conv6(F.relu(self.conv5(x))))
-        # x = F.relu(self.conv7(x))
-        x = self.conv7(x)
-        x = x.view(-1, self.config.num_classes) #1x1x10> 10
+        # Input Block
+        x = self.convblock1(x)
+        
+        # Convolution Block 1
+        x = self.convblock2(x)
+        x = self.convblock3(x)
+        
+        # Transition Block 1
+        x = self.pool1(x)
+        x = self.dropout1(x)
+        
+        # Convolution Block 2
+        x = self.convblock4(x)
+        x = self.convblock5(x)
+        
+        # Transition Block 2
+        x = self.pool2(x)
+
+        
+        # Convolution Block 3
+        x = self.convblock6(x)
+        x = self.convblock7(x)
+        
+        x = x.view(x.size(0), -1)  # Flatten
+        
+        # Fully connected layers
+        x = torch.relu(self.fc0(x))
+        x = self.fc1(x)
         
         return F.log_softmax(x, dim=-1)
     
@@ -543,36 +612,6 @@ class MNISTModel(nn.Module):
         logger.log_detailed_model_summary(summary_text)
         
         return model_info
-    
-    def count_parameters(self) -> int:
-        """Count total number of parameters."""
-        return sum(p.numel() for p in self.parameters() if p.requires_grad)
-    
-    def get_parameter_info(self) -> Dict[str, Any]:
-        """Get detailed parameter information."""
-        total_params = 0
-        trainable_params = 0
-        param_info = {}
-        
-        for name, param in self.named_parameters():
-            param_count = param.numel()
-            total_params += param_count
-            if param.requires_grad:
-                trainable_params += param_count
-            
-            param_info[name] = {
-                'shape': list(param.shape),
-                'numel': param_count,
-                'requires_grad': param.requires_grad
-            }
-        
-        return {
-            'total_params': total_params,
-            'trainable_params': trainable_params,
-            'non_trainable_params': total_params - trainable_params,
-            'param_details': param_info
-        }
-
 
 # =============================================================================
 # TRAINING SYSTEM (Template Method Pattern)
@@ -942,8 +981,9 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 15
-    config.training.learning_rate = 0.1
+    config.training.epochs = 20
+    config.training.learning_rate = 0.01
+    config.training.momentum = 0.9
     config.data.batch_size = 64
     config.logging.log_level = 'DEBUG'
     
