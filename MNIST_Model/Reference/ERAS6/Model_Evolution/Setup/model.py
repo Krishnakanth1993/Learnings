@@ -77,26 +77,97 @@ class MNISTModel(nn.Module):
         self.config = config
         
         
-        # Convolutional layers with batch normalization
-        self.conv1 = nn.Conv2d(1, 32, 3, padding=1) # 28>28 | 3
-        self.conv2 = nn.Conv2d(32, 64, 3, padding=1) # 28 > 28 |  5
-        self.pool1 = nn.MaxPool2d(2, 2) # 28 > 14 | 10
-        self.conv3 = nn.Conv2d(64, 128, 3, padding=1) # 14> 14 | 12
-        self.conv4 = nn.Conv2d(128, 256, 3, padding=1) #14 > 14 | 14
-        self.pool2 = nn.MaxPool2d(2, 2) # 14 > 7 | 28
-        self.conv5 = nn.Conv2d(256, 512, 3) # 7 > 5 | 30
-        self.conv6 = nn.Conv2d(512, 1024, 3) # 5 > 3 | 32 | 3*3*1024 | 3x3x1024x10 |
-        self.conv7 = nn.Conv2d(1024, 10, 3) # 3 > 1 | 34 | > 1x1x10
-    
+        # Input Block
+        self.convblock1 = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+
+        # CONVOLUTION BLOCK 1
+        self.convblock2 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+        
+        self.convblock3 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(14),
+            nn.ReLU()
+        ) # output_size = 28
+
+        # TRANSITION BLOCK 1
+        self.pool1 = nn.MaxPool2d(2, 2) # output_size = 14
+        #self.dropout1 = nn.Dropout(p=config.dropout_rate)
+
+        # CONVOLUTION BLOCK 2
+        self.convblock4 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(28),
+            nn.ReLU()
+        ) # output_size = 14
+        
+        self.convblock5 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(28),
+            nn.ReLU()
+        ) # output_size = 14
+
+        # TRANSITION BLOCK 2
+        self.pool2 = nn.MaxPool2d(2, 2) # output_size = 7
+        #self.dropout2 = nn.Dropout(p=config.dropout_rate)
+
+        # CONVOLUTION BLOCK 3
+        self.convblock6 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(16),
+            nn.ReLU()
+        ) # output_size = 7
+        
+        self.convblock7 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            #nn.BatchNorm2d(16),
+            nn.ReLU()
+        ) # output_size = 7
+
+       
+        
+        # Fully connected layers
+        self.fc0 = nn.Linear(3136, 1000)
+        self.fc1 = nn.Linear(1000, 100)
+        self.fc2 = nn.Linear(100, 10)
+
     def forward(self, x):
-        """Forward pass through the network."""
-        # First block with three conv layers
-        x = self.pool1(F.relu(self.conv2(F.relu(self.conv1(x)))))
-        x = self.pool2(F.relu(self.conv4(F.relu(self.conv3(x)))))
-        x = F.relu(self.conv6(F.relu(self.conv5(x))))
-        # x = F.relu(self.conv7(x))
-        x = self.conv7(x)
-        x = x.view(-1, self.config.num_classes) #1x1x10> 10
+        # Input Block
+        x = self.convblock1(x)
+        
+        # Convolution Block 1
+        x = self.convblock2(x)
+        x = self.convblock3(x)
+        
+        # Transition Block 1
+        x = self.pool1(x)
+        #x = self.dropout1(x)
+        
+        # Convolution Block 2
+        x = self.convblock4(x)
+        x = self.convblock5(x)
+        
+        # Transition Block 2
+        x = self.pool2(x)
+
+        
+        # Convolution Block 3
+        x = self.convblock6(x)
+        x = self.convblock7(x)
+        
+        x = x.view(x.size(0), -1)  # Flatten
+        
+        # Fully connected layers
+        x = torch.relu(self.fc0(x))
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
         
         return F.log_softmax(x, dim=-1)
     
