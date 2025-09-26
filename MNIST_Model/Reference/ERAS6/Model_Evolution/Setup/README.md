@@ -1,4 +1,5 @@
 # MNIST Training Experiments
+*This README documents the successful completion of Setup-1, Setup-1-Run2, Setup-2, and Setup-3 experiments. The ultra-lightweight architecture achieved 99.19% test accuracy with 99.9% parameter reduction (6.38M → 6K), demonstrating exceptional efficiency while maintaining outstanding performance. The model shows exceptional stability with test accuracy exceeding training accuracy, making it ideal for production deployment.*
 
 ### Target
 - ✅ Get the set-up right
@@ -485,4 +486,3 @@
 
 ---
 
-*This README documents the successful completion of Setup-1, Setup-1-Run2, Setup-2, and Setup-3 experiments. The ultra-lightweight architecture achieved 99.19% test accuracy with 99.9% parameter reduction (6.38M → 6K), demonstrating exceptional efficiency while maintaining outstanding performance. The model shows exceptional stability with test accuracy exceeding training accuracy, making it ideal for production deployment.*
