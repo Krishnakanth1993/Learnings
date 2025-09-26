@@ -79,20 +79,20 @@ class MNISTModel(nn.Module):
         
         # Input Block
         self.convblock1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=1, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
             #nn.BatchNorm2d(14),
             nn.ReLU()
         ) # output_size = 28
 
         # CONVOLUTION BLOCK 1
         self.convblock2 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=10, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
             #nn.BatchNorm2d(14),
             nn.ReLU()
         ) # output_size = 28
         
         self.convblock3 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=10, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
             #nn.BatchNorm2d(14),
             nn.ReLU()
         ) # output_size = 28
@@ -103,13 +103,13 @@ class MNISTModel(nn.Module):
 
         # CONVOLUTION BLOCK 2
         self.convblock4 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=10, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
             #nn.BatchNorm2d(28),
             nn.ReLU()
         ) # output_size = 14
         
         self.convblock5 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
             #nn.BatchNorm2d(28),
             nn.ReLU()
         ) # output_size = 14
@@ -120,23 +120,22 @@ class MNISTModel(nn.Module):
 
         # CONVOLUTION BLOCK 3
         self.convblock6 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False),
             #nn.BatchNorm2d(16),
             nn.ReLU()
-        ) # output_size = 7
+        ) # output_size = 5
         
         self.convblock7 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False),
             #nn.BatchNorm2d(16),
             nn.ReLU()
-        ) # output_size = 7
+        ) # output_size = 3
 
        
         
         # Fully connected layers
-        self.fc0 = nn.Linear(3136, 1000)
-        self.fc1 = nn.Linear(1000, 100)
-        self.fc2 = nn.Linear(100, 10)
+        self.fc0 = nn.Linear(3*3*8, 20)
+        self.fc1 = nn.Linear(20, 10)
 
     def forward(self, x):
         # Input Block
@@ -166,8 +165,7 @@ class MNISTModel(nn.Module):
         
         # Fully connected layers
         x = torch.relu(self.fc0(x))
-        x = torch.relu(self.fc1(x))
-        x = self.fc2(x)
+        x = self.fc1(x)
         
         return F.log_softmax(x, dim=-1)
     
