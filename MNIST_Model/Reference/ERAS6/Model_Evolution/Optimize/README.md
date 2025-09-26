@@ -10,16 +10,17 @@
 - ✅ Maintain model stability and prevent overfitting
 
 ### Result
-- **Best Parameters**: 7,522
+- **Best Parameters**: 7,974
 - **Best Test Accuracy**: 99.41%
 - **Best Train Accuracy**: 99.47%
 - **Model Stability**: Excellent (minimal gap between train/test)
 
 ### Analysis
-- **Excellent optimization!** All three experiments achieved >99% accuracy
+- **Excellent optimization!** All four experiments achieved >99% accuracy
 - **GAP effectiveness**: Global Average Pooling improved best test accuracy to 99.41%
 - **Channel optimization**: Increased channels in early layers enhanced learning capacity
-- **Parameter efficiency**: Achieved 99.41% accuracy with only 7,522 parameters
+- **Dual FC validation**: Additional FC layer provided consistent high performance
+- **Parameter efficiency**: Achieved 99.41% accuracy with only 7,974 parameters
 - **Consistent performance**: All models show stable training curves
 - **Production ready**: Robust models suitable for deployment
 
@@ -30,6 +31,8 @@
 - **Experiment 2 Curves**: [View Training Curves (With Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250926_234555.png)
 - **Experiment 3 Log**: [View Training Log (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_013711_mnist_training.log)
 - **Experiment 3 Curves**: [View Training Curves (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_014458.png)
+- **Experiment 4 Log**: [View Training Log (Dual FC)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_015013_mnist_training.log)
+- **Experiment 4 Curves**: [View Training Curves (Dual FC)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_015635.png)
 
 ---
 
@@ -40,6 +43,7 @@
 | Opt-1 | 2025-09-26 | Optimized CNN (No Dropout) | 6,132 | 99.47% | 99.27% | 0.20% | 20 | 0.01 | 64 | No | ✅ Completed |
 | Opt-2 | 2025-09-26 | Optimized CNN (With Dropout) | 6,132 | 98.94% | 99.33% | -0.39% | 20 | 0.01 | 64 | Yes | ✅ Completed |
 | Opt-3 | 2025-09-27 | Enhanced CNN with GAP | 7,522 | 99.05% | 99.33% | -0.28% | 20 | 0.01 | 64 | Yes | ✅ Completed |
+| Opt-4 | 2025-09-27 | Enhanced CNN with Dual FC | 7,974 | 99.06% | 99.35% | -0.29% | 20 | 0.01 | 64 | Yes | ✅ Completed |
 
 ---
 
@@ -188,16 +192,63 @@
 
 ---
 
+### Opt-4: Enhanced CNN with Dual FC
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Test dual FC layers with GAP | ✅ |
+| Compare with single FC approach | ✅ |
+| Maintain parameters under 8K | ✅ |
+| Achieve consistent high performance | ✅ |
+
+#### Model Architecture
+- **Total Parameters**: 7,974
+- **Architecture**: Enhanced CNN with GAP and dual FC layers
+- **Key Features**:
+  - **Same conv architecture** as Opt-3 (12 channels in early blocks)
+  - **Global Average Pooling**: Maintains spatial reduction
+  - **Dual FC layers**: Linear(8→28) + Linear(28→10) instead of single layer
+  - **Dropout**: Applied after each conv block
+  - **BatchNorm**: Applied to all conv layers
+
+#### Training Configuration
+- **Epochs**: 20
+- **Learning Rate**: 0.01
+- **Batch Size**: 64
+- **Optimizer**: SGD with momentum=0.9
+- **Scheduler**: StepLR (step_size=10, gamma=0.1)
+- **Weight Decay**: 0.0
+- **Dropout Rate**: 0.05
+
+#### Results
+- **Final Train Accuracy**: 99.06%
+- **Final Test Accuracy**: 99.35%
+- **Best Test Accuracy**: 99.41%
+- **Final Train Loss**: 0.0300
+- **Final Test Loss**: 0.0209
+- **Gap**: -0.29% (test > train - excellent generalization!)
+
+#### Key Observations
+- **Consistent high performance**: Matched Opt-3's best test accuracy (99.41%)
+- **Excellent generalization**: Test accuracy > Train accuracy consistently
+- **Parameter efficiency**: 7,974 parameters (still under 8K target)
+- **Dual FC effectiveness**: Additional FC layer provided slight improvement
+- **Stable training**: Smooth convergence with minimal overfitting
+- **Architecture validation**: Confirmed GAP + dual FC as effective approach
+
+---
+
 ## Comparative Analysis
 
 ### Performance Comparison
-| Metric | Opt-1 (No Dropout) | Opt-2 (With Dropout) | Opt-3 (GAP Enhanced) | Best |
-|--------|-------------------|---------------------|---------------------|------|
-| **Test Accuracy** | 99.27% | 99.34% | 99.33% | Opt-2 |
-| **Train Accuracy** | 99.47% | 98.94% | 99.05% | Opt-1 |
-| **Best Test** | 99.31% | 99.34% | 99.41% | **Opt-3** |
-| **Gap** | 0.20% | -0.39% | -0.28% | Opt-2 |
-| **Parameters** | 6,132 | 6,132 | 7,522 | Opt-1/2 |
+| Metric | Opt-1 (No Dropout) | Opt-2 (With Dropout) | Opt-3 (GAP Enhanced) | Opt-4 (Dual FC) | Best |
+|--------|-------------------|---------------------|---------------------|-----------------|------|
+| **Test Accuracy** | 99.27% | 99.34% | 99.33% | 99.35% | **Opt-4** |
+| **Train Accuracy** | 99.47% | 98.94% | 99.05% | 99.06% | Opt-1 |
+| **Best Test** | 99.31% | 99.34% | 99.41% | 99.41% | **Opt-3/4** |
+| **Gap** | 0.20% | -0.39% | -0.28% | -0.29% | Opt-2 |
+| **Parameters** | 6,132 | 6,132 | 7,522 | 7,974 | Opt-1/2 |
 
 ### Key Insights
 
@@ -260,11 +311,11 @@ Input: (1, 28, 28)
 
 ## Conclusion
 
-All three optimization experiments successfully achieved the target objectives:
+All four optimization experiments successfully achieved the target objectives:
 
-1. **Maintained lightweight design** (6,132-7,522 parameters)
+1. **Maintained lightweight design** (6,132-7,974 parameters)
 2. **Achieved excellent accuracy** (>99% on all models)
 3. **Demonstrated model stability** (minimal overfitting)
-4. **Validated architectural improvements** (GAP and channel optimization)
+4. **Validated architectural improvements** (GAP, channel optimization, and dual FC)
 
-The **Opt-3 model with GAP** is recommended for production use due to its superior best test accuracy of 99.41% and excellent generalization performance.
+Both **Opt-3 and Opt-4 models** are recommended for production use due to their superior best test accuracy of 99.41% and excellent generalization performance. Opt-4 provides slightly better final test accuracy (99.35% vs 99.33%).
