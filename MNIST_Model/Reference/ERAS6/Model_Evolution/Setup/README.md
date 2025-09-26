@@ -21,6 +21,8 @@
 - **Ultra-lightweight** - 99.9% parameter reduction from original
 - **Production ready** - 0.45MB model size
 
+log link [https://github.com/Krishnakanth1993/Learnings/blob/7c59523eb3f4e343c907a66de0919882386783dc/MNIST_Model/Reference/ERAS6/Model_Evolution/Setup/logs/20250925_021125_mnist_training.log]
+training curve [https://github.com/Krishnakanth1993/Learnings/blob/7c59523eb3f4e343c907a66de0919882386783dc/MNIST_Model/Reference/ERAS6/Model_Evolution/Setup/logs/training_curves_20250925_021632.png]
 ---
 
 ## Experiment Summary Table
