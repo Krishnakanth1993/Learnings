@@ -138,8 +138,8 @@ class MNISTModel(nn.Module):
        
         
         # Fully connected layers
-        self.fc0 = nn.Linear(8, 10)  # 8 channels from GAP
-        #self.fc1 = nn.Linear(28, 10)
+        self.fc0 = nn.Linear(8, 28)  # 8 channels from GAP
+        self.fc1 = nn.Linear(28, 10)
 
         self.dropout = nn.Dropout(p=config.dropout_rate)
 
@@ -178,8 +178,8 @@ class MNISTModel(nn.Module):
         x = x.view(x.size(0), -1)  # Flatten while preserving batch dimension
         
         # Fully connected layers
-        x = self.fc0(x)
-        #x = self.fc1(x)
+        x = torch.relu(self.fc0(x))
+        x = self.fc1(x)
         
         return F.log_softmax(x, dim=-1)
     
