@@ -63,9 +63,9 @@ class TrainingConfig:
     """Configuration for training process."""
     epochs: int = 20
     learning_rate: float = 0.01
-    momentum: float = 0.8
+    momentum: float = 0.9
     weight_decay: float = 0.0
-    scheduler_step_size: int = 10
+    scheduler_step_size: int = 6
     scheduler_gamma: float = 0.1
     seed: int = 1
 

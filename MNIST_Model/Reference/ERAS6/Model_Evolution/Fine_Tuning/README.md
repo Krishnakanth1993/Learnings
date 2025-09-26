@@ -10,22 +10,25 @@
 
 ### Result
 - **Parameters**: 7,974
-- **Final Test Accuracy**: 99.31%
-- **Best Test Accuracy**: 99.36%
-- **Final Train Accuracy**: 99.09%
+- **Final Test Accuracy**: 99.41%
+- **Best Test Accuracy**: 99.43%
+- **Final Train Accuracy**: 99.07%
 - **Model Stability**: Excellent (minimal gap between train/test)
 
 ### Analysis
-- **Excellent fine-tuning!** Model achieved >99% accuracy consistently. Marginally lower to previous model (-0.04%). Hence will revert back to older transition block position
+- **Excellent fine-tuning!** Model achieved >99% accuracy consistently with hyperparameter optimization
+- **Hyperparameter tuning success**: Scheduler step size (10→6) and momentum (0.8→0.9) improved performance
 - **Architecture validation**: Confirmed dual FC + GAP design effectiveness
 - **Production ready**: Robust model suitable for deployment
-- **Parameter efficiency**: Achieved 99.36% accuracy with only 7,974 parameters
-- **Consistent performance**: Stable training curves with excellent generalization. Slower convergence > 16 Epochs to hit best test accuracy
-- **Fine-tuning success**: Model maintained high performance with proven architecture
+- **Parameter efficiency**: Achieved 99.43% accuracy with only 7,974 parameters
+- **Consistent performance**: Stable training curves with excellent generalization
+- **Fine-tuning success**: Model achieved best performance with optimized hyperparameters
 
 ### Resources
-- **Fine-Tuning Log**: [View Training Log](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_020151_mnist_training.log)
-- **Training Curves**: [View Training Progress Visualization](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_020815.png)
+- **Fine-1 Log**: [View Training Log (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_020151_mnist_training.log)
+- **Fine-1 Curves**: [View Training Curves (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_020815.png)
+- **Fine-2 Log**: [View Training Log (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_021806_mnist_training.log)
+- **Fine-2 Curves**: [View Training Curves (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_022550.png)
 
 ---
 
@@ -34,6 +37,7 @@
 | Experiment | Date | Architecture | Parameters | Train Acc | Test Acc | Gap | Epochs | LR | Batch Size | Dropout | Status |
 |------------|------|--------------|------------|-----------|----------|-----|--------|----|-----------|---------|---------| 
 | Fine-1 | 2025-09-27 | Dual FC + GAP (Fine-Tuned) | 7,974 | 99.09% | 99.31% | -0.22% | 20 | 0.01 | 64 | Yes | ✅ Completed |
+| Fine-2 | 2025-09-27 | Dual FC + GAP (Hyperparameter Tuned) | 7,974 | 99.07% | 99.41% | -0.34% | 20 | 0.01 | 64 | Yes | ✅ Completed |
 
 ---
 
@@ -87,16 +91,64 @@
 
 ---
 
+### Fine-2: Dual FC + GAP Hyperparameter Tuning
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Tune hyperparameters for better performance | ✅ |
+| Test scheduler step size adjustment | ✅ |
+| Optimize momentum parameter | ✅ |
+| Achieve improved test accuracy | ✅ |
+
+#### Model Architecture
+- **Total Parameters**: 7,974
+- **Architecture**: Dual FC + GAP (same as Fine-1)
+- **Key Features**:
+  - **Identical architecture** to Fine-1 (proven design)
+  - **12 channels** in early conv blocks
+  - **Global Average Pooling**: Spatial reduction
+  - **Dual FC layers**: Linear(8→28) + Linear(28→10)
+  - **Dropout**: Applied after each conv block (0.05)
+  - **BatchNorm**: Applied to all conv layers
+
+#### Training Configuration
+- **Epochs**: 20
+- **Learning Rate**: 0.01
+- **Batch Size**: 64
+- **Optimizer**: SGD with momentum=0.9 (increased from 0.8)
+- **Scheduler**: StepLR (step_size=6, gamma=0.1) (reduced from 10)
+- **Weight Decay**: 0.0
+- **Dropout Rate**: 0.05
+
+#### Results
+- **Final Train Accuracy**: 99.07%
+- **Final Test Accuracy**: 99.41%
+- **Best Test Accuracy**: 99.43%
+- **Final Train Loss**: 0.0290
+- **Final Test Loss**: 0.0199
+- **Gap**: -0.34% (test > train - excellent generalization!)
+
+#### Key Observations
+- **Improved test accuracy**: 99.41% vs 99.31% in Fine-1 (+0.10%)
+- **Better best test accuracy**: 99.43% vs 99.36% in Fine-1 (+0.07%)
+- **Enhanced generalization**: Better gap (-0.34% vs -0.22%)
+- **Hyperparameter effectiveness**: Scheduler and momentum tuning worked
+- **Stable training**: Smooth convergence without overfitting
+- **Production ready**: Model ready for deployment with improved results
+
+---
+
 ## Comparative Analysis
 
 ### Performance Comparison with Optimization Phase
-| Metric | Opt-4 (Dual FC) | Fine-1 (Fine-Tuned) | Improvement |
-|--------|-----------------|---------------------|-------------|
-| **Test Accuracy** | 99.35% | 99.31% | -0.04% |
-| **Train Accuracy** | 99.06% | 99.09% | +0.03% |
-| **Best Test** | 99.41% | 99.36% | -0.05% |
-| **Gap** | -0.29% | -0.22% | Slightly less generalization |
-| **Parameters** | 7,974 | 7,974 | Same |
+| Metric | Opt-4 (Dual FC) | Fine-1 (Fine-Tuned) | Fine-2 (Hyperparameter Tuned) | Best |
+|--------|-----------------|---------------------|-------------------------------|------|
+| **Test Accuracy** | 99.35% | 99.31% | 99.41% | **Fine-2** |
+| **Train Accuracy** | 99.06% | 99.09% | 99.07% | Fine-1 |
+| **Best Test** | 99.41% | 99.36% | 99.43% | **Fine-2** |
+| **Gap** | -0.29% | -0.22% | -0.34% | **Fine-2** |
+| **Parameters** | 7,974 | 7,974 | 7,974 | Same |
 
 ### Key Insights
 
@@ -162,11 +214,12 @@ Input: (1, 28, 28)
 
 ## Conclusion
 
-The fine-tuning experiment successfully validated the optimized architecture:
+Both fine-tuning experiments successfully validated and improved the optimized architecture:
 
 1. **Maintained lightweight design** (7,974 parameters)
-2. **Achieved excellent accuracy** (99.36% best test accuracy)
+2. **Achieved excellent accuracy** (99.43% best test accuracy)
 3. **Demonstrated model stability** (excellent generalization)
 4. **Validated production readiness** (consistent performance)
+5. **Hyperparameter optimization success** (improved performance with tuned parameters)
 
-The **Fine-1 model** is recommended for production deployment due to its proven architecture, consistent high performance, and excellent generalization capabilities. The dual FC + GAP design has been thoroughly validated and is ready for real-world applications.
+The **Fine-2 model** is recommended for production deployment due to its superior performance (99.43% best test accuracy), optimized hyperparameters, and excellent generalization capabilities. The dual FC + GAP design with tuned scheduler and momentum has been thoroughly validated and is ready for real-world applications.

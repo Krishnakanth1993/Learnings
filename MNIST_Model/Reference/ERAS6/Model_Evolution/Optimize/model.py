@@ -151,11 +151,11 @@ class MNISTModel(nn.Module):
         x = self.convblock2(x)
         x = self.dropout(x)
 
-        # Transition Block 1
-        x = self.pool1(x)
-        
         x = self.convblock3(x)
         x = self.dropout(x)
+
+        # Transition Block 1
+        x = self.pool1(x)
         
         
         #x = self.dropout1(x)
