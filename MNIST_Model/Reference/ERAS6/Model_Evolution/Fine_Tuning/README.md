@@ -1,34 +1,41 @@
 # MNIST Training Experiments - Fine-Tuning Phase
+The dual FC + GAP design with tuned scheduler and momentum gave test accuracy of 99.54% with LR =0.04 and Step size of 10.
+
 
 ## Project Summary
 
 ### Target
 - ✅ Fine-tune optimized model architecture by moving Max pooling transition block after 2nd conv layer
-- ✅ Test model performance with modified architecture
+- ✅ Test model performance with tuned schedured parameters
 - ✅ Achieve consistent high accuracy with proven design
 - ✅ Maintain model stability and generalization
 
 ### Result
 - **Parameters**: 7,974
-- **Final Test Accuracy**: 99.41%
-- **Best Test Accuracy**: 99.43%
-- **Final Train Accuracy**: 99.07%
+- **Final Test Accuracy**: 99.53%
+- **Best Test Accuracy**: 99.54%
+- **Final Train Accuracy**: 99.12%
 - **Model Stability**: Excellent (minimal gap between train/test)
 
 ### Analysis
-- **Excellent fine-tuning!** Model achieved >99% accuracy consistently with hyperparameter optimization
-- **Hyperparameter tuning success**: Scheduler step size (10→6) and momentum (0.8→0.9) improved performance
-- **Architecture validation**: Confirmed dual FC + GAP design effectiveness
-- **Production ready**: Robust model suitable for deployment
-- **Parameter efficiency**: Achieved 99.43% accuracy with only 7,974 parameters
-- **Consistent performance**: Stable training curves with excellent generalization
-- **Fine-tuning success**: Model achieved best performance with optimized hyperparameters
+- **Outstanding fine-tuning!** Model achieved >99.5% accuracy with optimal hyperparameter configuration
+- **Learning rate optimization**: LR=0.04 with step=10 achieved best performance (99.53% test, 99.54% best)
+- **Scheduler step size impact**: Step=10 outperformed step=5, showing optimal learning rate decay timing
+- **Architecture validation**: Confirmed dual FC + GAP design effectiveness at higher learning rates
+- **Production ready**: Robust model suitable for deployment with 99.54% best accuracy
+- **Parameter efficiency**: Achieved 99.54% accuracy with only 7,974 parameters
+- **Excellent generalization**: All experiments show test > train accuracy (negative gap)
+- **Fine-tuning success**: Model achieved best performance with LR=0.04, step=10 configuration
 
 ### Resources
 - **Fine-1 Log**: [View Training Log (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_020151_mnist_training.log)
 - **Fine-1 Curves**: [View Training Curves (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_020815.png)
 - **Fine-2 Log**: [View Training Log (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_021806_mnist_training.log)
 - **Fine-2 Curves**: [View Training Curves (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_022550.png)
+- **Fine-3 Log**: [View Training Log (Fine-3)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_035029_mnist_training.log)
+- **Fine-3 Curves**: [View Training Curves (Fine-3)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_035700.png)
+- **Fine-4 Log**: [View Training Log (Fine-4)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_050904_mnist_training.log)
+- **Fine-4 Curves**: [View Training Curves (Fine-4)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_051553.png)
 
 ---
 
@@ -38,6 +45,8 @@
 |------------|------|--------------|------------|-----------|----------|-----|--------|----|-----------|---------|---------| 
 | Fine-1 | 2025-09-27 | Dual FC + GAP (Fine-Tuned) | 7,974 | 99.09% | 99.31% | -0.22% | 20 | 0.01 | 64 | Yes | ✅ Completed |
 | Fine-2 | 2025-09-27 | Dual FC + GAP (Hyperparameter Tuned) | 7,974 | 99.07% | 99.41% | -0.34% | 20 | 0.01 | 64 | Yes | ✅ Completed |
+| Fine-3 | 2025-09-27 | Dual FC + GAP (LR=0.04, Step=5) | 7,974 | 98.93% | 99.43% | -0.50% | 20 | 0.04 | 64 | Yes | ✅ Completed |
+| Fine-4 | 2025-09-27 | Dual FC + GAP (LR=0.04, Step=10) | 7,974 | 99.12% | 99.53% | -0.41% | 20 | 0.04 | 64 | Yes | ✅ Completed |
 
 ---
 
@@ -137,18 +146,109 @@
 - **Stable training**: Smooth convergence without overfitting
 - **Production ready**: Model ready for deployment with improved results
 
+### Fine-3: Dual FC + GAP (LR=0.04, Step=5)
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Test higher learning rate (0.04) | ✅ |
+| Test scheduler step size (5) | ✅ |
+| Evaluate model performance with aggressive learning | ✅ |
+| Maintain model stability | ✅ |
+
+#### Model Architecture
+- **Total Parameters**: 7,974
+- **Architecture**: Dual FC + GAP (same as previous experiments)
+- **Key Features**:
+  - **Identical architecture** to previous experiments
+  - **12 channels** in early conv blocks
+  - **Global Average Pooling**: Spatial reduction
+  - **Dual FC layers**: Linear(8→28) + Linear(28→10)
+  - **Dropout**: Applied after each conv block (0.05)
+  - **BatchNorm**: Applied to all conv layers
+
+#### Training Configuration
+- **Epochs**: 20
+- **Learning Rate**: 0.04 (increased from 0.01)
+- **Batch Size**: 64
+- **Optimizer**: SGD with momentum=0.9
+- **Scheduler**: StepLR (step_size=5, gamma=0.1)
+- **Weight Decay**: 0.0
+- **Dropout Rate**: 0.05
+
+#### Results
+- **Final Train Accuracy**: 98.93%
+- **Final Test Accuracy**: 99.43%
+- **Best Test Accuracy**: 99.45%
+- **Final Train Loss**: 0.0345
+- **Final Test Loss**: 0.0205
+- **Gap**: -0.50% (test > train - excellent generalization!)
+
+#### Key Observations
+- **High test accuracy**: 99.43% with higher learning rate
+- **Excellent generalization**: -0.50% gap (test > train)
+- **Best test accuracy**: 99.45% achieved
+- **Stable training**: Model handled higher learning rate well
+- **Good convergence**: Reached high accuracy despite aggressive learning
+
+### Fine-4: Dual FC + GAP (LR=0.04, Step=10)
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Test higher learning rate (0.04) with step=10 | ✅ |
+| Compare with Fine-3 (step=5) | ✅ |
+| Evaluate scheduler step size impact | ✅ |
+| Achieve best possible performance | ✅ |
+
+#### Model Architecture
+- **Total Parameters**: 7,974
+- **Architecture**: Dual FC + GAP (same as previous experiments)
+- **Key Features**:
+  - **Identical architecture** to previous experiments
+  - **12 channels** in early conv blocks
+  - **Global Average Pooling**: Spatial reduction
+  - **Dual FC layers**: Linear(8→28) + Linear(28→10)
+  - **Dropout**: Applied after each conv block (0.05)
+  - **BatchNorm**: Applied to all conv layers
+
+#### Training Configuration
+- **Epochs**: 20
+- **Learning Rate**: 0.04 (same as Fine-3)
+- **Batch Size**: 64
+- **Optimizer**: SGD with momentum=0.9
+- **Scheduler**: StepLR (step_size=10, gamma=0.1) (increased from 5)
+- **Weight Decay**: 0.0
+- **Dropout Rate**: 0.05
+
+#### Results
+- **Final Train Accuracy**: 99.12%
+- **Final Test Accuracy**: 99.53%
+- **Best Test Accuracy**: 99.54%
+- **Final Train Loss**: 0.0279
+- **Final Test Loss**: 0.0155
+- **Gap**: -0.41% (test > train - excellent generalization!)
+
+#### Key Observations
+- **Best test accuracy**: 99.53% (highest achieved so far)
+- **Best overall performance**: 99.54% best test accuracy
+- **Improved from Fine-3**: Better results with step=10 vs step=5
+- **Excellent generalization**: -0.41% gap (test > train)
+- **Optimal configuration**: LR=0.04, step=10 appears optimal
+- **Production ready**: Best performing model for deployment
+
 ---
 
 ## Comparative Analysis
 
 ### Performance Comparison with Optimization Phase
-| Metric | Opt-4 (Dual FC) | Fine-1 (Fine-Tuned) | Fine-2 (Hyperparameter Tuned) | Best |
-|--------|-----------------|---------------------|-------------------------------|------|
-| **Test Accuracy** | 99.35% | 99.31% | 99.41% | **Fine-2** |
-| **Train Accuracy** | 99.06% | 99.09% | 99.07% | Fine-1 |
-| **Best Test** | 99.41% | 99.36% | 99.43% | **Fine-2** |
-| **Gap** | -0.29% | -0.22% | -0.34% | **Fine-2** |
-| **Parameters** | 7,974 | 7,974 | 7,974 | Same |
+| Metric | Opt-4 (Dual FC) | Fine-1 (Fine-Tuned) | Fine-2 (Hyperparameter Tuned) | Fine-3 (LR=0.04, Step=5) | Fine-4 (LR=0.04, Step=10) | Best |
+|--------|-----------------|---------------------|-------------------------------|---------------------------|----------------------------|------|
+| **Test Accuracy** | 99.35% | 99.31% | 99.41% | 99.43% | 99.53% | **Fine-4** |
+| **Train Accuracy** | 99.06% | 99.09% | 99.07% | 98.93% | 99.12% | **Fine-1** |
+| **Best Test** | 99.41% | 99.36% | 99.43% | 99.45% | 99.54% | **Fine-4** |
+| **Gap** | -0.29% | -0.22% | -0.34% | -0.50% | -0.41% | **Fine-3** |
+| **Parameters** | 7,974 | 7,974 | 7,974 | 7,974 | 7,974 | 7,974 |
 
 ### Key Insights
 
@@ -222,4 +322,3 @@ Both fine-tuning experiments successfully validated and improved the optimized a
 4. **Validated production readiness** (consistent performance)
 5. **Hyperparameter optimization success** (improved performance with tuned parameters)
 
-The **Fine-2 model** is recommended for production deployment due to its superior performance (99.43% best test accuracy), optimized hyperparameters, and excellent generalization capabilities. The dual FC + GAP design with tuned scheduler and momentum has been thoroughly validated and is ready for real-world applications.

@@ -62,10 +62,10 @@ class DataConfig:
 class TrainingConfig:
     """Configuration for training process."""
     epochs: int = 20
-    learning_rate: float = 0.01
+    learning_rate: float = 0.008
     momentum: float = 0.9
     weight_decay: float = 0.0
-    scheduler_step_size: int = 6
+    scheduler_step_size: int = 5
     scheduler_gamma: float = 0.1
     seed: int = 1
 
@@ -190,6 +190,27 @@ class Logger:
         self.info(f"Data Config: {config.data}")
         self.info(f"Model Config: {config.model}")
         self.info(f"Training Config: {config.training}")
+        self.info("=" * 50)
+    
+    def log_updated_config(self, config: Config) -> None:
+        """Log the updated configuration with actual values from main()."""
+        self.info("Updated Configuration (from main()):")
+        self.info(f"  - Epochs: {config.training.epochs}")
+        self.info(f"  - Learning Rate: {config.training.learning_rate}")
+        self.info(f"  - Momentum: {config.training.momentum}")
+        self.info(f"  - Weight Decay: {config.training.weight_decay}")
+        self.info(f"  - Scheduler Step Size: {config.training.scheduler_step_size}")
+        self.info(f"  - Scheduler Gamma: {config.training.scheduler_gamma}")
+        self.info(f"  - Batch Size: {config.data.batch_size}")
+        self.info(f"  - Num Workers: {config.data.num_workers}")
+        self.info(f"  - Pin Memory: {config.data.pin_memory}")
+        self.info(f"  - Shuffle: {config.data.shuffle}")
+        self.info(f"  - Dropout Rate: {config.model.dropout_rate}")
+        self.info(f"  - Device: {'CUDA' if torch.cuda.is_available() else 'CPU'}")
+        self.info(f"  - Log Directory: {config.logging.log_dir}")
+        self.info(f"  - Model Save Directory: {config.logging.model_save_dir}")
+        self.info(f"  - Save Model: {config.logging.save_model}")
+        self.info(f"  - Log Level: {config.logging.log_level}")
         self.info("=" * 50)
     
     def log_epoch_results(self, epoch: int, train_loss: float, train_acc: float, 
@@ -796,9 +817,13 @@ def main():
     
     # You can customize the configuration here
     config.training.epochs = 20
-    config.training.learning_rate = 0.01
+    config.training.learning_rate = 0.008
+    print("*"*60)
+    print(f"Learning Rate: {config.training.learning_rate}")
+    print("*"*60)
+
     config.training.momentum = 0.9
-    config.data.batch_size = 64
+    config.data.batch_size = 32
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")
@@ -812,6 +837,9 @@ def main():
     
     # Create and run the training facade
     training_facade = MNISTTrainingFacade(config)
+    
+    # Log the updated configuration after all updates
+    training_facade.logger.log_updated_config(config)
     final_metrics = training_facade.run_complete_pipeline()
     
     print("\n" + "=" * 60)
