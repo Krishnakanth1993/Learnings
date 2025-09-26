@@ -79,21 +79,21 @@ class MNISTModel(nn.Module):
         
         # Input Block
         self.convblock1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(10),
+            nn.Conv2d(in_channels=1, out_channels=12, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(12),
             nn.ReLU()
         ) # output_size = 28
 
         # CONVOLUTION BLOCK 1
         self.convblock2 = nn.Sequential(
-            nn.Conv2d(in_channels=10, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(10),
+            nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(12),
             nn.ReLU()
         ) # output_size = 28
         
         self.convblock3 = nn.Sequential(
-            nn.Conv2d(in_channels=10, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(10),
+            nn.Conv2d(in_channels=12, out_channels=12, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(12),
             nn.ReLU()
         ) # output_size = 28
 
@@ -103,14 +103,14 @@ class MNISTModel(nn.Module):
 
         # CONVOLUTION BLOCK 2
         self.convblock4 = nn.Sequential(
-            nn.Conv2d(in_channels=10, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=12, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(10),
             nn.ReLU()
         ) # output_size = 14
         
         self.convblock5 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=10, out_channels=10, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(10),
             nn.ReLU()
         ) # output_size = 14
 
@@ -120,22 +120,26 @@ class MNISTModel(nn.Module):
 
         # CONVOLUTION BLOCK 3
         self.convblock6 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=10, out_channels=16, kernel_size=3, stride=1, padding=0, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU()
         ) # output_size = 5
         
         self.convblock7 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False),
+            nn.Conv2d(in_channels=16, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False),
             nn.BatchNorm2d(8),
             nn.ReLU()
         ) # output_size = 3
 
+        self.gap = nn.Sequential(
+            nn.AvgPool2d(kernel_size=3) # 7>> 9... nn.AdaptiveAvgPool((1, 1))
+        ) # output_size = 1
+
        
         
         # Fully connected layers
-        self.fc0 = nn.Linear(3*3*8, 20)
-        self.fc1 = nn.Linear(20, 10)
+        self.fc0 = nn.Linear(8, 10)  # 8 channels from GAP
+        #self.fc1 = nn.Linear(28, 10)
 
         self.dropout = nn.Dropout(p=config.dropout_rate)
 
@@ -169,11 +173,13 @@ class MNISTModel(nn.Module):
         x = self.convblock7(x)
         x = self.dropout(x)
         
-        x = x.view(x.size(0), -1)  # Flatten
+        # Global Average Pooling
+        x = self.gap(x)
+        x = x.view(x.size(0), -1)  # Flatten while preserving batch dimension
         
         # Fully connected layers
-        x = torch.relu(self.fc0(x))
-        x = self.fc1(x)
+        x = self.fc0(x)
+        #x = self.fc1(x)
         
         return F.log_softmax(x, dim=-1)
     

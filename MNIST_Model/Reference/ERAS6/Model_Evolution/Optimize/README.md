@@ -10,16 +10,17 @@
 - ✅ Maintain model stability and prevent overfitting
 
 ### Result
-- **Best Parameters**: 6,132
-- **Best Test Accuracy**: 99.34%
+- **Best Parameters**: 7,522
+- **Best Test Accuracy**: 99.41%
 - **Best Train Accuracy**: 99.47%
 - **Model Stability**: Excellent (minimal gap between train/test)
 
 ### Analysis
-- **Excellent optimization!** Both experiments achieved >99% accuracy
-- **Dropout impact**: Slight improvement in generalization (99.27% → 99.34%)
-- **Consistent performance**: Both models show stable training curves
-- **Ultra-lightweight**: Maintained 6K parameters while achieving high accuracy
+- **Excellent optimization!** All three experiments achieved >99% accuracy
+- **GAP effectiveness**: Global Average Pooling improved best test accuracy to 99.41%
+- **Channel optimization**: Increased channels in early layers enhanced learning capacity
+- **Parameter efficiency**: Achieved 99.41% accuracy with only 7,522 parameters
+- **Consistent performance**: All models show stable training curves
 - **Production ready**: Robust models suitable for deployment
 
 ### Resources
@@ -27,6 +28,8 @@
 - **Experiment 1 Curves**: [View Training Curves (No Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250926_233350.png)
 - **Experiment 2 Log**: [View Training Log (With Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250926_233654_mnist_training.log)
 - **Experiment 2 Curves**: [View Training Curves (With Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250926_234555.png)
+- **Experiment 3 Log**: [View Training Log (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_013711_mnist_training.log)
+- **Experiment 3 Curves**: [View Training Curves (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_014458.png)
 
 ---
 
@@ -36,6 +39,7 @@
 |------------|------|--------------|------------|-----------|----------|-----|--------|----|-----------|---------|---------| 
 | Opt-1 | 2025-09-26 | Optimized CNN (No Dropout) | 6,132 | 99.47% | 99.27% | 0.20% | 20 | 0.01 | 64 | No | ✅ Completed |
 | Opt-2 | 2025-09-26 | Optimized CNN (With Dropout) | 6,132 | 98.94% | 99.33% | -0.39% | 20 | 0.01 | 64 | Yes | ✅ Completed |
+| Opt-3 | 2025-09-27 | Enhanced CNN with GAP | 7,522 | 99.05% | 99.33% | -0.28% | 20 | 0.01 | 64 | Yes | ✅ Completed |
 
 ---
 
@@ -137,16 +141,63 @@
 
 ---
 
+### Opt-3: Enhanced CNN with GAP
+
+#### Target
+| Objective | Status |
+|-----------|--------|
+| Add Global Average Pooling (GAP) | ✅ |
+| Increase channels in initial layers | ✅ |
+| Maintain parameters under 8K | ✅ |
+| Achieve better performance | ✅ |
+
+#### Model Architecture
+- **Total Parameters**: 7,522
+- **Architecture**: Enhanced CNN with GAP and increased channels
+- **Key Features**:
+  - **Increased channels**: 12 channels in first two blocks (vs 10 in previous)
+  - **Global Average Pooling**: Replaces fully connected layers
+  - **Simplified FC**: Single Linear layer (8→10) instead of two layers
+  - **Dropout**: Applied after each conv block
+  - **BatchNorm**: Applied to all conv layers
+
+#### Training Configuration
+- **Epochs**: 20
+- **Learning Rate**: 0.01
+- **Batch Size**: 64
+- **Optimizer**: SGD with momentum=0.9
+- **Scheduler**: StepLR (step_size=10, gamma=0.1)
+- **Weight Decay**: 0.0
+- **Dropout Rate**: 0.05
+
+#### Results
+- **Final Train Accuracy**: 99.05%
+- **Final Test Accuracy**: 99.33%
+- **Best Test Accuracy**: 99.41%
+- **Final Train Loss**: 0.0300
+- **Final Test Loss**: 0.0216
+- **Gap**: -0.28% (test > train - excellent generalization!)
+
+#### Key Observations
+- **Excellent generalization**: Test accuracy > Train accuracy consistently
+- **High performance**: Achieved 99.41% best test accuracy
+- **Parameter efficiency**: 7,522 parameters (within 8K target)
+- **GAP effectiveness**: Simplified architecture with maintained performance
+- **Stable training**: Smooth convergence without overfitting
+- **Channel increase impact**: More features in early layers improved learning
+
+---
+
 ## Comparative Analysis
 
 ### Performance Comparison
-| Metric | Opt-1 (No Dropout) | Opt-2 (With Dropout) | Improvement |
-|--------|-------------------|---------------------|-------------|
-| **Test Accuracy** | 99.27% | 99.34% | +0.07% |
-| **Train Accuracy** | 99.47% | 98.94% | -0.53% |
-| **Gap** | 0.20% | -0.39% | Better generalization |
-| **Best Test** | 99.31% | 99.34% | +0.03% |
-| **Parameters** | 6,132 | 6,132 | Same |
+| Metric | Opt-1 (No Dropout) | Opt-2 (With Dropout) | Opt-3 (GAP Enhanced) | Best |
+|--------|-------------------|---------------------|---------------------|------|
+| **Test Accuracy** | 99.27% | 99.34% | 99.33% | Opt-2 |
+| **Train Accuracy** | 99.47% | 98.94% | 99.05% | Opt-1 |
+| **Best Test** | 99.31% | 99.34% | 99.41% | **Opt-3** |
+| **Gap** | 0.20% | -0.39% | -0.28% | Opt-2 |
+| **Parameters** | 6,132 | 6,132 | 7,522 | Opt-1/2 |
 
 ### Key Insights
 
@@ -209,11 +260,11 @@ Input: (1, 28, 28)
 
 ## Conclusion
 
-Both optimization experiments successfully achieved the target objectives:
+All three optimization experiments successfully achieved the target objectives:
 
-1. **Maintained ultra-lightweight design** (6,132 parameters)
-2. **Achieved excellent accuracy** (>99% on both models)
+1. **Maintained lightweight design** (6,132-7,522 parameters)
+2. **Achieved excellent accuracy** (>99% on all models)
 3. **Demonstrated model stability** (minimal overfitting)
-4. **Validated regularization impact** (dropout improves generalization)
+4. **Validated architectural improvements** (GAP and channel optimization)
 
-The **Opt-2 model with dropout** is recommended for production use due to its superior generalization performance and test accuracy of 99.34%.
+The **Opt-3 model with GAP** is recommended for production use due to its superior best test accuracy of 99.41% and excellent generalization performance.
