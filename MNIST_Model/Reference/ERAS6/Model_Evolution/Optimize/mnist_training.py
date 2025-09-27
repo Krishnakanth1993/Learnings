@@ -62,10 +62,10 @@ class DataConfig:
 class TrainingConfig:
     """Configuration for training process."""
     epochs: int = 20
-    learning_rate: float = 0.008
-    momentum: float = 0.9
+    learning_rate: float = 0.01
+    momentum: float = 0.8
     weight_decay: float = 0.0
-    scheduler_step_size: int = 5
+    scheduler_step_size: int = 6
     scheduler_gamma: float = 0.1
     seed: int = 1
 
@@ -817,13 +817,10 @@ def main():
     
     # You can customize the configuration here
     config.training.epochs = 20
-    config.training.learning_rate = 0.008
-    print("*"*60)
-    print(f"Learning Rate: {config.training.learning_rate}")
-    print("*"*60)
+    config.training.learning_rate = 0.01
 
     config.training.momentum = 0.9
-    config.data.batch_size = 32
+    config.data.batch_size = 64
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")
