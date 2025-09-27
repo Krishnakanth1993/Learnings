@@ -3,8 +3,8 @@
 ## Project Summary
 
 ### Target
-- ✅ Optimize model architecture for better performance
-- ✅ Experiment with different regularization techniques
+- ✅ Optimize model architecture for better performance with Batch Normalization
+- ✅ Experiment with different regularization techniques - dropout
 - ✅ Compare models with and without dropout
 - ✅ Achieve consistent high accuracy with minimal parameters
 - ✅ Maintain model stability and prevent overfitting
@@ -24,15 +24,9 @@
 - **Consistent performance**: All models show stable training curves
 - **Production ready**: Robust models suitable for deployment
 
-### Resources
-- **Experiment 1 Log**: [View Training Log (No Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250926_232239_mnist_training.log)
-- **Experiment 1 Curves**: [View Training Curves (No Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250926_233350.png)
-- **Experiment 2 Log**: [View Training Log (With Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250926_233654_mnist_training.log)
-- **Experiment 2 Curves**: [View Training Curves (With Dropout)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250926_234555.png)
-- **Experiment 3 Log**: [View Training Log (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_013711_mnist_training.log)
-- **Experiment 3 Curves**: [View Training Curves (GAP Enhanced)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_014458.png)
-- **Experiment 4 Log**: [View Training Log (Dual FC)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_015013_mnist_training.log)
-- **Experiment 4 Curves**: [View Training Curves (Dual FC)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_015635.png)
+### Resources - Opt-4 -Enhanced CNN with Dual FC
+- **Training Log**: [View Complete Training Log](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/20250927_015013_mnist_training.log)
+- **Training Curves**: [View Training Progress Visualization](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Optimize/logs/training_curves_20250927_015635.png)
 
 ---
 

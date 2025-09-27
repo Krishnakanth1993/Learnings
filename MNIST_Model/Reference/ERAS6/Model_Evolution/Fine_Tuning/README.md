@@ -5,8 +5,8 @@ The dual FC + GAP design with tuned scheduler and momentum gave test accuracy of
 ## Project Summary
 
 ### Target
-- ✅ Fine-tune optimized model architecture by moving Max pooling transition block after 2nd conv layer
-- ✅ Test model performance with tuned schedured parameters
+- ✅ Fine-tune optimized model architecture by moving Max pooling transition block after 2nd conv layer.
+- ✅ Test model performance with tuned scheduler parameters
 - ✅ Achieve consistent high accuracy with proven design
 - ✅ Maintain model stability and generalization
 
@@ -28,14 +28,8 @@ The dual FC + GAP design with tuned scheduler and momentum gave test accuracy of
 - **Fine-tuning success**: Model achieved best performance with LR=0.04, step=10 configuration
 
 ### Resources
-- **Fine-1 Log**: [View Training Log (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_020151_mnist_training.log)
-- **Fine-1 Curves**: [View Training Curves (Fine-1)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_020815.png)
-- **Fine-2 Log**: [View Training Log (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_021806_mnist_training.log)
-- **Fine-2 Curves**: [View Training Curves (Fine-2)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_022550.png)
-- **Fine-3 Log**: [View Training Log (Fine-3)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_035029_mnist_training.log)
-- **Fine-3 Curves**: [View Training Curves (Fine-3)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_035700.png)
-- **Fine-4 Log**: [View Training Log (Fine-4)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_050904_mnist_training.log)
-- **Fine-4 Curves**: [View Training Curves (Fine-4)](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_051553.png)
+- **Training Log**: [View Complete Training Log](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_050904_mnist_training.log)
+- **Training Curves**: [View Training Progress Visualization](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_051553.png)
 
 ---
 
