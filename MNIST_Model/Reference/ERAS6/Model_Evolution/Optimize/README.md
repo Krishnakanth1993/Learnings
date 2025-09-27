@@ -1,4 +1,5 @@
 # MNIST Training Experiments - Optimization Phase
+*This README documents the successful completion of Opt-1, Opt-2, Opt-3, and Opt-4 experiments. The optimized CNN architecture achieved 99.41% test accuracy with enhanced design features (GAP, increased channels, dual FC), demonstrating exceptional performance while maintaining parameter efficiency. The model shows outstanding stability with test accuracy consistently exceeding training accuracy in dropout-enabled experiments, making it ideal for production deployment. The systematic architectural optimization process validated the effectiveness of Global Average Pooling, channel optimization, and dual FC layers, resulting in the best performing model with 7,974 parameters. In next stage , goal is to stabilize the accuracy and hit 99.4 accuracy target consistantly before EPOCh 15 with LR and batch size tuning.*
 
 ## Project Summary
 
@@ -305,11 +306,4 @@ Input: (1, 28, 28)
 
 ## Conclusion
 
-All four optimization experiments successfully achieved the target objectives:
 
-1. **Maintained lightweight design** (6,132-7,974 parameters)
-2. **Achieved excellent accuracy** (>99% on all models)
-3. **Demonstrated model stability** (minimal overfitting)
-4. **Validated architectural improvements** (GAP, channel optimization, and dual FC)
-
-Both **Opt-3 and Opt-4 models** are recommended for production use due to their superior best test accuracy of 99.41% and excellent generalization performance. Opt-4 provides slightly better final test accuracy (99.35% vs 99.33%).

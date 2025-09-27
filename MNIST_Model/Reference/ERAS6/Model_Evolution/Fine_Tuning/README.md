@@ -1,5 +1,5 @@
 # MNIST Training Experiments - Fine-Tuning Phase
-The dual FC + GAP design with tuned scheduler and momentum gave test accuracy of 99.54% with LR =0.04 and Step size of 10.
+*This README documents the successful completion of Fine-1, Fine-2, Fine-3, and Fine-4 experiments. The dual FC + GAP architecture achieved 99.54% test accuracy with optimal hyperparameter configuration (LR=0.04, step=10), demonstrating exceptional performance while maintaining model efficiency. The model shows outstanding stability with test accuracy consistently exceeding training accuracy across all experiments, making it ideal for production deployment. The systematic hyperparameter optimization process validated the effectiveness of higher learning rates and optimal scheduler step sizes, resulting in the best performing model with 7,974 parameters.*
 
 
 ## Project Summary
@@ -306,13 +306,4 @@ Input: (1, 28, 28)
 
 ---
 
-## Conclusion
-
-Both fine-tuning experiments successfully validated and improved the optimized architecture:
-
-1. **Maintained lightweight design** (7,974 parameters)
-2. **Achieved excellent accuracy** (99.43% best test accuracy)
-3. **Demonstrated model stability** (excellent generalization)
-4. **Validated production readiness** (consistent performance)
-5. **Hyperparameter optimization success** (improved performance with tuned parameters)
 
