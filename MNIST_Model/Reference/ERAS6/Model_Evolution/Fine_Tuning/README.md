@@ -31,6 +31,21 @@
 - **Training Log**: [View Complete Training Log](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/20250927_050904_mnist_training.log)
 - **Training Curves**: [View Training Progress Visualization](https://github.com/Krishnakanth1993/Learnings/blob/main/MNIST_Model/Reference/ERAS6/Model_Evolution/Fine_Tuning/logs/training_curves_20250927_051553.png)
 
+RF Computation of Final Model:
+
+![RF Computation](RF_Computation.png)
+
+**Receptive Field Analysis:**
+- **Input**: 28×28×1 (MNIST image)
+- **Final RF**: 34×34 (covers entire input with some overlap)
+- **Total Parameters**: 7,974
+- **Architecture**: 9 layers with 2 downsampling stages
+- **Key Features**: 
+  - Two MaxPool2d layers (stride=2) for spatial reduction
+  - Channel progression: 1→12→12→12→10→10→16→8
+  - Global Average Pooling at the end
+  - Dual FC layers for final classification
+
 ---
 
 ## Experiment Summary Table
