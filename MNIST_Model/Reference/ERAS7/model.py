@@ -7,8 +7,8 @@ This module provides:
 - ModelBuilder: Builder pattern for constructing models
 - MNISTModel: The main CNN model class
 
-Author: AI Assistant
-Date: 2024
+Author: Krishnakanth
+Date: 2024-10-01
 """
 
 import os
