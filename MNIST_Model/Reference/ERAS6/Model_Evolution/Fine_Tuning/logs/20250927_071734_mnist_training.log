@@ -1,0 +1,156 @@
+2025-09-27 07:17:34,093 - MNIST_Training - INFO - Logger initialized. Log file: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS6\Model_Evolution\Fine_Tuning\logs\20250927_071734_mnist_training.log
+2025-09-27 07:17:34,095 - MNIST_Training - INFO - Updated Configuration (from main()):
+2025-09-27 07:17:34,096 - MNIST_Training - INFO -   - Epochs: 20
+2025-09-27 07:17:34,096 - MNIST_Training - INFO -   - Learning Rate: 0.2
+2025-09-27 07:17:34,097 - MNIST_Training - INFO -   - Momentum: 0.9
+2025-09-27 07:17:34,098 - MNIST_Training - INFO -   - Weight Decay: 0.0
+2025-09-27 07:17:34,098 - MNIST_Training - INFO -   - Scheduler Step Size: 10
+2025-09-27 07:17:34,099 - MNIST_Training - INFO -   - Scheduler Gamma: 0.1
+2025-09-27 07:17:34,100 - MNIST_Training - INFO -   - Batch Size: 512
+2025-09-27 07:17:34,100 - MNIST_Training - INFO -   - Num Workers: 4
+2025-09-27 07:17:34,101 - MNIST_Training - INFO -   - Pin Memory: True
+2025-09-27 07:17:34,101 - MNIST_Training - INFO -   - Shuffle: True
+2025-09-27 07:17:34,101 - MNIST_Training - INFO -   - Dropout Rate: 0.05
+2025-09-27 07:17:34,101 - MNIST_Training - INFO -   - Device: CUDA
+2025-09-27 07:17:34,101 - MNIST_Training - INFO -   - Log Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS6\Model_Evolution\Fine_Tuning\logs
+2025-09-27 07:17:34,102 - MNIST_Training - INFO -   - Model Save Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS6\Model_Evolution\Fine_Tuning\models
+2025-09-27 07:17:34,106 - MNIST_Training - INFO -   - Save Model: True
+2025-09-27 07:17:34,107 - MNIST_Training - INFO -   - Log Level: DEBUG
+2025-09-27 07:17:34,116 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:34,118 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:34,123 - MNIST_Training - INFO - MNIST TRAINING EXPERIMENT STARTED
+2025-09-27 07:17:34,126 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:34,128 - MNIST_Training - INFO - Data Config: DataConfig(data_dir='./data', batch_size=512, num_workers=4, pin_memory=True, shuffle=True, mean=(0.1307,), std=(0.3081,), rotation_range=(-7.0, 7.0), fill_value=1)
+2025-09-27 07:17:34,133 - MNIST_Training - INFO - Model Config: ModelConfig(input_channels=1, input_size=(28, 28), num_classes=10, dropout_rate=0.05)
+2025-09-27 07:17:34,137 - MNIST_Training - INFO - Training Config: TrainingConfig(epochs=20, learning_rate=0.2, momentum=0.9, weight_decay=0.0, scheduler_step_size=10, scheduler_gamma=0.1, seed=1)
+2025-09-27 07:17:34,137 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:34,138 - MNIST_Training - INFO - Setting up data...
+2025-09-27 07:17:34,138 - MNIST_Training - INFO - Loading MNIST dataset...
+2025-09-27 07:17:34,642 - MNIST_Training - INFO - Dataset loaded successfully!
+2025-09-27 07:17:34,642 - MNIST_Training - INFO - Train samples: 60000
+2025-09-27 07:17:34,643 - MNIST_Training - INFO - Test samples: 10000
+2025-09-27 07:17:34,643 - MNIST_Training - INFO - Computing data statistics...
+2025-09-27 07:17:36,189 - MNIST_Training - INFO - Data Statistics:
+2025-09-27 07:17:36,195 - MNIST_Training - INFO -   - Shape: torch.Size([60000, 28, 28])
+2025-09-27 07:17:36,195 - MNIST_Training - INFO -   - Size: 47,040,000
+2025-09-27 07:17:36,196 - MNIST_Training - INFO -   - Min: 0.0000
+2025-09-27 07:17:36,197 - MNIST_Training - INFO -   - Max: 1.0000
+2025-09-27 07:17:36,197 - MNIST_Training - INFO -   - Mean: 0.1307
+2025-09-27 07:17:36,197 - MNIST_Training - INFO -   - Std: 0.3081
+2025-09-27 07:17:36,203 - MNIST_Training - INFO -   - Variance: 0.0949
+2025-09-27 07:17:43,526 - MNIST_Training - INFO - Batch Information:
+2025-09-27 07:17:43,527 - MNIST_Training - INFO -   - Batch size: 512
+2025-09-27 07:17:43,527 - MNIST_Training - INFO -   - Image shape: torch.Size([1, 28, 28])
+2025-09-27 07:17:43,528 - MNIST_Training - INFO -   - Label shape: torch.Size([512])
+2025-09-27 07:17:43,529 - MNIST_Training - INFO -   - Data type: torch.float32
+2025-09-27 07:17:44,779 - MNIST_Training - INFO - Getting input size from data loader...
+2025-09-27 07:17:48,749 - MNIST_Training - INFO - Input size from data loader: (1, 28, 28)
+2025-09-27 07:17:50,494 - MNIST_Training - INFO - Setting up model...
+2025-09-27 07:17:50,537 - MNIST_Training - INFO - Generating model summary...
+2025-09-27 07:17:52,007 - MNIST_Training - INFO - Model Architecture Summary:
+2025-09-27 07:17:52,007 - MNIST_Training - INFO -   - Total Parameters: 7,974
+2025-09-27 07:17:52,007 - MNIST_Training - INFO -   - Batch Normalization: Yes
+2025-09-27 07:17:52,007 - MNIST_Training - INFO -   - Dropout: Yes
+2025-09-27 07:17:52,007 - MNIST_Training - INFO -   - GAP Layers: Yes
+2025-09-27 07:17:52,007 - MNIST_Training - INFO -   - FC Layers: Yes
+2025-09-27 07:17:52,007 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:52,007 - MNIST_Training - INFO - DETAILED MODEL ARCHITECTURE SUMMARY
+2025-09-27 07:17:52,007 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:52,009 - MNIST_Training - INFO - ----------------------------------------------------------------
+2025-09-27 07:17:52,009 - MNIST_Training - INFO -         Layer (type)               Output Shape         Param #
+2025-09-27 07:17:52,009 - MNIST_Training - INFO - ================================================================
+2025-09-27 07:17:52,009 - MNIST_Training - INFO -             Conv2d-1           [-1, 12, 28, 28]             108
+2025-09-27 07:17:52,009 - MNIST_Training - INFO -        BatchNorm2d-2           [-1, 12, 28, 28]              24
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -               ReLU-3           [-1, 12, 28, 28]               0
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -             Conv2d-4           [-1, 12, 28, 28]           1,296
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -        BatchNorm2d-5           [-1, 12, 28, 28]              24
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -               ReLU-6           [-1, 12, 28, 28]               0
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -            Dropout-7           [-1, 12, 28, 28]               0
+2025-09-27 07:17:52,010 - MNIST_Training - INFO -             Conv2d-8           [-1, 12, 28, 28]           1,296
+2025-09-27 07:17:52,011 - MNIST_Training - INFO -        BatchNorm2d-9           [-1, 12, 28, 28]              24
+2025-09-27 07:17:52,011 - MNIST_Training - INFO -              ReLU-10           [-1, 12, 28, 28]               0
+2025-09-27 07:17:52,011 - MNIST_Training - INFO -           Dropout-11           [-1, 12, 28, 28]               0
+2025-09-27 07:17:52,011 - MNIST_Training - INFO -         MaxPool2d-12           [-1, 12, 14, 14]               0
+2025-09-27 07:17:52,011 - MNIST_Training - INFO -            Conv2d-13           [-1, 10, 14, 14]           1,080
+2025-09-27 07:17:52,012 - MNIST_Training - INFO -       BatchNorm2d-14           [-1, 10, 14, 14]              20
+2025-09-27 07:17:52,012 - MNIST_Training - INFO -              ReLU-15           [-1, 10, 14, 14]               0
+2025-09-27 07:17:52,012 - MNIST_Training - INFO -           Dropout-16           [-1, 10, 14, 14]               0
+2025-09-27 07:17:52,013 - MNIST_Training - INFO -            Conv2d-17           [-1, 10, 14, 14]             900
+2025-09-27 07:17:52,014 - MNIST_Training - INFO -       BatchNorm2d-18           [-1, 10, 14, 14]              20
+2025-09-27 07:17:52,015 - MNIST_Training - INFO -              ReLU-19           [-1, 10, 14, 14]               0
+2025-09-27 07:17:52,016 - MNIST_Training - INFO -           Dropout-20           [-1, 10, 14, 14]               0
+2025-09-27 07:17:52,016 - MNIST_Training - INFO -         MaxPool2d-21             [-1, 10, 7, 7]               0
+2025-09-27 07:17:52,017 - MNIST_Training - INFO -            Conv2d-22             [-1, 16, 5, 5]           1,440
+2025-09-27 07:17:52,020 - MNIST_Training - INFO -       BatchNorm2d-23             [-1, 16, 5, 5]              32
+2025-09-27 07:17:52,023 - MNIST_Training - INFO -              ReLU-24             [-1, 16, 5, 5]               0
+2025-09-27 07:17:52,031 - MNIST_Training - INFO -           Dropout-25             [-1, 16, 5, 5]               0
+2025-09-27 07:17:52,033 - MNIST_Training - INFO -            Conv2d-26              [-1, 8, 3, 3]           1,152
+2025-09-27 07:17:52,044 - MNIST_Training - INFO -       BatchNorm2d-27              [-1, 8, 3, 3]              16
+2025-09-27 07:17:52,045 - MNIST_Training - INFO -              ReLU-28              [-1, 8, 3, 3]               0
+2025-09-27 07:17:52,046 - MNIST_Training - INFO -           Dropout-29              [-1, 8, 3, 3]               0
+2025-09-27 07:17:52,047 - MNIST_Training - INFO -         AvgPool2d-30              [-1, 8, 1, 1]               0
+2025-09-27 07:17:52,049 - MNIST_Training - INFO -            Linear-31                   [-1, 28]             252
+2025-09-27 07:17:52,049 - MNIST_Training - INFO -            Linear-32                   [-1, 10]             290
+2025-09-27 07:17:52,049 - MNIST_Training - INFO - ================================================================
+2025-09-27 07:17:52,049 - MNIST_Training - INFO - Total params: 7,974
+2025-09-27 07:17:52,050 - MNIST_Training - INFO - Trainable params: 7,974
+2025-09-27 07:17:52,050 - MNIST_Training - INFO - Non-trainable params: 0
+2025-09-27 07:17:52,050 - MNIST_Training - INFO - ----------------------------------------------------------------
+2025-09-27 07:17:52,051 - MNIST_Training - INFO - Input size (MB): 0.00
+2025-09-27 07:17:52,146 - MNIST_Training - INFO - Forward/backward pass size (MB): 0.95
+2025-09-27 07:17:52,150 - MNIST_Training - INFO - Params size (MB): 0.03
+2025-09-27 07:17:52,175 - MNIST_Training - INFO - Estimated Total Size (MB): 0.98
+2025-09-27 07:17:52,176 - MNIST_Training - INFO - ----------------------------------------------------------------
+2025-09-27 07:17:52,176 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:17:52,176 - MNIST_Training - INFO - Setting up trainer...
+2025-09-27 07:17:52,185 - MNIST_Training - INFO - Using device: cuda
+2025-09-27 07:17:52,187 - MNIST_Training - INFO - Starting training process...
+2025-09-27 07:17:52,188 - MNIST_Training - INFO - Starting training process...
+2025-09-27 07:17:52,189 - MNIST_Training - INFO - Starting Epoch 1/20
+2025-09-27 07:18:07,962 - MNIST_Training - INFO - Epoch  1: Train Loss: 0.5830, Train Acc: 80.75%, Test Loss: 0.1007, Test Acc: 96.97%
+2025-09-27 07:18:07,962 - MNIST_Training - INFO - Starting Epoch 2/20
+2025-09-27 07:18:21,569 - MNIST_Training - INFO - Epoch  2: Train Loss: 0.0956, Train Acc: 97.04%, Test Loss: 0.0594, Test Acc: 98.20%
+2025-09-27 07:18:21,573 - MNIST_Training - INFO - Starting Epoch 3/20
+2025-09-27 07:18:34,973 - MNIST_Training - INFO - Epoch  3: Train Loss: 0.0716, Train Acc: 97.82%, Test Loss: 0.0374, Test Acc: 98.84%
+2025-09-27 07:18:34,973 - MNIST_Training - INFO - Starting Epoch 4/20
+2025-09-27 07:18:48,684 - MNIST_Training - INFO - Epoch  4: Train Loss: 0.0607, Train Acc: 98.22%, Test Loss: 0.0505, Test Acc: 98.37%
+2025-09-27 07:18:48,684 - MNIST_Training - INFO - Starting Epoch 5/20
+2025-09-27 07:19:25,290 - MNIST_Training - INFO - Epoch  5: Train Loss: 0.0553, Train Acc: 98.28%, Test Loss: 0.0347, Test Acc: 98.90%
+2025-09-27 07:19:25,290 - MNIST_Training - INFO - Starting Epoch 6/20
+2025-09-27 07:19:38,834 - MNIST_Training - INFO - Epoch  6: Train Loss: 0.0531, Train Acc: 98.34%, Test Loss: 0.0598, Test Acc: 98.14%
+2025-09-27 07:19:38,835 - MNIST_Training - INFO - Starting Epoch 7/20
+2025-09-27 07:19:52,375 - MNIST_Training - INFO - Epoch  7: Train Loss: 0.0467, Train Acc: 98.58%, Test Loss: 0.0289, Test Acc: 99.07%
+2025-09-27 07:19:52,375 - MNIST_Training - INFO - Starting Epoch 8/20
+2025-09-27 07:20:05,959 - MNIST_Training - INFO - Epoch  8: Train Loss: 0.0434, Train Acc: 98.69%, Test Loss: 0.0271, Test Acc: 99.24%
+2025-09-27 07:20:05,959 - MNIST_Training - INFO - Starting Epoch 9/20
+2025-09-27 07:20:19,605 - MNIST_Training - INFO - Epoch  9: Train Loss: 0.0449, Train Acc: 98.62%, Test Loss: 0.0357, Test Acc: 98.96%
+2025-09-27 07:20:19,605 - MNIST_Training - INFO - Starting Epoch 10/20
+2025-09-27 07:20:35,048 - MNIST_Training - INFO - Epoch 10: Train Loss: 0.0405, Train Acc: 98.71%, Test Loss: 0.0305, Test Acc: 99.04%
+2025-09-27 07:20:35,049 - MNIST_Training - INFO - Starting Epoch 11/20
+2025-09-27 07:21:48,961 - MNIST_Training - INFO - Epoch 11: Train Loss: 0.0310, Train Acc: 99.02%, Test Loss: 0.0197, Test Acc: 99.41%
+2025-09-27 07:21:48,963 - MNIST_Training - INFO - Starting Epoch 12/20
+2025-09-27 07:23:23,947 - MNIST_Training - INFO - Epoch 12: Train Loss: 0.0284, Train Acc: 99.08%, Test Loss: 0.0198, Test Acc: 99.41%
+2025-09-27 07:23:23,947 - MNIST_Training - INFO - Starting Epoch 13/20
+2025-09-27 07:24:56,432 - MNIST_Training - INFO - Epoch 13: Train Loss: 0.0271, Train Acc: 99.14%, Test Loss: 0.0195, Test Acc: 99.43%
+2025-09-27 07:24:56,434 - MNIST_Training - INFO - Starting Epoch 14/20
+2025-09-27 07:26:58,136 - MNIST_Training - INFO - Epoch 14: Train Loss: 0.0295, Train Acc: 99.08%, Test Loss: 0.0199, Test Acc: 99.39%
+2025-09-27 07:26:58,139 - MNIST_Training - INFO - Starting Epoch 15/20
+2025-09-27 07:28:49,096 - MNIST_Training - INFO - Epoch 15: Train Loss: 0.0278, Train Acc: 99.12%, Test Loss: 0.0193, Test Acc: 99.41%
+2025-09-27 07:28:49,100 - MNIST_Training - INFO - Starting Epoch 16/20
+2025-09-27 07:31:37,986 - MNIST_Training - INFO - Epoch 16: Train Loss: 0.0260, Train Acc: 99.16%, Test Loss: 0.0202, Test Acc: 99.35%
+2025-09-27 07:31:37,988 - MNIST_Training - INFO - Starting Epoch 17/20
+2025-09-27 07:33:26,135 - MNIST_Training - INFO - Epoch 17: Train Loss: 0.0264, Train Acc: 99.11%, Test Loss: 0.0200, Test Acc: 99.39%
+2025-09-27 07:33:26,136 - MNIST_Training - INFO - Starting Epoch 18/20
+2025-09-27 07:34:44,235 - MNIST_Training - INFO - Epoch 18: Train Loss: 0.0244, Train Acc: 99.22%, Test Loss: 0.0192, Test Acc: 99.36%
+2025-09-27 07:34:44,238 - MNIST_Training - INFO - Starting Epoch 19/20
+2025-09-27 07:36:09,050 - MNIST_Training - INFO - Epoch 19: Train Loss: 0.0263, Train Acc: 99.16%, Test Loss: 0.0198, Test Acc: 99.39%
+2025-09-27 07:36:09,051 - MNIST_Training - INFO - Starting Epoch 20/20
+2025-09-27 07:37:38,029 - MNIST_Training - INFO - Epoch 20: Train Loss: 0.0241, Train Acc: 99.24%, Test Loss: 0.0193, Test Acc: 99.41%
+2025-09-27 07:37:38,032 - MNIST_Training - INFO - Training completed!
+2025-09-27 07:37:38,033 - MNIST_Training - INFO - Final Results: {'final_train_loss': 0.0240809716031713, 'final_test_loss': 0.019291995084285737, 'final_train_accuracy': 99.24166666666666, 'final_test_accuracy': 99.41, 'best_test_accuracy': 99.43}
+2025-09-27 07:37:40,978 - MNIST_Training - INFO - Training curves saved to: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS6\Model_Evolution\Fine_Tuning\logs\training_curves_20250927_073738.png
+2025-09-27 07:37:55,813 - MNIST_Training - INFO - Model saved to: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS6\Model_Evolution\Fine_Tuning\models\mnist_model_20250927_073755.pth
+2025-09-27 07:37:55,868 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:37:55,870 - MNIST_Training - INFO - TRAINING PIPELINE COMPLETED SUCCESSFULLY
+2025-09-27 07:37:55,878 - MNIST_Training - INFO - ==================================================
+2025-09-27 07:37:55,889 - MNIST_Training - INFO - Final Metrics: {'final_train_loss': 0.0240809716031713, 'final_test_loss': 0.019291995084285737, 'final_train_accuracy': 99.24166666666666, 'final_test_accuracy': 99.41, 'best_test_accuracy': 99.43}

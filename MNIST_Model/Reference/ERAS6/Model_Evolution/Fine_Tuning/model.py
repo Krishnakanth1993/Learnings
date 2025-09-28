@@ -7,8 +7,8 @@ This module provides:
 - ModelBuilder: Builder pattern for constructing models
 - MNISTModel: The main CNN model class
 
-Author: AI Assistant
-Date: 2024
+Author: Krishnakanth
+Date: 2025-09-28
 """
 
 import os
@@ -29,10 +29,54 @@ from dataclasses import dataclass
 @dataclass
 class ModelConfig:
     """Configuration for model architecture."""
-    input_channels: int = 1
-    input_size: Tuple[int, int] = (28, 28)
-    num_classes: int = 10
+    # Dataset-specific configurations
+    dataset_name: str = 'MNIST'  # Options: 'MNIST', 'CIFAR10', 'CIFAR100'
+    
+    # MNIST configuration
+    mnist_input_channels: int = 1
+    mnist_input_size: Tuple[int, int] = (28, 28)
+    mnist_num_classes: int = 10
+    
+    # CIFAR configuration
+    cifar_input_channels: int = 3
+    cifar_input_size: Tuple[int, int] = (32, 32)
+    cifar10_num_classes: int = 10
+    cifar100_num_classes: int = 100
+    
+    # Model parameters
     dropout_rate: float = 0.05
+    
+    @property
+    def input_channels(self) -> int:
+        """Get input channels based on dataset."""
+        if self.dataset_name == 'MNIST':
+            return self.mnist_input_channels
+        elif self.dataset_name in ['CIFAR10', 'CIFAR100']:
+            return self.cifar_input_channels
+        else:
+            raise ValueError(f"Unsupported dataset: {self.dataset_name}")
+    
+    @property
+    def input_size(self) -> Tuple[int, int]:
+        """Get input size based on dataset."""
+        if self.dataset_name == 'MNIST':
+            return self.mnist_input_size
+        elif self.dataset_name in ['CIFAR10', 'CIFAR100']:
+            return self.cifar_input_size
+        else:
+            raise ValueError(f"Unsupported dataset: {self.dataset_name}")
+    
+    @property
+    def num_classes(self) -> int:
+        """Get number of classes based on dataset."""
+        if self.dataset_name == 'MNIST':
+            return self.mnist_num_classes
+        elif self.dataset_name == 'CIFAR10':
+            return self.cifar10_num_classes
+        elif self.dataset_name == 'CIFAR100':
+            return self.cifar100_num_classes
+        else:
+            raise ValueError(f"Unsupported dataset: {self.dataset_name}")
 
 
 # =============================================================================

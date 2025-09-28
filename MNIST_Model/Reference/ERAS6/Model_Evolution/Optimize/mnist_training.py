@@ -11,8 +11,8 @@ This script combines all functionality into a single file while maintaining:
 - Model architecture analysis
 - Training progress monitoring
 
-Author: AI Assistant
-Date: 2024
+Author: Krishnakanth
+Date: 2025-09-28
 """
 
 import os
@@ -24,7 +24,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchsummary import summary
-from torch.optim.lr_scheduler import StepLR
+from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR, ExponentialLR, ReduceLROnPlateau
 from tqdm import tqdm
 from io import StringIO
 import logging
@@ -68,6 +68,21 @@ class TrainingConfig:
     scheduler_step_size: int = 6
     scheduler_gamma: float = 0.1
     seed: int = 1
+    
+    # Optimizer configuration
+    optimizer_type: str = 'SGD'  # Options: 'SGD', 'Adam', 'AdamW', 'RMSprop'
+    adam_betas: Tuple[float, float] = (0.9, 0.999)
+    adam_eps: float = 1e-8
+    rmsprop_alpha: float = 0.99
+    
+    # Scheduler configuration
+    scheduler_type: str = 'StepLR'  # Options: 'StepLR', 'CosineAnnealingLR', 'ExponentialLR', 'ReduceLROnPlateau'
+    cosine_t_max: int = 20
+    exponential_gamma: float = 0.95
+    plateau_mode: str = 'min'
+    plateau_factor: float = 0.5
+    plateau_patience: int = 5
+    plateau_threshold: float = 1e-4
 
 
 @dataclass
@@ -197,10 +212,34 @@ class Logger:
         self.info("Updated Configuration (from main()):")
         self.info(f"  - Epochs: {config.training.epochs}")
         self.info(f"  - Learning Rate: {config.training.learning_rate}")
-        self.info(f"  - Momentum: {config.training.momentum}")
+        self.info(f"  - Optimizer: {config.training.optimizer_type}")
         self.info(f"  - Weight Decay: {config.training.weight_decay}")
-        self.info(f"  - Scheduler Step Size: {config.training.scheduler_step_size}")
-        self.info(f"  - Scheduler Gamma: {config.training.scheduler_gamma}")
+        
+        # Optimizer-specific parameters
+        if config.training.optimizer_type == 'SGD':
+            self.info(f"  - Momentum: {config.training.momentum}")
+        elif config.training.optimizer_type in ['Adam', 'AdamW']:
+            self.info(f"  - Adam Betas: {config.training.adam_betas}")
+            self.info(f"  - Adam Eps: {config.training.adam_eps}")
+        elif config.training.optimizer_type == 'RMSprop':
+            self.info(f"  - RMSprop Alpha: {config.training.rmsprop_alpha}")
+        
+        # Scheduler information
+        self.info(f"  - Scheduler: {config.training.scheduler_type}")
+        
+        # Scheduler-specific parameters
+        if config.training.scheduler_type == 'StepLR':
+            self.info(f"  - Step Size: {config.training.scheduler_step_size}")
+            self.info(f"  - Gamma: {config.training.scheduler_gamma}")
+        elif config.training.scheduler_type == 'CosineAnnealingLR':
+            self.info(f"  - T Max: {config.training.cosine_t_max}")
+        elif config.training.scheduler_type == 'ExponentialLR':
+            self.info(f"  - Gamma: {config.training.exponential_gamma}")
+        elif config.training.scheduler_type == 'ReduceLROnPlateau':
+            self.info(f"  - Mode: {config.training.plateau_mode}")
+            self.info(f"  - Factor: {config.training.plateau_factor}")
+            self.info(f"  - Patience: {config.training.plateau_patience}")
+            self.info(f"  - Threshold: {config.training.plateau_threshold}")
         self.info(f"  - Batch Size: {config.data.batch_size}")
         self.info(f"  - Num Workers: {config.data.num_workers}")
         self.info(f"  - Pin Memory: {config.data.pin_memory}")
@@ -214,10 +253,14 @@ class Logger:
         self.info("=" * 50)
     
     def log_epoch_results(self, epoch: int, train_loss: float, train_acc: float, 
-                         test_loss: float, test_acc: float) -> None:
+                         test_loss: float, test_acc: float, current_lr: float = None) -> None:
         """Log epoch results."""
-        self.info(f"Epoch {epoch:2d}: Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, "
-                 f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%")
+        if current_lr is not None:
+            self.info(f"Epoch {epoch:2d}: Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, "
+                     f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%, LR: {current_lr:.6f}")
+        else:
+            self.info(f"Epoch {epoch:2d}: Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, "
+                     f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%")
     
     def log_model_summary(self, total_params: int, has_batchnorm: bool, 
                          has_dropout: bool, has_fc_or_gap: bool) -> None:
@@ -520,6 +563,72 @@ class MNISTTrainer(BaseTrainer):
         
         self.logger.info(f"Using device: {self.device}")
     
+    def create_optimizer(self, model) -> optim.Optimizer:
+        """Create optimizer based on configuration."""
+        if self.config.optimizer_type == 'SGD':
+            return optim.SGD(
+                model.parameters(),
+                lr=self.config.learning_rate,
+                momentum=self.config.momentum,
+                weight_decay=self.config.weight_decay
+            )
+        elif self.config.optimizer_type == 'Adam':
+            return optim.Adam(
+                model.parameters(),
+                lr=self.config.learning_rate,
+                betas=self.config.adam_betas,
+                eps=self.config.adam_eps,
+                weight_decay=self.config.weight_decay
+            )
+        elif self.config.optimizer_type == 'AdamW':
+            return optim.AdamW(
+                model.parameters(),
+                lr=self.config.learning_rate,
+                betas=self.config.adam_betas,
+                eps=self.config.adam_eps,
+                weight_decay=self.config.weight_decay
+            )
+        elif self.config.optimizer_type == 'RMSprop':
+            return optim.RMSprop(
+                model.parameters(),
+                lr=self.config.learning_rate,
+                alpha=self.config.rmsprop_alpha,
+                weight_decay=self.config.weight_decay
+            )
+        else:
+            raise ValueError(f"Unsupported optimizer type: {self.config.optimizer_type}")
+    
+    def create_scheduler(self, optimizer) -> Any:
+        """Create scheduler based on configuration."""
+        if self.config.scheduler_type == 'StepLR':
+            return StepLR(
+                optimizer,
+                step_size=self.config.scheduler_step_size,
+                gamma=self.config.scheduler_gamma
+            )
+        elif self.config.scheduler_type == 'CosineAnnealingLR':
+            return CosineAnnealingLR(
+                optimizer,
+                T_max=self.config.cosine_t_max,
+                eta_min=0
+            )
+        elif self.config.scheduler_type == 'ExponentialLR':
+            return ExponentialLR(
+                optimizer,
+                gamma=self.config.exponential_gamma
+            )
+        elif self.config.scheduler_type == 'ReduceLROnPlateau':
+            return ReduceLROnPlateau(
+                optimizer,
+                mode=self.config.plateau_mode,
+                factor=self.config.plateau_factor,
+                patience=self.config.plateau_patience,
+                threshold=self.config.plateau_threshold,
+                verbose=True
+            )
+        else:
+            raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
+    
     def train_epoch(self, model, device, train_loader, optimizer, epoch: int) -> Tuple[float, float]:
         """Train the model for one epoch."""
         model.train()
@@ -587,18 +696,43 @@ class MNISTTrainer(BaseTrainer):
         self.logger.info("Starting training process...")
         
         # Setup optimizer and scheduler
-        optimizer = optim.SGD(
-            model.parameters(),
-            lr=self.config.learning_rate,
-            momentum=self.config.momentum,
-            weight_decay=self.config.weight_decay
-        )
+        optimizer = self.create_optimizer(model)
+        scheduler = self.create_scheduler(optimizer)
         
-        scheduler = StepLR(
-            optimizer,
-            step_size=self.config.scheduler_step_size,
-            gamma=self.config.scheduler_gamma
-        )
+        self.logger.info(f"Using optimizer: {self.config.optimizer_type}")
+        self.logger.info(f"Using scheduler: {self.config.scheduler_type}")
+        
+        # Log optimizer details
+        self.logger.info("Optimizer Configuration:")
+        if self.config.optimizer_type == 'SGD':
+            self.logger.info(f"  - Learning Rate: {self.config.learning_rate}")
+            self.logger.info(f"  - Momentum: {self.config.momentum}")
+            self.logger.info(f"  - Weight Decay: {self.config.weight_decay}")
+        elif self.config.optimizer_type in ['Adam', 'AdamW']:
+            self.logger.info(f"  - Learning Rate: {self.config.learning_rate}")
+            self.logger.info(f"  - Betas: {self.config.adam_betas}")
+            self.logger.info(f"  - Eps: {self.config.adam_eps}")
+            self.logger.info(f"  - Weight Decay: {self.config.weight_decay}")
+        elif self.config.optimizer_type == 'RMSprop':
+            self.logger.info(f"  - Learning Rate: {self.config.learning_rate}")
+            self.logger.info(f"  - Alpha: {self.config.rmsprop_alpha}")
+            self.logger.info(f"  - Weight Decay: {self.config.weight_decay}")
+        
+        # Log scheduler details
+        self.logger.info("Scheduler Configuration:")
+        if self.config.scheduler_type == 'StepLR':
+            self.logger.info(f"  - Step Size: {self.config.scheduler_step_size}")
+            self.logger.info(f"  - Gamma: {self.config.scheduler_gamma}")
+        elif self.config.scheduler_type == 'CosineAnnealingLR':
+            self.logger.info(f"  - T Max: {self.config.cosine_t_max}")
+            self.logger.info(f"  - Eta Min: 0")
+        elif self.config.scheduler_type == 'ExponentialLR':
+            self.logger.info(f"  - Gamma: {self.config.exponential_gamma}")
+        elif self.config.scheduler_type == 'ReduceLROnPlateau':
+            self.logger.info(f"  - Mode: {self.config.plateau_mode}")
+            self.logger.info(f"  - Factor: {self.config.plateau_factor}")
+            self.logger.info(f"  - Patience: {self.config.plateau_patience}")
+            self.logger.info(f"  - Threshold: {self.config.plateau_threshold}")
         
         # Training loop
         for epoch in range(self.config.epochs):
@@ -613,14 +747,20 @@ class MNISTTrainer(BaseTrainer):
             test_loss, test_acc = self.test_epoch(model, self.device, test_loader)
             
             # Update scheduler
-            scheduler.step()
+            if self.config.scheduler_type == 'ReduceLROnPlateau':
+                scheduler.step(test_loss)  # ReduceLROnPlateau needs a metric
+            else:
+                scheduler.step()
             
             # Store metrics
             self.metrics.add_epoch_metrics(train_loss, train_acc, test_loss, test_acc)
             
+            # Get current learning rate
+            current_lr = optimizer.param_groups[0]['lr']
+            
             # Log results
             self.logger.log_epoch_results(
-                epoch + 1, train_loss, train_acc, test_loss, test_acc
+                epoch + 1, train_loss, train_acc, test_loss, test_acc, current_lr
             )
         
         # Log final results
