@@ -1,0 +1,73 @@
+2025-09-29 13:45:39,180 - CIFAR-10_Training - INFO - Logger initialized. Log file: c:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\logs\20250929_134539_cifar10_training.log
+2025-09-29 13:46:38,132 - CIFAR-10_Training - INFO - Setting up data...
+2025-09-29 13:46:38,133 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-09-29 13:46:41,318 - CIFAR-10_Training - INFO - CIFAR-10 dataset loaded successfully!
+2025-09-29 13:46:41,320 - CIFAR-10_Training - INFO - Train samples: 50000
+2025-09-29 13:46:41,321 - CIFAR-10_Training - INFO - Test samples: 10000
+2025-09-29 13:46:41,324 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-09-29 13:46:45,438 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-09-29 13:46:45,449 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-09-29 13:46:45,452 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-09-29 13:46:45,454 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-09-29 13:46:45,455 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-09-29 13:46:45,456 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-09-29 13:46:45,457 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-09-29 13:46:45,459 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-09-29 13:46:45,460 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-09-29 13:46:45,461 - CIFAR-10_Training - INFO -   Red Channel:
+2025-09-29 13:46:45,462 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-09-29 13:46:45,463 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-09-29 13:46:45,463 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 13:46:45,464 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 13:46:45,465 - CIFAR-10_Training - INFO -   Green Channel:
+2025-09-29 13:46:45,465 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-09-29 13:46:45,466 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-09-29 13:46:45,467 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 13:46:45,468 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 13:46:45,469 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-09-29 13:46:45,470 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-09-29 13:46:45,471 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-09-29 13:46:45,471 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 13:46:45,472 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 13:47:13,754 - CIFAR-10_Training - INFO - CIFAR-10 Batch Information:
+2025-09-29 13:47:13,757 - CIFAR-10_Training - INFO -   - Batch size: 128
+2025-09-29 13:47:13,763 - CIFAR-10_Training - INFO -   - Image shape: torch.Size([3, 32, 32])
+2025-09-29 13:47:13,770 - CIFAR-10_Training - INFO -   - Label shape: torch.Size([128])
+2025-09-29 13:47:13,772 - CIFAR-10_Training - INFO -   - Data type: torch.float32
+2025-09-29 13:47:13,777 - CIFAR-10_Training - INFO -   - Number of classes: 10
+2025-09-29 14:02:42,732 - CIFAR-10_Training - INFO - Setting up data...
+2025-09-29 14:02:42,733 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-09-29 14:02:45,271 - CIFAR-10_Training - INFO - CIFAR-10 dataset loaded successfully!
+2025-09-29 14:02:45,272 - CIFAR-10_Training - INFO - Train samples: 50000
+2025-09-29 14:02:45,273 - CIFAR-10_Training - INFO - Test samples: 10000
+2025-09-29 14:02:45,274 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-09-29 14:02:48,426 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-09-29 14:02:48,427 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-09-29 14:02:48,429 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-09-29 14:02:48,430 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-09-29 14:02:48,431 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-09-29 14:02:48,432 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-09-29 14:02:48,433 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-09-29 14:02:48,433 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-09-29 14:02:48,434 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-09-29 14:02:48,435 - CIFAR-10_Training - INFO -   Red Channel:
+2025-09-29 14:02:48,435 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-09-29 14:02:48,436 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-09-29 14:02:48,438 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:02:48,439 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:02:48,439 - CIFAR-10_Training - INFO -   Green Channel:
+2025-09-29 14:02:48,440 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-09-29 14:02:48,441 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-09-29 14:02:48,441 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:02:48,442 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:02:48,444 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-09-29 14:02:48,445 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-09-29 14:02:48,446 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-09-29 14:02:48,447 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:02:48,448 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:03:11,781 - CIFAR-10_Training - INFO - CIFAR-10 Batch Information:
+2025-09-29 14:03:11,783 - CIFAR-10_Training - INFO -   - Batch size: 128
+2025-09-29 14:03:11,784 - CIFAR-10_Training - INFO -   - Image shape: torch.Size([3, 32, 32])
+2025-09-29 14:03:11,785 - CIFAR-10_Training - INFO -   - Label shape: torch.Size([128])
+2025-09-29 14:03:11,787 - CIFAR-10_Training - INFO -   - Data type: torch.float32
+2025-09-29 14:03:11,789 - CIFAR-10_Training - INFO -   - Number of classes: 10

@@ -1,6 +1,6 @@
 """
-MNIST Training Script - Complete Monolithic Implementation
-A comprehensive, object-oriented Python script for training MNIST digit classification models.
+CIFAR-10 Training Script - Complete Monolithic Implementation
+A comprehensive, object-oriented Python script for training CIFAR-10 classification models.
 
 This script combines all functionality into a single file while maintaining:
 - Object-Oriented Design Principles
@@ -11,8 +11,8 @@ This script combines all functionality into a single file while maintaining:
 - Model architecture analysis
 - Training progress monitoring
 
-Author: AI Assistant
-Date: 2024
+Author: Krishnakanth
+Date: 29-09-2025
 """
 
 import os
@@ -35,7 +35,7 @@ from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
 
 # Import model classes from separate module
-from model import ModelConfig, ModelBuilder, MNISTModel
+from model import ModelConfig, ModelBuilder, CIFAR10Model
 
 
 # =============================================================================
@@ -50,9 +50,12 @@ class DataConfig:
     num_workers: int = 4
     pin_memory: bool = True
     shuffle: bool = True
-    # MNIST specific normalization values
+    # CIFAR-10 specific normalization values
     mean: Tuple[float, ...] = (0.1307,)
     std: Tuple[float, ...] = (0.3081,)
+    # CIFAR-10 specific normalization values
+    cifar10_mean: Tuple[float, ...] = (0.4914, 0.4822, 0.4465)
+    cifar10_std: Tuple[float, ...] = (0.2470, 0.2435, 0.2616)
     # Data augmentation
     rotation_range: Tuple[float, float] = (-7.0, 7.0)
     fill_value: int = 1
@@ -89,7 +92,7 @@ class TrainingConfig:
 class LoggingConfig:
     """Configuration for logging."""
     log_dir: str = None  # Will be set to script directory
-    log_file: str = 'mnist_training.log'
+    log_file: str = 'cifar10_training.log'
     log_level: str = 'INFO'
     save_model: bool = True
     model_save_dir: str = None  # Will be set to script directory
@@ -146,7 +149,7 @@ class Logger:
     def _setup_logger(self) -> None:
         """Setup the logger with file and console handlers."""
         # Create logger
-        self.logger = logging.getLogger('MNIST_Training')
+        self.logger = logging.getLogger('CIFAR-10_Training')
         self.logger.setLevel(getattr(logging, self.config.log_level))
         
         # Clear any existing handlers
@@ -200,7 +203,7 @@ class Logger:
     def log_experiment_start(self, config: Config) -> None:
         """Log experiment start with configuration."""
         self.info("=" * 50)
-        self.info("MNIST TRAINING EXPERIMENT STARTED")
+        self.info("CIFAR-10 TRAINING EXPERIMENT STARTED")
         self.info("=" * 50)
         self.info(f"Data Config: {config.data}")
         self.info(f"Model Config: {config.model}")
@@ -279,6 +282,17 @@ class Logger:
         for line in summary_text.splitlines():
             self.info(line)
         self.info("=" * 50)
+    
+    def log_epoch_results_with_difference(self, epoch: int, train_loss: float, train_acc: float, 
+                                        test_loss: float, test_acc: float, current_lr: float, 
+                                        acc_diff: float, overfitting_epochs: int) -> None:
+        """Log epoch results with accuracy difference."""
+        overfitting_warning = f" (OVERFITTING: {overfitting_epochs} epochs)" if overfitting_epochs > 0 else ""
+        
+        self.info(f"Epoch {epoch:2d}: Train Loss: {train_loss:.4f}, Train Acc: {train_acc:.2f}%, "
+                 f"Test Loss: {test_loss:.4f}, Test Acc: {test_acc:.2f}%, "
+                 f"Acc Diff: {acc_diff:.2f}%, LR: {current_lr:.6f}{overfitting_warning}")
+
 
 
 # =============================================================================
@@ -294,35 +308,45 @@ class TransformStrategy(ABC):
         pass
 
 
-class TrainTransformStrategy(TransformStrategy):
-    """Strategy for training data transformations."""
+class CIFAR10TransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-10 data transformations."""
     
     def __init__(self, config: DataConfig):
         self.config = config
     
     def get_transforms(self) -> transforms.Compose:
-        """Get training transforms with augmentation."""
+        """Get CIFAR-10 specific transforms."""
         return transforms.Compose([
-            transforms.RandomRotation(
-                self.config.rotation_range, 
-                fill=(self.config.fill_value,)
-            ),
             transforms.ToTensor(),
-            transforms.Normalize(self.config.mean, self.config.std)
+            transforms.Normalize(self.config.cifar10_mean, self.config.cifar10_std)
         ])
 
 
-class TestTransformStrategy(TransformStrategy):
-    """Strategy for test data transformations."""
+class CIFAR10TrainTransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-10 training data transformations with augmentation."""
     
     def __init__(self, config: DataConfig):
         self.config = config
     
     def get_transforms(self) -> transforms.Compose:
-        """Get test transforms without augmentation."""
+        """Get CIFAR-10 training transforms with augmentation."""
         return transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(self.config.mean, self.config.std)
+            transforms.Normalize(self.config.cifar10_mean, self.config.cifar10_std)
+        ])
+
+
+class CIFAR10TestTransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-10 test data transformations."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+    
+    def get_transforms(self) -> transforms.Compose:
+        """Get CIFAR-10 test transforms."""
+        return transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(self.config.cifar10_mean, self.config.cifar10_std)
         ])
 
 
@@ -347,9 +371,9 @@ class DataLoaderFactory:
         return DataLoader(dataset, **dataloader_args)
 
 
-class MNISTDataManager:
+class CIFAR10DataManager:
     """
-    Data manager class for MNIST dataset.
+    Data manager class for CIFAR-10 dataset.
     Implements the Facade pattern to provide a simple interface for data operations.
     """
     
@@ -361,23 +385,26 @@ class MNISTDataManager:
         self.train_loader = None
         self.test_loader = None
         
+        # CIFAR-10 class names
+        self.classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+        
         # Initialize transform strategies
-        self.train_transform_strategy = TrainTransformStrategy(config)
-        self.test_transform_strategy = TestTransformStrategy(config)
-    
+        self.train_transform_strategy = CIFAR10TrainTransformStrategy(config)
+        self.test_transform_strategy = CIFAR10TestTransformStrategy(config)
+
     def load_data(self) -> Tuple[DataLoader, DataLoader]:
-        """Load MNIST dataset and create data loaders."""
-        self.logger.info("Loading MNIST dataset...")
+        """Load CIFAR-10 dataset and create data loaders."""
+        self.logger.info("Loading CIFAR-10 dataset...")
         
         # Create datasets
-        self.train_dataset = datasets.MNIST(
+        self.train_dataset = datasets.CIFAR10(
             self.config.data_dir,
             train=True,
             download=True,
             transform=self.train_transform_strategy.get_transforms()
         )
         
-        self.test_dataset = datasets.MNIST(
+        self.test_dataset = datasets.CIFAR10(
             self.config.data_dir,
             train=False,
             download=True,
@@ -392,44 +419,75 @@ class MNISTDataManager:
             self.test_dataset, self.config, is_train=False
         )
         
-        self.logger.info(f"Dataset loaded successfully!")
+        self.logger.info(f"CIFAR-10 dataset loaded successfully!")
         self.logger.info(f"Train samples: {len(self.train_dataset)}")
         self.logger.info(f"Test samples: {len(self.test_dataset)}")
         
         return self.train_loader, self.test_loader
     
     def get_data_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive data statistics."""
-        self.logger.info("Computing data statistics...")
+        """Get comprehensive data statistics for CIFAR-10."""
+        self.logger.info("Computing CIFAR-10 data statistics...")
         
         # Get raw data for statistics
-        raw_train_data = self.train_dataset.data.float() / 255.0
+        raw_train_data = self.train_dataset.data
+        float_data = torch.tensor(raw_train_data, dtype=torch.float32) / 255.0
+        
+        # Overall statistics
+        overall_stats = {
+            'shape': raw_train_data.shape,
+            'size': raw_train_data.size,
+            'min': torch.min(float_data).item(),
+            'max': torch.max(float_data).item(),
+            'mean': torch.mean(float_data).item(),
+            'std': torch.std(float_data).item(),
+            'var': torch.var(float_data).item()
+        }
+        
+        # Channel-wise statistics
+        channel_stats = {}
+        for i, channel in enumerate(['Red', 'Green', 'Blue']):
+            channel_data = float_data[:, :, :, i]
+            channel_stats[channel.lower()] = {
+                'min': torch.min(channel_data).item(),
+                'max': torch.max(channel_data).item(),
+                'mean': torch.mean(channel_data).item(),
+                'median': torch.median(channel_data).item(),
+                'std': torch.std(channel_data).item(),
+                'var': torch.var(channel_data).item(),
+                'range': (torch.max(channel_data) - torch.min(channel_data)).item()
+            }
         
         stats = {
-            'shape': raw_train_data.shape,
-            'size': raw_train_data.numel(),
-            'min': torch.min(raw_train_data).item(),
-            'max': torch.max(raw_train_data).item(),
-            'mean': torch.mean(raw_train_data).item(),
-            'std': torch.std(raw_train_data).item(),
-            'var': torch.var(raw_train_data).item()
+            'overall': overall_stats,
+            'channels': channel_stats,
+            'class_names': self.classes,
+            'num_classes': len(self.classes)
         }
         
         # Log statistics
-        self.logger.info("Data Statistics:")
-        self.logger.info(f"  - Shape: {stats['shape']}")
-        self.logger.info(f"  - Size: {stats['size']:,}")
-        self.logger.info(f"  - Min: {stats['min']:.4f}")
-        self.logger.info(f"  - Max: {stats['max']:.4f}")
-        self.logger.info(f"  - Mean: {stats['mean']:.4f}")
-        self.logger.info(f"  - Std: {stats['std']:.4f}")
-        self.logger.info(f"  - Variance: {stats['var']:.4f}")
+        self.logger.info("CIFAR-10 Data Statistics:")
+        self.logger.info(f"  - Shape: {stats['overall']['shape']}")
+        self.logger.info(f"  - Size: {stats['overall']['size']:,}")
+        self.logger.info(f"  - Min: {stats['overall']['min']:.4f}")
+        self.logger.info(f"  - Max: {stats['overall']['max']:.4f}")
+        self.logger.info(f"  - Mean: {stats['overall']['mean']:.4f}")
+        self.logger.info(f"  - Std: {stats['overall']['std']:.4f}")
+        self.logger.info(f"  - Variance: {stats['overall']['var']:.4f}")
+        
+        self.logger.info("Channel-wise Statistics:")
+        for channel, channel_stat in channel_stats.items():
+            self.logger.info(f"  {channel.capitalize()} Channel:")
+            self.logger.info(f"    - Mean: {channel_stat['mean']:.4f}")
+            self.logger.info(f"    - Std: {channel_stat['std']:.4f}")
+            self.logger.info(f"    - Min: {channel_stat['min']:.4f}")
+            self.logger.info(f"    - Max: {channel_stat['max']:.4f}")
         
         return stats
     
     def get_input_size_from_dataloader(self) -> Tuple[int, int, int]:
         """Get input size dynamically from the first batch of data."""
-        self.logger.info("Getting input size from data loader...")
+        self.logger.info("Getting input size from CIFAR-10 data loader...")
         
         # Get a sample batch
         dataiter = iter(self.train_loader)
@@ -439,33 +497,137 @@ class MNISTDataManager:
         input_size = images.shape[1:]  # Remove batch dimension
         input_size_tuple = tuple(input_size)
         
-        self.logger.info(f"Input size from data loader: {input_size_tuple}")
+        self.logger.info(f"CIFAR-10 input size from data loader: {input_size_tuple}")
         return input_size_tuple
     
-    def visualize_samples(self, num_samples: int = 60, save_path: Optional[str] = None) -> None:
-        """Visualize sample images from the dataset."""
-        self.logger.info(f"Visualizing {num_samples} sample images...")
+    def visualize_samples(self, num_samples: int = 16, save_path: Optional[str] = None) -> None:
+        """Visualize sample images from the CIFAR-10 dataset."""
+        self.logger.info(f"Visualizing {num_samples} CIFAR-10 sample images...")
         
         # Get a batch of data
         dataiter = iter(self.train_loader)
         images, labels = next(dataiter)
         
-        # Create visualization
-        fig, axes = plt.subplots(6, 10, figsize=(15, 9))
-        fig.suptitle('MNIST Sample Images', fontsize=16)
+        # Create visualization with RGB channels
+        fig, axes = plt.subplots(4, 4, figsize=(12, 12))
+        fig.suptitle('CIFAR-10 Sample Images', fontsize=16)
         
         for i in range(min(num_samples, len(images))):
-            row = i // 10
-            col = i % 10
-            axes[row, col].imshow(images[i].squeeze().numpy(), cmap='gray_r')
-            axes[row, col].set_title(f'Label: {labels[i].item()}', fontsize=8)
+            row = i // 4
+            col = i % 4
+            
+            # Convert from (C, H, W) to (H, W, C) for display
+            img = images[i].permute(1, 2, 0)
+            
+            # Denormalize for display
+            img = img * torch.tensor(self.config.cifar10_std) + torch.tensor(self.config.cifar10_mean)
+            img = torch.clamp(img, 0, 1)
+            
+            axes[row, col].imshow(img.numpy())
+            axes[row, col].set_title(f'{self.classes[labels[i]]}', fontsize=10, fontweight='bold')
             axes[row, col].axis('off')
         
         plt.tight_layout()
         
         if save_path:
             plt.savefig(save_path, dpi=150, bbox_inches='tight')
-            self.logger.info(f"Sample visualization saved to: {save_path}")
+            self.logger.info(f"CIFAR-10 sample visualization saved to: {save_path}")
+        
+        plt.show()
+    
+    def visualize_rgb_channels(self, num_samples: int = 4, save_path: Optional[str] = None) -> None:
+        """Visualize RGB channel analysis for CIFAR-10 samples."""
+        self.logger.info(f"Visualizing RGB channel analysis for {num_samples} CIFAR-10 samples...")
+        
+        # Get a batch of data
+        dataiter = iter(self.train_loader)
+        images, labels = next(dataiter)
+        
+        # Create visualization showing original + RGB channels
+        fig, axes = plt.subplots(num_samples, 4, figsize=(16, 4 * num_samples))
+        fig.suptitle('CIFAR-10 RGB Channel Analysis', fontsize=16)
+        
+        for i in range(min(num_samples, len(images))):
+            # Convert from (C, H, W) to (H, W, C) for display
+            img = images[i].permute(1, 2, 0)
+            
+            # Denormalize for display
+            img = img * torch.tensor(self.config.cifar10_std) + torch.tensor(self.config.cifar10_mean)
+            img = torch.clamp(img, 0, 1)
+            
+            # Original RGB image
+            axes[i, 0].imshow(img.numpy())
+            axes[i, 0].set_title(f'Original: {self.classes[labels[i]]}', fontsize=12, fontweight='bold')
+            axes[i, 0].axis('off')
+            
+            # Red channel
+            axes[i, 1].imshow(img[:,:,0].numpy(), cmap='Reds')
+            axes[i, 1].set_title('Red Channel', fontsize=10)
+            axes[i, 1].axis('off')
+            
+            # Green channel
+            axes[i, 2].imshow(img[:,:,1].numpy(), cmap='Greens')
+            axes[i, 2].set_title('Green Channel', fontsize=10)
+            axes[i, 2].axis('off')
+            
+            # Blue channel
+            axes[i, 3].imshow(img[:,:,2].numpy(), cmap='Blues')
+            axes[i, 3].set_title('Blue Channel', fontsize=10)
+            axes[i, 3].axis('off')
+
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=150, bbox_inches='tight')
+            self.logger.info(f"CIFAR-10 RGB channel visualization saved to: {save_path}")
+        
+        plt.show()
+    
+    def plot_channel_histograms(self, save_path: Optional[str] = None) -> None:
+        """Plot histograms for each RGB channel."""
+        self.logger.info("Plotting CIFAR-10 channel histograms...")
+        
+        # Get raw data for histogram analysis
+        raw_train_data = self.train_dataset.data
+        float_data = torch.tensor(raw_train_data, dtype=torch.float32) / 255.0
+        
+        fig, axs = plt.subplots(1, 3, sharey=True, tight_layout=True, figsize=(15, 5))
+        
+        # Calculate statistics for each channel
+        red_data = float_data[:,:,:,0].ravel()
+        green_data = float_data[:,:,:,1].ravel()
+        blue_data = float_data[:,:,:,2].ravel()
+        
+        # Red channel
+        axs[0].hist(red_data.numpy(), bins=255, color='red', alpha=0.7)
+        red_stats = f'Mean: {torch.mean(red_data):.3f}\nMedian: {torch.median(red_data):.3f}\nStd: {torch.std(red_data):.3f}\nMin: {torch.min(red_data):.3f}\nMax: {torch.max(red_data):.3f}'
+        axs[0].set_title('Red Channel', fontsize=12, fontweight='bold')
+        axs[0].text(0.02, 0.98, red_stats, transform=axs[0].transAxes, fontsize=9, 
+                    verticalalignment='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+        axs[0].set_xlabel('Pixel Value')
+        axs[0].set_ylabel('Frequency')
+        
+        # Green channel
+        axs[1].hist(green_data.numpy(), bins=255, color='green', alpha=0.7)
+        green_stats = f'Mean: {torch.mean(green_data):.3f}\nMedian: {torch.median(green_data):.3f}\nStd: {torch.std(green_data):.3f}\nMin: {torch.min(green_data):.3f}\nMax: {torch.max(green_data):.3f}'
+        axs[1].set_title('Green Channel', fontsize=12, fontweight='bold')
+        axs[1].text(0.02, 0.98, green_stats, transform=axs[1].transAxes, fontsize=9, 
+                    verticalalignment='top', bbox=dict(boxstyle='round', facecolor='lightgreen', alpha=0.8))
+        axs[1].set_xlabel('Pixel Value')
+        
+        # Blue channel
+        axs[2].hist(blue_data.numpy(), bins=255, color='blue', alpha=0.7)
+        blue_stats = f'Mean: {torch.mean(blue_data):.3f}\nMedian: {torch.median(blue_data):.3f}\nStd: {torch.std(blue_data):.3f}\nMin: {torch.min(blue_data):.3f}\nMax: {torch.max(blue_data):.3f}'
+        axs[2].set_title('Blue Channel', fontsize=12, fontweight='bold')
+        axs[2].text(0.02, 0.98, blue_stats, transform=axs[2].transAxes, fontsize=9, 
+                    verticalalignment='top', bbox=dict(boxstyle='round', facecolor='lightblue', alpha=0.8))
+        axs[2].set_xlabel('Pixel Value')
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=150, bbox_inches='tight')
+            self.logger.info(f"CIFAR-10 channel histograms saved to: {save_path}")
         
         plt.show()
     
@@ -479,17 +641,19 @@ class MNISTDataManager:
             'image_shape': images.shape[1:],
             'label_shape': labels.shape,
             'data_type': str(images.dtype),
-            'device': str(images.device)
+            'device': str(images.device),
+            'num_classes': len(self.classes),
+            'class_names': self.classes
         }
         
-        self.logger.info("Batch Information:")
+        self.logger.info("CIFAR-10 Batch Information:")
         self.logger.info(f"  - Batch size: {batch_info['batch_size']}")
         self.logger.info(f"  - Image shape: {batch_info['image_shape']}")
         self.logger.info(f"  - Label shape: {batch_info['label_shape']}")
         self.logger.info(f"  - Data type: {batch_info['data_type']}")
+        self.logger.info(f"  - Number of classes: {batch_info['num_classes']}")
         
         return batch_info
-
 
 # =============================================================================
 # TRAINING SYSTEM (Template Method Pattern)
@@ -503,6 +667,8 @@ class TrainingMetrics:
         self.test_losses: List[float] = []
         self.train_accuracies: List[float] = []
         self.test_accuracies: List[float] = []
+        self.accuracy_differences: List[float] = []  # Track accuracy differences
+        self.overfitting_epochs: int = 0  # Count consecutive overfitting epochs
     
     def add_epoch_metrics(self, train_loss: float, train_acc: float, 
                          test_loss: float, test_acc: float) -> None:
@@ -511,6 +677,34 @@ class TrainingMetrics:
         self.train_accuracies.append(train_acc)
         self.test_losses.append(test_loss)
         self.test_accuracies.append(test_acc)
+        
+        # Calculate accuracy difference
+        acc_diff = train_acc - test_acc
+        self.accuracy_differences.append(acc_diff)
+        
+        # Check for overfitting (train_acc - test_acc > 15%)
+        if acc_diff > 15.0:
+            self.overfitting_epochs += 1
+        else:
+            self.overfitting_epochs = 0  # Reset counter if not overfitting
+    
+    def should_stop_training(self, patience: int = 10) -> bool:
+        """Check if training should stop due to overfitting."""
+        return self.overfitting_epochs >= patience
+    
+    def get_current_accuracy_difference(self) -> float:
+        """Get the current accuracy difference."""
+        return self.accuracy_differences[-1] if self.accuracy_differences else 0.0
+    
+    def get_overfitting_info(self) -> Dict[str, Any]:
+        """Get overfitting information."""
+        return {
+            'current_difference': self.get_current_accuracy_difference(),
+            'overfitting_epochs': self.overfitting_epochs,
+            'should_stop': self.should_stop_training(),
+            'max_difference': max(self.accuracy_differences) if self.accuracy_differences else 0.0,
+            'avg_difference': sum(self.accuracy_differences) / len(self.accuracy_differences) if self.accuracy_differences else 0.0
+        }
     
     def get_best_accuracy(self) -> float:
         """Get the best test accuracy achieved."""
@@ -521,12 +715,19 @@ class TrainingMetrics:
         if not self.test_accuracies:
             return {}
         
+        overfitting_info = self.get_overfitting_info()
+        
         return {
             'final_train_loss': self.train_losses[-1],
             'final_test_loss': self.test_losses[-1],
             'final_train_accuracy': self.train_accuracies[-1],
             'final_test_accuracy': self.test_accuracies[-1],
-            'best_test_accuracy': self.get_best_accuracy()
+            'best_test_accuracy': self.get_best_accuracy(),
+            'final_accuracy_difference': self.get_current_accuracy_difference(),
+            'max_accuracy_difference': overfitting_info['max_difference'],
+            'avg_accuracy_difference': overfitting_info['avg_difference'],
+            'overfitting_epochs': overfitting_info['overfitting_epochs'],
+            'stopped_due_to_overfitting': overfitting_info['should_stop']
         }
 
 
@@ -544,9 +745,9 @@ class BaseTrainer(ABC):
         pass
 
 
-class MNISTTrainer(BaseTrainer):
+class CIFAR10Trainer(BaseTrainer):
     """
-    MNIST model trainer.
+    CIFAR-10 model trainer.
     Implements the Template Method pattern for training workflow.
     """
     
@@ -556,12 +757,17 @@ class MNISTTrainer(BaseTrainer):
         self.metrics = TrainingMetrics()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         
+        # Early stopping configuration
+        self.early_stopping_patience = 10  # Stop if overfitting for 10 epochs
+        self.overfitting_threshold = 15.0  # 15% difference threshold
+        
         # Set random seeds for reproducibility
         torch.manual_seed(config.seed)
         if torch.cuda.is_available():
             torch.cuda.manual_seed(config.seed)
         
         self.logger.info(f"Using device: {self.device}")
+        self.logger.info(f"Early stopping: Stop if train_acc - test_acc > {self.overfitting_threshold}% for {self.early_stopping_patience} epochs")
     
     def create_optimizer(self, model) -> optim.Optimizer:
         """Create optimizer based on configuration."""
@@ -690,7 +896,7 @@ class MNISTTrainer(BaseTrainer):
     
     def train(self, model, train_loader, test_loader) -> TrainingMetrics:
         """
-        Complete training process.
+        Complete training process with early stopping.
         Template method that defines the training workflow.
         """
         self.logger.info("Starting training process...")
@@ -734,7 +940,7 @@ class MNISTTrainer(BaseTrainer):
             self.logger.info(f"  - Patience: {self.config.plateau_patience}")
             self.logger.info(f"  - Threshold: {self.config.plateau_threshold}")
         
-        # Training loop
+        # Training loop with early stopping
         for epoch in range(self.config.epochs):
             self.logger.info(f"Starting Epoch {epoch + 1}/{self.config.epochs}")
             
@@ -758,26 +964,57 @@ class MNISTTrainer(BaseTrainer):
             # Get current learning rate
             current_lr = optimizer.param_groups[0]['lr']
             
-            # Log results
-            self.logger.log_epoch_results(
-                epoch + 1, train_loss, train_acc, test_loss, test_acc, current_lr
+            # Get accuracy difference and overfitting info
+            acc_diff = self.metrics.get_current_accuracy_difference()
+            overfitting_info = self.metrics.get_overfitting_info()
+            
+            # Log results with accuracy difference
+            self.logger.log_epoch_results_with_difference(
+                epoch + 1, train_loss, train_acc, test_loss, test_acc, 
+                current_lr, acc_diff, overfitting_info['overfitting_epochs']
             )
+            
+            # Check for early stopping
+            if self.metrics.should_stop_training(self.early_stopping_patience):
+                self.logger.warning("=" * 60)
+                self.logger.warning("EARLY STOPPING TRIGGERED!")
+                self.logger.warning("=" * 60)
+                self.logger.warning(f"Training stopped due to overfitting.")
+                self.logger.warning(f"Train accuracy - Test accuracy = {acc_diff:.2f}%")
+                self.logger.warning(f"Overfitting threshold: {self.overfitting_threshold}%")
+                self.logger.warning(f"Consecutive overfitting epochs: {overfitting_info['overfitting_epochs']}")
+                self.logger.warning(f"Patience: {self.early_stopping_patience} epochs")
+                self.logger.warning("=" * 60)
+                break
         
         # Log final results
         final_metrics = self.metrics.get_final_metrics()
         self.logger.info("Training completed!")
         self.logger.info(f"Final Results: {final_metrics}")
         
+        # Log overfitting summary
+        overfitting_info = self.metrics.get_overfitting_info()
+        self.logger.info("=" * 50)
+        self.logger.info("OVERFITTING ANALYSIS")
+        self.logger.info("=" * 50)
+        self.logger.info(f"Final accuracy difference: {overfitting_info['current_difference']:.2f}%")
+        self.logger.info(f"Maximum accuracy difference: {overfitting_info['max_difference']:.2f}%")
+        self.logger.info(f"Average accuracy difference: {overfitting_info['avg_difference']:.2f}%")
+        self.logger.info(f"Consecutive overfitting epochs: {overfitting_info['overfitting_epochs']}")
+        self.logger.info(f"Stopped due to overfitting: {overfitting_info['should_stop']}")
+        self.logger.info("=" * 50)
+        
         return self.metrics
-    
+
+
     def plot_training_curves(self, save_path: str = None) -> None:
-        """Plot training curves."""
+        """Plot training curves with accuracy difference."""
         if not self.metrics.train_losses:
             self.logger.warning("No training data available for plotting.")
             return
         
-        fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-        fig.suptitle('Training Progress', fontsize=16)
+        fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+        fig.suptitle('Training Progress with Overfitting Analysis', fontsize=16)
         
         epochs = range(1, len(self.metrics.train_losses) + 1)
         
@@ -809,6 +1046,25 @@ class MNISTTrainer(BaseTrainer):
         axes[1, 1].set_ylabel('Accuracy (%)')
         axes[1, 1].grid(True)
         
+        # Accuracy Difference
+        axes[0, 2].plot(epochs, self.metrics.accuracy_differences, 'g-', label='Train - Test')
+        axes[0, 2].axhline(y=self.overfitting_threshold, color='r', linestyle='--', 
+                          label=f'Overfitting Threshold ({self.overfitting_threshold}%)')
+        axes[0, 2].set_title('Accuracy Difference (Train - Test)')
+        axes[0, 2].set_xlabel('Epoch')
+        axes[0, 2].set_ylabel('Accuracy Difference (%)')
+        axes[0, 2].grid(True)
+        axes[0, 2].legend()
+        
+        # Combined Accuracy Plot
+        axes[1, 2].plot(epochs, self.metrics.train_accuracies, 'b-', label='Train Accuracy')
+        axes[1, 2].plot(epochs, self.metrics.test_accuracies, 'r-', label='Test Accuracy')
+        axes[1, 2].set_title('Train vs Test Accuracy')
+        axes[1, 2].set_xlabel('Epoch')
+        axes[1, 2].set_ylabel('Accuracy (%)')
+        axes[1, 2].grid(True)
+        axes[1, 2].legend()
+        
         plt.tight_layout()
         
         if save_path:
@@ -816,7 +1072,7 @@ class MNISTTrainer(BaseTrainer):
             self.logger.info(f"Training curves saved to: {save_path}")
         
         plt.show()
-    
+
     def save_model(self, model, filepath: str) -> None:
         """Save the trained model."""
         torch.save({
@@ -837,9 +1093,9 @@ class MNISTTrainer(BaseTrainer):
 # MAIN TRAINING FACADE (Facade Pattern)
 # =============================================================================
 
-class MNISTTrainingFacade:
+class TrainingFacade:
     """
-    Facade class that provides a simple interface for the entire MNIST training process.
+    Facade class that provides a simple interface for the entire CIFAR-10 training process.
     Implements the Facade pattern to hide the complexity of the training system.
     """
     
@@ -853,7 +1109,7 @@ class MNISTTrainingFacade:
     def setup_data(self) -> tuple:
         """Setup data loading and get data loaders."""
         self.logger.info("Setting up data...")
-        self.data_manager = MNISTDataManager(self.config.data, self.logger)
+        self.data_manager = CIFAR10DataManager(self.config.data, self.logger)
         train_loader, test_loader = self.data_manager.load_data()
         
         # Get and log data statistics
@@ -862,11 +1118,11 @@ class MNISTTrainingFacade:
         
         return train_loader, test_loader
     
-    def setup_model(self, input_size: Tuple[int, int, int]) -> MNISTModel:
+    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR10Model:
         """Setup the model with dynamic input size."""
         self.logger.info("Setting up model...")
         builder = ModelBuilder()
-        self.model = builder.build_mnist_model(self.config.model)
+        self.model = builder.build_cifar10_model(self.config.model)
         
         # Move model to device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -877,10 +1133,10 @@ class MNISTTrainingFacade:
         
         return self.model
     
-    def setup_trainer(self) -> MNISTTrainer:
+    def setup_trainer(self) -> CIFAR10Trainer:
         """Setup the trainer."""
         self.logger.info("Setting up trainer...")
-        self.trainer = MNISTTrainer(self.config.training, self.logger)
+        self.trainer = CIFAR10Trainer(self.config.training, self.logger)
         return self.trainer
     
     def run_training(self, train_loader, test_loader) -> dict:
@@ -901,14 +1157,14 @@ class MNISTTrainingFacade:
         if self.config.logging.save_model:
             model_path = os.path.join(
                 self.config.logging.model_save_dir,
-                f"mnist_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+                f"cifar10_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
             )
             self.trainer.save_model(self.model, model_path)
         
         return metrics.get_final_metrics()
     
     def run_complete_pipeline(self) -> dict:
-        """Run the complete MNIST training pipeline."""
+        """Run the complete CIFAR-10 training pipeline."""
         try:
             # Log experiment start
             self.logger.log_experiment_start(self.config)
@@ -945,21 +1201,22 @@ class MNISTTrainingFacade:
 
 def main():
     """
-    Main function to run the MNIST training.
+    Main function to run the CIFAR-10 training.
     Demonstrates usage of the complete training system.
     """
     print("=" * 60)
-    print("MNIST TRAINING SCRIPT - MONOLITHIC IMPLEMENTATION")
+    print("CIFAR-10 TRAINING SCRIPT - MONOLITHIC IMPLEMENTATION")
     print("=" * 60)
     
     # Create configuration
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 20
-    config.training.learning_rate = 0.01
+    config.training.epochs = 100
+    config.training.learning_rate = 0.05
     config.training.momentum = 0.9
-    config.data.batch_size = 64
+    config.data.batch_size = 128
+    config.training.scheduler_step_size = 15
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")
@@ -972,7 +1229,7 @@ def main():
     print("=" * 60)
     
     # Create and run the training facade
-    training_facade = MNISTTrainingFacade(config)
+    training_facade = TrainingFacade(config)
     
     # Log the updated configuration after all updates
     training_facade.logger.log_updated_config(config)

@@ -1,0 +1,83 @@
+2025-09-29 14:04:58,958 - CIFAR-10_Training - INFO - Logger initialized. Log file: c:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\logs\20250929_140458_cifar10_training.log
+2025-09-29 14:05:03,513 - CIFAR-10_Training - INFO - Setting up data...
+2025-09-29 14:05:03,515 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-09-29 14:05:05,781 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-09-29 14:05:08,471 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-09-29 14:05:08,473 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-09-29 14:05:08,477 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-09-29 14:05:08,480 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-09-29 14:05:08,481 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-09-29 14:05:08,481 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-09-29 14:05:08,483 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-09-29 14:05:08,485 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-09-29 14:05:08,486 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-09-29 14:05:08,487 - CIFAR-10_Training - INFO -   Red Channel:
+2025-09-29 14:05:08,488 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-09-29 14:05:08,489 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-09-29 14:05:08,491 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:08,492 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:05:08,493 - CIFAR-10_Training - INFO -   Green Channel:
+2025-09-29 14:05:08,494 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-09-29 14:05:08,495 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-09-29 14:05:08,496 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:08,497 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:05:08,498 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-09-29 14:05:08,499 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-09-29 14:05:08,500 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-09-29 14:05:08,501 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:08,502 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:05:22,234 - CIFAR-10_Training - INFO - Setting up data...
+2025-09-29 14:05:22,235 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-09-29 14:05:24,536 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-09-29 14:05:27,176 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-09-29 14:05:27,180 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-09-29 14:05:27,181 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-09-29 14:05:27,183 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-09-29 14:05:27,185 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-09-29 14:05:27,187 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-09-29 14:05:27,188 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-09-29 14:05:27,189 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-09-29 14:05:27,192 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-09-29 14:05:27,193 - CIFAR-10_Training - INFO -   Red Channel:
+2025-09-29 14:05:27,194 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-09-29 14:05:27,196 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-09-29 14:05:27,197 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:27,198 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:05:27,199 - CIFAR-10_Training - INFO -   Green Channel:
+2025-09-29 14:05:27,200 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-09-29 14:05:27,201 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-09-29 14:05:27,202 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:27,204 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:05:27,205 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-09-29 14:05:27,206 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-09-29 14:05:27,207 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-09-29 14:05:27,208 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:05:27,209 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:09:32,050 - CIFAR-10_Training - INFO - Setting up data...
+2025-09-29 14:09:32,052 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-09-29 14:09:34,148 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-09-29 14:09:36,571 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-09-29 14:09:36,573 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-09-29 14:09:36,574 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-09-29 14:09:36,574 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-09-29 14:09:36,575 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-09-29 14:09:36,575 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-09-29 14:09:36,576 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-09-29 14:09:36,577 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-09-29 14:09:36,578 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-09-29 14:09:36,579 - CIFAR-10_Training - INFO -   Red Channel:
+2025-09-29 14:09:36,580 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-09-29 14:09:36,580 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-09-29 14:09:36,581 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:09:36,582 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:09:36,583 - CIFAR-10_Training - INFO -   Green Channel:
+2025-09-29 14:09:36,584 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-09-29 14:09:36,584 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-09-29 14:09:36,585 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:09:36,586 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:09:36,587 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-09-29 14:09:36,587 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-09-29 14:09:36,588 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-09-29 14:09:36,589 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-09-29 14:09:36,589 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-09-29 14:20:10,157 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
