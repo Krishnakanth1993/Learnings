@@ -980,8 +980,7 @@ class CIFAR10Trainer(BaseTrainer):
                 mode=self.config.plateau_mode,
                 factor=self.config.plateau_factor,
                 patience=self.config.plateau_patience,
-                threshold=self.config.plateau_threshold,
-                verbose=True
+                threshold=self.config.plateau_threshold
             )
         else:
             raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
@@ -1363,10 +1362,15 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 200
-    config.training.learning_rate = 0.05
+    config.training.epochs = 100
+    config.training.learning_rate = 0.005
     config.training.momentum = 0.9
     config.data.batch_size = 128
+    config.training.scheduler_type = 'ReduceLROnPlateau'
+    config.training.plateau_mode = 'min'
+    config.training.plateau_factor = 0.5
+    config.training.plateau_patience = 5
+    config.training.plateau_threshold = 1e-4
     config.training.scheduler_step_size = 30
     config.logging.log_level = 'DEBUG'
     

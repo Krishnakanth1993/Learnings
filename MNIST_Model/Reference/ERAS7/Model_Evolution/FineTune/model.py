@@ -267,7 +267,7 @@ class CIFAR10Model(nn.Module):
         # Convolution Block 2
         
         x = self.convblock5(x)
-        #x = self.convblock6(x)
+        x = self.convblock6(x)
         x = self.convblock7(x)
         x = self.convdialated2(x)
         #x = self.pool2(x)  # 16x16 -> 8x8
@@ -282,7 +282,7 @@ class CIFAR10Model(nn.Module):
         
         # # Convolution Block 4
         x = self.convblock11(x)
-        #x = self.convblock12(x)
+        x = self.convblock12(x)
         x = self.convblock13(x)
 
          # Additional convolution layer
