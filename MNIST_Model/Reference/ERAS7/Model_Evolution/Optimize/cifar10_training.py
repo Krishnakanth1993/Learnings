@@ -1216,7 +1216,7 @@ def main():
     config.training.learning_rate = 0.05
     config.training.momentum = 0.9
     config.data.batch_size = 128
-    config.training.scheduler_step_size = 50
+    config.training.scheduler_step_size = 30
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")

@@ -167,24 +167,24 @@ class CIFAR10Model(nn.Module):
         
         
         self.convblock8 = nn.Sequential(
-            depthwise_separable_conv(32, 64),
-            nn.BatchNorm2d(64),
+            depthwise_separable_conv(32, 32),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 8
 
         self.convblock9 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=2, dilation=2, bias=False),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 8
 
         self.convblock10 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(64),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=2,dilation = 2, bias=False),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
@@ -193,8 +193,8 @@ class CIFAR10Model(nn.Module):
         # TRANSITION BLOCK 3
 
         self.convdialated3 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, dilation=3),
-            nn.BatchNorm2d(64)
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=3),
+            nn.BatchNorm2d(32)
         ) # output_size = 4 
 
         self.pool3 = nn.MaxPool2d(2, 2) # output_size = 4
@@ -203,21 +203,21 @@ class CIFAR10Model(nn.Module):
         
         
         self.convblock11 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 4
 
         self.convblock12 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=2,dilation = 2, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 4
 
         self.convblock13 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=2,dilation = 2, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
