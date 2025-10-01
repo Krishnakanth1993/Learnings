@@ -382,3 +382,5 @@
 2025-10-01 11:03:06,255 - CIFAR-10_Training - INFO - Starting Epoch 108/200
 2025-10-01 11:03:38,129 - CIFAR-10_Training - INFO - Epoch 108: Train Loss: 0.7293, Train Acc: 74.39%, Test Loss: 0.7580, Test Acc: 74.05%, Acc Diff: 0.34%, LR: 0.000500
 2025-10-01 11:03:38,129 - CIFAR-10_Training - INFO - Starting Epoch 109/200
+2025-10-01 11:04:10,041 - CIFAR-10_Training - INFO - Epoch 109: Train Loss: 0.7254, Train Acc: 74.54%, Test Loss: 0.7590, Test Acc: 73.97%, Acc Diff: 0.57%, LR: 0.000500
+2025-10-01 11:04:10,041 - CIFAR-10_Training - INFO - Starting Epoch 110/200

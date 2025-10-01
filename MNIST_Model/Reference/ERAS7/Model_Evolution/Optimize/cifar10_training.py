@@ -1215,7 +1215,7 @@ def main():
     config.training.epochs = 200
     config.training.learning_rate = 0.05
     config.training.momentum = 0.9
-    config.data.batch_size = 64
+    config.data.batch_size = 128
     config.training.scheduler_step_size = 50
     config.logging.log_level = 'DEBUG'
     
