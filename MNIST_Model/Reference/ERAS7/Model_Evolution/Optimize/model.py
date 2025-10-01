@@ -61,6 +61,16 @@ class ModelBuilder:
             raise ValueError("No model has been built yet. Call build_cifar10_model() first.")
         return self._model
 
+class depthwise_separable_conv(nn.Module):
+    def __init__(self, nin, nout): 
+        super(depthwise_separable_conv, self).__init__() 
+        self.depthwise = nn.Conv2d(nin, nin, kernel_size=3, padding=1, groups=nin) 
+        self.pointwise = nn.Conv2d(nin, nout, kernel_size=1) 
+  
+    def forward(self, x): 
+        out = self.depthwise(x) 
+        out = self.pointwise(out) 
+        return out
 
 # =============================================================================
 # CIFAR10 MODEL DEFINITION
@@ -77,8 +87,8 @@ class CIFAR10Model(nn.Module):
         
         # INPUT BLOCK
         self.convblock1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 32
@@ -86,66 +96,78 @@ class CIFAR10Model(nn.Module):
         # CONVOLUTION BLOCK 1
 
         self.convblock2 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 32
         
         self.convblock3 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 32
 
         self.convblock4 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(16),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
-        ) # output_size = 16
+        ) # output_size = 32
 
         # TRANSITION BLOCK 1
+
+        self.convdialated1 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, dilation=9),
+            nn.BatchNorm2d(16)
+        ) # output_size = 16
+
         self.pool1 = nn.MaxPool2d(2, 2) # output_size = 16
 
         # CONVOLUTION BLOCK 2
         
         self.convblock5 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 16
 
         self.convblock6 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 16
 
         self.convblock7 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 16
 
         # TRANSITION BLOCK 2
+
+        self.convdialated2 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=5),
+            nn.BatchNorm2d(32)
+        ) # output_size = 8
+
         self.pool2 = nn.MaxPool2d(2, 2) # output_size = 8
 
         # CONVOLUTION BLOCK 3
         
         
         self.convblock8 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
@@ -169,6 +191,12 @@ class CIFAR10Model(nn.Module):
         ) # output_size = 4
 
         # TRANSITION BLOCK 3
+
+        self.convdialated3 = nn.Sequential(
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=3),
+            nn.BatchNorm2d(32)
+        ) # output_size = 4 
+
         self.pool3 = nn.MaxPool2d(2, 2) # output_size = 4
 
         # CONVOLUTION BLOCK 4
@@ -182,37 +210,42 @@ class CIFAR10Model(nn.Module):
         ) # output_size = 4
 
         self.convblock12 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(32),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 4
 
         self.convblock13 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 4
 
-         # Additional convolution layer instead of GAP
-        self.convblock14 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
-        ) # output_size = 4
+        #  # Additional convolution layer instead of GAP
+        # self.convblock14 = nn.Sequential(
+        #     nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False),
+        #     nn.BatchNorm2d(128),
+        #     nn.ReLU(),
+        #     nn.Dropout2d(self.config.dropout_rate)
+        # ) # output_size = 4
 
         # 1x1 Convolution to reduce channels to 10 classes
         self.conv1x1 = nn.Sequential(
-            nn.Conv2d(in_channels=128, out_channels=10, kernel_size=1, stride=1, padding=0, bias=False),
-            nn.BatchNorm2d(10),
-            nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
+            nn.Conv2d(in_channels=64, out_channels=10, kernel_size=1, stride=1, padding=0, bias=False),
+            
         ) # output_size = 4
 
-        # Final pooling to reduce spatial dimensions
-        self.final_pool = nn.AdaptiveAvgPool2d(1) # output_size = 1x1
+
+        self.gap = nn.Sequential(
+            nn.AvgPool2d(kernel_size=4) # 7>> 9... nn.AdaptiveAvgPool((1, 1))
+        ) # output_size = 1
+
+    
+        # Fully connected layers
+        self.fc0 = nn.Linear(10, 50)  
+        self.fc1 = nn.Linear(50, 10)
 
 
         
@@ -226,21 +259,24 @@ class CIFAR10Model(nn.Module):
         x = self.convblock2(x)
         x = self.convblock3(x)
         x = self.convblock4(x)
-        x = self.pool1(x)  # 32x32 -> 16x16
+        x = self.convdialated1(x)
+        #x = self.pool1(x)  # 32x32 -> 16x16
         
         # Convolution Block 2
         
         x = self.convblock5(x)
         x = self.convblock6(x)
         x = self.convblock7(x)
-        x = self.pool2(x)  # 16x16 -> 8x8
+        x = self.convdialated2(x)
+        #x = self.pool2(x)  # 16x16 -> 8x8
         
         # Convolution Block 3
         
         x = self.convblock8(x)
         x = self.convblock9(x)
         x = self.convblock10(x)
-        x = self.pool3(x)  # 8x8 -> 4x4
+        x = self.convdialated3(x)
+        #x = self.pool3(x)  # 8x8 -> 4x4
         
         # # Convolution Block 4
         x = self.convblock11(x)
@@ -248,16 +284,21 @@ class CIFAR10Model(nn.Module):
         x = self.convblock13(x)
 
          # Additional convolution layer
-        x = self.convblock14(x)  # 256 channels -> 128 channels
+        #x = self.convblock14(x)  # 256 channels -> 128 channels
         
         # 1x1 Convolution to get 10 classes
         x = self.conv1x1(x)  # 128 channels -> 10 channels
         
         # Final pooling to reduce spatial dimensions
-        x = self.final_pool(x)  # 4x4 -> 1x1
+        x = self.gap(x)  # 4x4 
         
         # Flatten
         x = x.view(x.size(0), -1)  # Flatten while preserving batch dimension
+
+        
+        # Fully connected layers
+        x = torch.relu(self.fc0(x))
+        x = self.fc1(x)
         
         # No fully connected layers needed - we already have 10 outputs
         return F.log_softmax(x, dim=-1)
