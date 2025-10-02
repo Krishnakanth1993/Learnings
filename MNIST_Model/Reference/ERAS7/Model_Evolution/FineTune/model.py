@@ -246,8 +246,8 @@ class CIFAR10Model(nn.Module):
 
     
         # Fully connected layers
-        self.fc0 = nn.Linear(64, 100)  
-        self.fc1 = nn.Linear(100, 10)
+        self.fc0 = nn.Linear(64, 128)  
+        self.fc1 = nn.Linear(128, 10)
 
 
         
@@ -260,7 +260,7 @@ class CIFAR10Model(nn.Module):
         # Convolution Block 1
         x = self.convblock2(x)
         x = self.convblock3(x)
-        x = self.convblock4(x)
+        #x = self.convblock4(x)
         x = self.convdialated1(x)
         #x = self.pool1(x)  # 32x32 -> 16x16
         
