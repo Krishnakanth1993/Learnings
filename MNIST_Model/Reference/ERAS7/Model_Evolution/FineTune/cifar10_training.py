@@ -1363,9 +1363,9 @@ def main():
     
     # You can customize the configuration here
     config.training.epochs = 200
-    config.training.learning_rate = 0.05
+    config.training.learning_rate = 0.075
     config.training.momentum = 0.9
-    config.data.batch_size = 128
+    config.data.batch_size = 256
     config.training.scheduler_type = 'ReduceLROnPlateau'
     config.training.plateau_mode = 'min'
     config.training.plateau_factor = 0.5
