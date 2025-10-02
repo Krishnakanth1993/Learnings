@@ -289,7 +289,7 @@ class CIFAR10Model(nn.Module):
         #x = self.convblock14(x)  # 256 channels -> 128 channels
         
         # 1x1 Convolution to get 10 classes
-        # x = self.conv1x1(x)  # 128 channels -> 10 channels
+        #x = self.conv1x1(x)  # 128 channels -> 10 channels
         
         # Final pooling to reduce spatial dimensions
         x = self.gap(x)  # 4x4 
