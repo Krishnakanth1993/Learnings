@@ -308,7 +308,7 @@ class TransformStrategy(ABC):
     def get_transforms(self):
         """Get the composed transforms."""
         pass
-    
+
     @abstractmethod
     def __call__(self, image):
         """Apply transforms to an image."""
@@ -355,7 +355,7 @@ class CIFAR10TransformStrategy(AlbumentationsTransformStrategy):
     
     def __init__(self, config: DataConfig):
         self.config = config
-        
+    
         # Create Albumentations pipeline for basic transforms
         transform_pipeline = A.Compose([
             A.Normalize(
@@ -374,7 +374,7 @@ class CIFAR10TrainTransformStrategy(AlbumentationsTransformStrategy):
     
     def __init__(self, config: DataConfig):
         self.config = config
-        
+    
         # Create Albumentations pipeline with augmentations
         transform_pipeline = A.Compose([
             # Augmentations FIRST (work on 0-255 numpy arrays)
@@ -482,7 +482,7 @@ class CIFAR10PyTorchTestTransformStrategy(PyTorchTransformStrategy):
     
     def __init__(self, config: DataConfig):
         self.config = config
-        
+    
         transform_pipeline = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(
@@ -490,7 +490,7 @@ class CIFAR10PyTorchTestTransformStrategy(PyTorchTransformStrategy):
                 std=self.config.cifar10_std
             )
         ])
-        
+
         super().__init__(transform_pipeline)
 
 class DataLoaderFactory:
@@ -535,8 +535,8 @@ class CIFAR10DataManager:
         # Initialize transform strategies based on choice
         if use_albumentations:
             self.logger.info("Using Albumentations for data augmentation")
-            self.train_transform_strategy = CIFAR10TrainTransformStrategy(config)
-            self.test_transform_strategy = CIFAR10TestTransformStrategy(config)
+        self.train_transform_strategy = CIFAR10TrainTransformStrategy(config)
+        self.test_transform_strategy = CIFAR10TestTransformStrategy(config)
         else:
             self.logger.info("Using PyTorch native transforms for data augmentation")
             self.train_transform_strategy = CIFAR10PyTorchTrainTransformStrategy(config)
