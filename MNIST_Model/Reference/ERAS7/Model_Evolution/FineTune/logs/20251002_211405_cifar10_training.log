@@ -1,0 +1,578 @@
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO - Logger initialized. Log file: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\Model_Evolution\FineTune\logs\20251002_211405_cifar10_training.log
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO - Updated Configuration (from main()):
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Epochs: 200
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Learning Rate: 0.05
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Optimizer: SGD
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Weight Decay: 0.0
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Momentum: 0.9
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Scheduler: ReduceLROnPlateau
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Mode: min
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Factor: 0.5
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Patience: 5
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Threshold: 0.0001
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Batch Size: 128
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Num Workers: 4
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Pin Memory: True
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Shuffle: True
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Dropout Rate: 0.05
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Device: CUDA
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Log Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\Model_Evolution\FineTune\logs
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Model Save Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\Model_Evolution\FineTune\models
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Save Model: True
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO -   - Log Level: DEBUG
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:05,913 - CIFAR-10_Training - INFO - CIFAR-10 TRAINING EXPERIMENT STARTED
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - Data Config: DataConfig(data_dir='./data', batch_size=128, num_workers=4, pin_memory=True, shuffle=True, mean=(0.1307,), std=(0.3081,), cifar10_mean=(0.4914, 0.4822, 0.4465), cifar10_std=(0.247, 0.2435, 0.2616), rotation_range=(-7.0, 7.0), fill_value=1)
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - Model Config: ModelConfig(input_channels=1, input_size=(28, 28), num_classes=10, dropout_rate=0.05)
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - Training Config: TrainingConfig(epochs=200, learning_rate=0.05, momentum=0.9, weight_decay=0.0, scheduler_step_size=30, scheduler_gamma=0.1, seed=1, optimizer_type='SGD', adam_betas=(0.9, 0.999), adam_eps=1e-08, rmsprop_alpha=0.99, scheduler_type='ReduceLROnPlateau', cosine_t_max=20, exponential_gamma=0.95, plateau_mode='min', plateau_factor=0.5, plateau_patience=5, plateau_threshold=0.0001)
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - Setting up data...
+2025-10-02 21:14:05,927 - CIFAR-10_Training - INFO - Using Albumentations for data augmentation
+2025-10-02 21:14:05,932 - CIFAR-10_Training - INFO - Loading CIFAR-10 dataset...
+2025-10-02 21:14:07,204 - CIFAR-10_Training - INFO - CIFAR-10 dataset loaded successfully!
+2025-10-02 21:14:07,204 - CIFAR-10_Training - INFO - Train samples: 50000
+2025-10-02 21:14:07,220 - CIFAR-10_Training - INFO - Test samples: 10000
+2025-10-02 21:14:07,220 - CIFAR-10_Training - INFO - Augmentation library: Albumentations
+2025-10-02 21:14:07,220 - CIFAR-10_Training - INFO - Computing CIFAR-10 data statistics...
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO - CIFAR-10 Data Statistics:
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Size: 153,600,000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Min: 0.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Max: 1.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Mean: 0.4734
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Std: 0.2516
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   - Variance: 0.0633
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO - Channel-wise Statistics:
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   Red Channel:
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Mean: 0.4914
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Std: 0.2470
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   Green Channel:
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Mean: 0.4822
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Std: 0.2435
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -   Blue Channel:
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Mean: 0.4465
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Std: 0.2616
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Min: 0.0000
+2025-10-02 21:14:09,202 - CIFAR-10_Training - INFO -     - Max: 1.0000
+2025-10-02 21:14:24,992 - CIFAR-10_Training - INFO - CIFAR-10 Batch Information:
+2025-10-02 21:14:25,002 - CIFAR-10_Training - INFO -   - Batch size: 128
+2025-10-02 21:14:25,002 - CIFAR-10_Training - INFO -   - Image shape: torch.Size([3, 32, 32])
+2025-10-02 21:14:25,002 - CIFAR-10_Training - INFO -   - Label shape: torch.Size([128])
+2025-10-02 21:14:25,002 - CIFAR-10_Training - INFO -   - Data type: torch.float32
+2025-10-02 21:14:25,002 - CIFAR-10_Training - INFO -   - Number of classes: 10
+2025-10-02 21:14:26,020 - CIFAR-10_Training - INFO - Getting input size from CIFAR-10 data loader...
+2025-10-02 21:14:37,983 - CIFAR-10_Training - INFO - CIFAR-10 input size from data loader: (3, 32, 32)
+2025-10-02 21:14:38,701 - CIFAR-10_Training - INFO - Setting up model...
+2025-10-02 21:14:38,724 - CIFAR-10_Training - INFO - Generating model summary...
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - Model Architecture Summary:
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -   - Total Parameters: 144,426
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -   - Batch Normalization: Yes
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -   - Dropout: No
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -   - GAP Layers: Yes
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -   - FC Layers: Yes
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - DETAILED MODEL ARCHITECTURE SUMMARY
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - ----------------------------------------------------------------
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -         Layer (type)               Output Shape         Param #
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - ================================================================
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -             Conv2d-1           [-1, 32, 32, 32]             864
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -        BatchNorm2d-2           [-1, 32, 32, 32]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -               ReLU-3           [-1, 32, 32, 32]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -             Conv2d-4           [-1, 32, 32, 32]           9,216
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -        BatchNorm2d-5           [-1, 32, 32, 32]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -               ReLU-6           [-1, 32, 32, 32]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -             Conv2d-7           [-1, 32, 32, 32]           9,216
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -        BatchNorm2d-8           [-1, 32, 32, 32]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -               ReLU-9           [-1, 32, 32, 32]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-10           [-1, 32, 16, 16]           9,248
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-11           [-1, 32, 16, 16]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -         Dropout2d-12           [-1, 32, 16, 16]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-13           [-1, 32, 16, 16]           9,216
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-14           [-1, 32, 16, 16]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -              ReLU-15           [-1, 32, 16, 16]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-16           [-1, 32, 16, 16]           9,216
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-17           [-1, 32, 16, 16]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -              ReLU-18           [-1, 32, 16, 16]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-19           [-1, 32, 16, 16]           9,216
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-20           [-1, 32, 16, 16]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -              ReLU-21           [-1, 32, 16, 16]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-22             [-1, 32, 8, 8]           9,248
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-23             [-1, 32, 8, 8]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -         Dropout2d-24             [-1, 32, 8, 8]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-25             [-1, 32, 8, 8]             320
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-26             [-1, 32, 8, 8]           1,056
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO - depthwise_separable_conv-27             [-1, 32, 8, 8]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -       BatchNorm2d-28             [-1, 32, 8, 8]              64
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -              ReLU-29             [-1, 32, 8, 8]               0
+2025-10-02 21:14:39,224 - CIFAR-10_Training - INFO -            Conv2d-30             [-1, 32, 8, 8]           9,216
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -       BatchNorm2d-31             [-1, 32, 8, 8]              64
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -              ReLU-32             [-1, 32, 8, 8]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Conv2d-33             [-1, 32, 8, 8]           9,216
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -       BatchNorm2d-34             [-1, 32, 8, 8]              64
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -              ReLU-35             [-1, 32, 8, 8]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Conv2d-36             [-1, 32, 4, 4]           9,248
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -       BatchNorm2d-37             [-1, 32, 4, 4]              64
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -         Dropout2d-38             [-1, 32, 4, 4]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Conv2d-39             [-1, 32, 4, 4]             320
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Conv2d-40             [-1, 64, 4, 4]           2,112
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - depthwise_separable_conv-41             [-1, 64, 4, 4]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -       BatchNorm2d-42             [-1, 64, 4, 4]             128
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -              ReLU-43             [-1, 64, 4, 4]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Conv2d-44             [-1, 64, 4, 4]          36,864
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -       BatchNorm2d-45             [-1, 64, 4, 4]             128
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -              ReLU-46             [-1, 64, 4, 4]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -         Dropout2d-47             [-1, 64, 4, 4]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -         AvgPool2d-48             [-1, 64, 1, 1]               0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Linear-49                  [-1, 128]           8,320
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO -            Linear-50                   [-1, 10]           1,290
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - ================================================================
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Total params: 144,426
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Trainable params: 144,426
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Non-trainable params: 0
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - ----------------------------------------------------------------
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Input size (MB): 0.01
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Forward/backward pass size (MB): 3.30
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Params size (MB): 0.55
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - Estimated Total Size (MB): 3.86
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - ----------------------------------------------------------------
+2025-10-02 21:14:39,240 - CIFAR-10_Training - INFO - ==================================================
+2025-10-02 21:14:39,242 - CIFAR-10_Training - INFO - Setting up trainer...
+2025-10-02 21:14:39,244 - CIFAR-10_Training - INFO - Using device: cuda
+2025-10-02 21:14:39,244 - CIFAR-10_Training - INFO - Early stopping: Stop if train_acc - test_acc > 15.0% for 10 epochs
+2025-10-02 21:14:39,244 - CIFAR-10_Training - INFO - Starting training process...
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO - Starting training process...
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO - Using optimizer: SGD
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO - Using scheduler: ReduceLROnPlateau
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO - Optimizer Configuration:
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO -   - Learning Rate: 0.05
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO -   - Momentum: 0.9
+2025-10-02 21:14:39,245 - CIFAR-10_Training - INFO -   - Weight Decay: 0.0
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO - Scheduler Configuration:
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO -   - Mode: min
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO -   - Factor: 0.5
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO -   - Patience: 5
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO -   - Threshold: 0.0001
+2025-10-02 21:14:39,246 - CIFAR-10_Training - INFO - Starting Epoch 1/200
+2025-10-02 21:15:16,178 - CIFAR-10_Training - INFO - Epoch  1: Train Loss: 1.7697, Train Acc: 32.70%, Test Loss: 1.4730, Test Acc: 44.36%, Acc Diff: -11.66%, LR: 0.050000
+2025-10-02 21:15:16,178 - CIFAR-10_Training - INFO - Starting Epoch 2/200
+2025-10-02 21:15:53,375 - CIFAR-10_Training - INFO - Epoch  2: Train Loss: 1.4201, Train Acc: 48.06%, Test Loss: 1.2886, Test Acc: 52.88%, Acc Diff: -4.82%, LR: 0.050000
+2025-10-02 21:15:53,380 - CIFAR-10_Training - INFO - Starting Epoch 3/200
+2025-10-02 21:16:29,398 - CIFAR-10_Training - INFO - Epoch  3: Train Loss: 1.2435, Train Acc: 55.82%, Test Loss: 1.0650, Test Acc: 62.31%, Acc Diff: -6.49%, LR: 0.050000
+2025-10-02 21:16:29,398 - CIFAR-10_Training - INFO - Starting Epoch 4/200
+2025-10-02 21:17:06,177 - CIFAR-10_Training - INFO - Epoch  4: Train Loss: 1.1374, Train Acc: 60.06%, Test Loss: 1.0844, Test Acc: 63.02%, Acc Diff: -2.96%, LR: 0.050000
+2025-10-02 21:17:06,177 - CIFAR-10_Training - INFO - Starting Epoch 5/200
+2025-10-02 21:17:42,130 - CIFAR-10_Training - INFO - Epoch  5: Train Loss: 1.0596, Train Acc: 62.88%, Test Loss: 0.9517, Test Acc: 66.92%, Acc Diff: -4.04%, LR: 0.050000
+2025-10-02 21:17:42,130 - CIFAR-10_Training - INFO - Starting Epoch 6/200
+2025-10-02 21:18:17,932 - CIFAR-10_Training - INFO - Epoch  6: Train Loss: 1.0013, Train Acc: 65.09%, Test Loss: 0.9371, Test Acc: 67.92%, Acc Diff: -2.83%, LR: 0.050000
+2025-10-02 21:18:17,932 - CIFAR-10_Training - INFO - Starting Epoch 7/200
+2025-10-02 21:18:54,139 - CIFAR-10_Training - INFO - Epoch  7: Train Loss: 0.9558, Train Acc: 66.85%, Test Loss: 0.8414, Test Acc: 70.62%, Acc Diff: -3.77%, LR: 0.050000
+2025-10-02 21:18:54,139 - CIFAR-10_Training - INFO - Starting Epoch 8/200
+2025-10-02 21:19:29,950 - CIFAR-10_Training - INFO - Epoch  8: Train Loss: 0.9283, Train Acc: 68.08%, Test Loss: 0.8911, Test Acc: 69.52%, Acc Diff: -1.44%, LR: 0.050000
+2025-10-02 21:19:29,950 - CIFAR-10_Training - INFO - Starting Epoch 9/200
+2025-10-02 21:20:05,689 - CIFAR-10_Training - INFO - Epoch  9: Train Loss: 0.9013, Train Acc: 68.91%, Test Loss: 0.8839, Test Acc: 69.02%, Acc Diff: -0.11%, LR: 0.050000
+2025-10-02 21:20:05,689 - CIFAR-10_Training - INFO - Starting Epoch 10/200
+2025-10-02 21:20:41,679 - CIFAR-10_Training - INFO - Epoch 10: Train Loss: 0.8690, Train Acc: 69.90%, Test Loss: 0.8210, Test Acc: 71.54%, Acc Diff: -1.64%, LR: 0.050000
+2025-10-02 21:20:41,679 - CIFAR-10_Training - INFO - Starting Epoch 11/200
+2025-10-02 21:21:17,977 - CIFAR-10_Training - INFO - Epoch 11: Train Loss: 0.8542, Train Acc: 70.52%, Test Loss: 0.7461, Test Acc: 74.17%, Acc Diff: -3.65%, LR: 0.050000
+2025-10-02 21:21:17,977 - CIFAR-10_Training - INFO - Starting Epoch 12/200
+2025-10-02 21:21:54,309 - CIFAR-10_Training - INFO - Epoch 12: Train Loss: 0.8252, Train Acc: 71.71%, Test Loss: 0.7351, Test Acc: 74.62%, Acc Diff: -2.91%, LR: 0.050000
+2025-10-02 21:21:54,309 - CIFAR-10_Training - INFO - Starting Epoch 13/200
+2025-10-02 21:22:33,146 - CIFAR-10_Training - INFO - Epoch 13: Train Loss: 0.8101, Train Acc: 72.20%, Test Loss: 0.7664, Test Acc: 73.58%, Acc Diff: -1.38%, LR: 0.050000
+2025-10-02 21:22:33,147 - CIFAR-10_Training - INFO - Starting Epoch 14/200
+2025-10-02 21:23:25,055 - CIFAR-10_Training - INFO - Epoch 14: Train Loss: 0.7909, Train Acc: 72.84%, Test Loss: 0.6936, Test Acc: 75.97%, Acc Diff: -3.13%, LR: 0.050000
+2025-10-02 21:23:25,056 - CIFAR-10_Training - INFO - Starting Epoch 15/200
+2025-10-02 21:24:14,218 - CIFAR-10_Training - INFO - Epoch 15: Train Loss: 0.7783, Train Acc: 73.34%, Test Loss: 0.7954, Test Acc: 72.69%, Acc Diff: 0.65%, LR: 0.050000
+2025-10-02 21:24:14,218 - CIFAR-10_Training - INFO - Starting Epoch 16/200
+2025-10-02 21:24:52,258 - CIFAR-10_Training - INFO - Epoch 16: Train Loss: 0.7635, Train Acc: 74.06%, Test Loss: 0.6686, Test Acc: 77.54%, Acc Diff: -3.48%, LR: 0.050000
+2025-10-02 21:24:52,259 - CIFAR-10_Training - INFO - Starting Epoch 17/200
+2025-10-02 21:25:44,414 - CIFAR-10_Training - INFO - Epoch 17: Train Loss: 0.7565, Train Acc: 74.14%, Test Loss: 0.7663, Test Acc: 74.55%, Acc Diff: -0.41%, LR: 0.050000
+2025-10-02 21:25:44,414 - CIFAR-10_Training - INFO - Starting Epoch 18/200
+2025-10-02 21:26:36,399 - CIFAR-10_Training - INFO - Epoch 18: Train Loss: 0.7440, Train Acc: 74.60%, Test Loss: 0.6806, Test Acc: 76.65%, Acc Diff: -2.05%, LR: 0.050000
+2025-10-02 21:26:36,401 - CIFAR-10_Training - INFO - Starting Epoch 19/200
+2025-10-02 21:27:21,152 - CIFAR-10_Training - INFO - Epoch 19: Train Loss: 0.7248, Train Acc: 75.14%, Test Loss: 0.6619, Test Acc: 77.50%, Acc Diff: -2.36%, LR: 0.050000
+2025-10-02 21:27:21,152 - CIFAR-10_Training - INFO - Starting Epoch 20/200
+2025-10-02 21:27:57,758 - CIFAR-10_Training - INFO - Epoch 20: Train Loss: 0.7190, Train Acc: 75.54%, Test Loss: 0.6732, Test Acc: 76.98%, Acc Diff: -1.44%, LR: 0.050000
+2025-10-02 21:27:57,758 - CIFAR-10_Training - INFO - Starting Epoch 21/200
+2025-10-02 21:28:34,326 - CIFAR-10_Training - INFO - Epoch 21: Train Loss: 0.7130, Train Acc: 75.74%, Test Loss: 0.6326, Test Acc: 78.43%, Acc Diff: -2.69%, LR: 0.050000
+2025-10-02 21:28:34,326 - CIFAR-10_Training - INFO - Starting Epoch 22/200
+2025-10-02 21:29:13,156 - CIFAR-10_Training - INFO - Epoch 22: Train Loss: 0.6996, Train Acc: 76.22%, Test Loss: 0.6628, Test Acc: 77.81%, Acc Diff: -1.59%, LR: 0.050000
+2025-10-02 21:29:13,158 - CIFAR-10_Training - INFO - Starting Epoch 23/200
+2025-10-02 21:30:03,788 - CIFAR-10_Training - INFO - Epoch 23: Train Loss: 0.6928, Train Acc: 76.29%, Test Loss: 0.6561, Test Acc: 77.36%, Acc Diff: -1.07%, LR: 0.050000
+2025-10-02 21:30:03,788 - CIFAR-10_Training - INFO - Starting Epoch 24/200
+2025-10-02 21:30:55,815 - CIFAR-10_Training - INFO - Epoch 24: Train Loss: 0.6899, Train Acc: 76.37%, Test Loss: 0.6375, Test Acc: 78.30%, Acc Diff: -1.93%, LR: 0.050000
+2025-10-02 21:30:55,816 - CIFAR-10_Training - INFO - Starting Epoch 25/200
+2025-10-02 21:31:47,789 - CIFAR-10_Training - INFO - Epoch 25: Train Loss: 0.6790, Train Acc: 76.59%, Test Loss: 0.6926, Test Acc: 76.70%, Acc Diff: -0.11%, LR: 0.050000
+2025-10-02 21:31:47,790 - CIFAR-10_Training - INFO - Starting Epoch 26/200
+2025-10-02 21:32:36,044 - CIFAR-10_Training - INFO - Epoch 26: Train Loss: 0.6757, Train Acc: 76.85%, Test Loss: 0.6268, Test Acc: 78.71%, Acc Diff: -1.86%, LR: 0.050000
+2025-10-02 21:32:36,044 - CIFAR-10_Training - INFO - Starting Epoch 27/200
+2025-10-02 21:33:12,473 - CIFAR-10_Training - INFO - Epoch 27: Train Loss: 0.6703, Train Acc: 77.09%, Test Loss: 0.6466, Test Acc: 78.20%, Acc Diff: -1.11%, LR: 0.050000
+2025-10-02 21:33:12,473 - CIFAR-10_Training - INFO - Starting Epoch 28/200
+2025-10-02 21:33:48,531 - CIFAR-10_Training - INFO - Epoch 28: Train Loss: 0.6600, Train Acc: 77.27%, Test Loss: 0.7052, Test Acc: 76.10%, Acc Diff: 1.17%, LR: 0.050000
+2025-10-02 21:33:48,531 - CIFAR-10_Training - INFO - Starting Epoch 29/200
+2025-10-02 21:34:24,638 - CIFAR-10_Training - INFO - Epoch 29: Train Loss: 0.6557, Train Acc: 77.61%, Test Loss: 0.6018, Test Acc: 79.25%, Acc Diff: -1.64%, LR: 0.050000
+2025-10-02 21:34:24,638 - CIFAR-10_Training - INFO - Starting Epoch 30/200
+2025-10-02 21:35:01,306 - CIFAR-10_Training - INFO - Epoch 30: Train Loss: 0.6472, Train Acc: 77.79%, Test Loss: 0.6552, Test Acc: 77.55%, Acc Diff: 0.24%, LR: 0.050000
+2025-10-02 21:35:01,306 - CIFAR-10_Training - INFO - Starting Epoch 31/200
+2025-10-02 21:35:37,499 - CIFAR-10_Training - INFO - Epoch 31: Train Loss: 0.6443, Train Acc: 77.92%, Test Loss: 0.5837, Test Acc: 80.00%, Acc Diff: -2.08%, LR: 0.050000
+2025-10-02 21:35:37,499 - CIFAR-10_Training - INFO - Starting Epoch 32/200
+2025-10-02 21:36:13,181 - CIFAR-10_Training - INFO - Epoch 32: Train Loss: 0.6398, Train Acc: 77.92%, Test Loss: 0.5882, Test Acc: 79.73%, Acc Diff: -1.81%, LR: 0.050000
+2025-10-02 21:36:13,181 - CIFAR-10_Training - INFO - Starting Epoch 33/200
+2025-10-02 21:36:49,213 - CIFAR-10_Training - INFO - Epoch 33: Train Loss: 0.6352, Train Acc: 78.38%, Test Loss: 0.5984, Test Acc: 79.56%, Acc Diff: -1.18%, LR: 0.050000
+2025-10-02 21:36:49,213 - CIFAR-10_Training - INFO - Starting Epoch 34/200
+2025-10-02 21:37:25,355 - CIFAR-10_Training - INFO - Epoch 34: Train Loss: 0.6238, Train Acc: 78.68%, Test Loss: 0.5707, Test Acc: 80.42%, Acc Diff: -1.74%, LR: 0.050000
+2025-10-02 21:37:25,355 - CIFAR-10_Training - INFO - Starting Epoch 35/200
+2025-10-02 21:38:01,147 - CIFAR-10_Training - INFO - Epoch 35: Train Loss: 0.6263, Train Acc: 78.55%, Test Loss: 0.5858, Test Acc: 80.03%, Acc Diff: -1.48%, LR: 0.050000
+2025-10-02 21:38:01,147 - CIFAR-10_Training - INFO - Starting Epoch 36/200
+2025-10-02 21:38:40,773 - CIFAR-10_Training - INFO - Epoch 36: Train Loss: 0.6125, Train Acc: 78.88%, Test Loss: 0.5575, Test Acc: 80.71%, Acc Diff: -1.83%, LR: 0.050000
+2025-10-02 21:38:40,774 - CIFAR-10_Training - INFO - Starting Epoch 37/200
+2025-10-02 21:39:31,937 - CIFAR-10_Training - INFO - Epoch 37: Train Loss: 0.6130, Train Acc: 79.05%, Test Loss: 0.5970, Test Acc: 79.43%, Acc Diff: -0.38%, LR: 0.050000
+2025-10-02 21:39:31,938 - CIFAR-10_Training - INFO - Starting Epoch 38/200
+2025-10-02 21:40:26,127 - CIFAR-10_Training - INFO - Epoch 38: Train Loss: 0.6048, Train Acc: 79.32%, Test Loss: 0.5545, Test Acc: 80.73%, Acc Diff: -1.41%, LR: 0.050000
+2025-10-02 21:40:26,127 - CIFAR-10_Training - INFO - Starting Epoch 39/200
+2025-10-02 21:41:20,256 - CIFAR-10_Training - INFO - Epoch 39: Train Loss: 0.6063, Train Acc: 79.32%, Test Loss: 0.5923, Test Acc: 79.68%, Acc Diff: -0.36%, LR: 0.050000
+2025-10-02 21:41:20,259 - CIFAR-10_Training - INFO - Starting Epoch 40/200
+2025-10-02 21:42:12,737 - CIFAR-10_Training - INFO - Epoch 40: Train Loss: 0.5960, Train Acc: 79.50%, Test Loss: 0.5586, Test Acc: 80.25%, Acc Diff: -0.75%, LR: 0.050000
+2025-10-02 21:42:12,737 - CIFAR-10_Training - INFO - Starting Epoch 41/200
+2025-10-02 21:43:07,379 - CIFAR-10_Training - INFO - Epoch 41: Train Loss: 0.5924, Train Acc: 79.81%, Test Loss: 0.5678, Test Acc: 80.70%, Acc Diff: -0.89%, LR: 0.050000
+2025-10-02 21:43:07,379 - CIFAR-10_Training - INFO - Starting Epoch 42/200
+2025-10-02 21:43:48,821 - CIFAR-10_Training - INFO - Epoch 42: Train Loss: 0.5917, Train Acc: 79.58%, Test Loss: 0.5922, Test Acc: 79.96%, Acc Diff: -0.38%, LR: 0.050000
+2025-10-02 21:43:48,821 - CIFAR-10_Training - INFO - Starting Epoch 43/200
+2025-10-02 21:44:27,668 - CIFAR-10_Training - INFO - Epoch 43: Train Loss: 0.5869, Train Acc: 79.83%, Test Loss: 0.5727, Test Acc: 80.52%, Acc Diff: -0.69%, LR: 0.050000
+2025-10-02 21:44:27,668 - CIFAR-10_Training - INFO - Starting Epoch 44/200
+2025-10-02 21:45:19,497 - CIFAR-10_Training - INFO - Epoch 44: Train Loss: 0.5816, Train Acc: 79.99%, Test Loss: 0.5360, Test Acc: 80.94%, Acc Diff: -0.95%, LR: 0.050000
+2025-10-02 21:45:19,498 - CIFAR-10_Training - INFO - Starting Epoch 45/200
+2025-10-02 21:46:10,481 - CIFAR-10_Training - INFO - Epoch 45: Train Loss: 0.5832, Train Acc: 79.97%, Test Loss: 0.5301, Test Acc: 81.86%, Acc Diff: -1.89%, LR: 0.050000
+2025-10-02 21:46:10,482 - CIFAR-10_Training - INFO - Starting Epoch 46/200
+2025-10-02 21:47:03,288 - CIFAR-10_Training - INFO - Epoch 46: Train Loss: 0.5776, Train Acc: 80.23%, Test Loss: 0.5535, Test Acc: 81.19%, Acc Diff: -0.96%, LR: 0.050000
+2025-10-02 21:47:03,288 - CIFAR-10_Training - INFO - Starting Epoch 47/200
+2025-10-02 21:47:54,987 - CIFAR-10_Training - INFO - Epoch 47: Train Loss: 0.5782, Train Acc: 80.19%, Test Loss: 0.5657, Test Acc: 80.83%, Acc Diff: -0.64%, LR: 0.050000
+2025-10-02 21:47:54,987 - CIFAR-10_Training - INFO - Starting Epoch 48/200
+2025-10-02 21:48:46,594 - CIFAR-10_Training - INFO - Epoch 48: Train Loss: 0.5682, Train Acc: 80.37%, Test Loss: 0.5223, Test Acc: 82.53%, Acc Diff: -2.16%, LR: 0.050000
+2025-10-02 21:48:46,595 - CIFAR-10_Training - INFO - Starting Epoch 49/200
+2025-10-02 21:49:39,027 - CIFAR-10_Training - INFO - Epoch 49: Train Loss: 0.5629, Train Acc: 80.72%, Test Loss: 0.5653, Test Acc: 80.47%, Acc Diff: 0.25%, LR: 0.050000
+2025-10-02 21:49:39,027 - CIFAR-10_Training - INFO - Starting Epoch 50/200
+2025-10-02 21:50:31,752 - CIFAR-10_Training - INFO - Epoch 50: Train Loss: 0.5628, Train Acc: 80.73%, Test Loss: 0.5328, Test Acc: 82.00%, Acc Diff: -1.27%, LR: 0.050000
+2025-10-02 21:50:31,754 - CIFAR-10_Training - INFO - Starting Epoch 51/200
+2025-10-02 21:51:22,392 - CIFAR-10_Training - INFO - Epoch 51: Train Loss: 0.5646, Train Acc: 80.85%, Test Loss: 0.5334, Test Acc: 81.66%, Acc Diff: -0.81%, LR: 0.050000
+2025-10-02 21:51:22,392 - CIFAR-10_Training - INFO - Starting Epoch 52/200
+2025-10-02 21:51:58,424 - CIFAR-10_Training - INFO - Epoch 52: Train Loss: 0.5565, Train Acc: 80.97%, Test Loss: 0.5290, Test Acc: 81.64%, Acc Diff: -0.67%, LR: 0.050000
+2025-10-02 21:51:58,424 - CIFAR-10_Training - INFO - Starting Epoch 53/200
+2025-10-02 21:52:34,543 - CIFAR-10_Training - INFO - Epoch 53: Train Loss: 0.5563, Train Acc: 80.95%, Test Loss: 0.5332, Test Acc: 81.88%, Acc Diff: -0.93%, LR: 0.050000
+2025-10-02 21:52:34,543 - CIFAR-10_Training - INFO - Starting Epoch 54/200
+2025-10-02 21:53:14,322 - CIFAR-10_Training - INFO - Epoch 54: Train Loss: 0.5531, Train Acc: 81.22%, Test Loss: 0.5184, Test Acc: 82.32%, Acc Diff: -1.10%, LR: 0.050000
+2025-10-02 21:53:14,323 - CIFAR-10_Training - INFO - Starting Epoch 55/200
+2025-10-02 21:54:05,247 - CIFAR-10_Training - INFO - Epoch 55: Train Loss: 0.5523, Train Acc: 81.02%, Test Loss: 0.5405, Test Acc: 81.97%, Acc Diff: -0.95%, LR: 0.050000
+2025-10-02 21:54:05,248 - CIFAR-10_Training - INFO - Starting Epoch 56/200
+2025-10-02 21:54:53,226 - CIFAR-10_Training - INFO - Epoch 56: Train Loss: 0.5465, Train Acc: 81.29%, Test Loss: 0.5264, Test Acc: 81.75%, Acc Diff: -0.46%, LR: 0.050000
+2025-10-02 21:54:53,226 - CIFAR-10_Training - INFO - Starting Epoch 57/200
+2025-10-02 21:55:29,020 - CIFAR-10_Training - INFO - Epoch 57: Train Loss: 0.5476, Train Acc: 81.20%, Test Loss: 0.5069, Test Acc: 82.30%, Acc Diff: -1.10%, LR: 0.050000
+2025-10-02 21:55:29,020 - CIFAR-10_Training - INFO - Starting Epoch 58/200
+2025-10-02 21:56:04,809 - CIFAR-10_Training - INFO - Epoch 58: Train Loss: 0.5416, Train Acc: 81.40%, Test Loss: 0.5282, Test Acc: 82.13%, Acc Diff: -0.73%, LR: 0.050000
+2025-10-02 21:56:04,809 - CIFAR-10_Training - INFO - Starting Epoch 59/200
+2025-10-02 21:56:40,801 - CIFAR-10_Training - INFO - Epoch 59: Train Loss: 0.5365, Train Acc: 81.83%, Test Loss: 0.5447, Test Acc: 81.37%, Acc Diff: 0.46%, LR: 0.050000
+2025-10-02 21:56:40,801 - CIFAR-10_Training - INFO - Starting Epoch 60/200
+2025-10-02 21:57:16,773 - CIFAR-10_Training - INFO - Epoch 60: Train Loss: 0.5355, Train Acc: 81.55%, Test Loss: 0.5367, Test Acc: 81.82%, Acc Diff: -0.27%, LR: 0.050000
+2025-10-02 21:57:16,773 - CIFAR-10_Training - INFO - Starting Epoch 61/200
+2025-10-02 21:57:52,602 - CIFAR-10_Training - INFO - Epoch 61: Train Loss: 0.5378, Train Acc: 81.49%, Test Loss: 0.5133, Test Acc: 82.60%, Acc Diff: -1.11%, LR: 0.050000
+2025-10-02 21:57:52,602 - CIFAR-10_Training - INFO - Starting Epoch 62/200
+2025-10-02 21:58:28,374 - CIFAR-10_Training - INFO - Epoch 62: Train Loss: 0.5300, Train Acc: 81.80%, Test Loss: 0.5574, Test Acc: 81.47%, Acc Diff: 0.33%, LR: 0.050000
+2025-10-02 21:58:28,374 - CIFAR-10_Training - INFO - Starting Epoch 63/200
+2025-10-02 21:59:04,370 - CIFAR-10_Training - INFO - Epoch 63: Train Loss: 0.5264, Train Acc: 82.06%, Test Loss: 0.5256, Test Acc: 81.95%, Acc Diff: 0.11%, LR: 0.025000
+2025-10-02 21:59:04,370 - CIFAR-10_Training - INFO - Starting Epoch 64/200
+2025-10-02 21:59:40,538 - CIFAR-10_Training - INFO - Epoch 64: Train Loss: 0.5006, Train Acc: 82.67%, Test Loss: 0.4826, Test Acc: 83.40%, Acc Diff: -0.73%, LR: 0.025000
+2025-10-02 21:59:40,538 - CIFAR-10_Training - INFO - Starting Epoch 65/200
+2025-10-02 22:00:16,725 - CIFAR-10_Training - INFO - Epoch 65: Train Loss: 0.4881, Train Acc: 83.20%, Test Loss: 0.4893, Test Acc: 83.36%, Acc Diff: -0.16%, LR: 0.025000
+2025-10-02 22:00:16,725 - CIFAR-10_Training - INFO - Starting Epoch 66/200
+2025-10-02 22:00:52,512 - CIFAR-10_Training - INFO - Epoch 66: Train Loss: 0.4878, Train Acc: 83.12%, Test Loss: 0.4777, Test Acc: 83.72%, Acc Diff: -0.60%, LR: 0.025000
+2025-10-02 22:00:52,512 - CIFAR-10_Training - INFO - Starting Epoch 67/200
+2025-10-02 22:01:28,518 - CIFAR-10_Training - INFO - Epoch 67: Train Loss: 0.4852, Train Acc: 83.46%, Test Loss: 0.4712, Test Acc: 83.76%, Acc Diff: -0.30%, LR: 0.025000
+2025-10-02 22:01:28,518 - CIFAR-10_Training - INFO - Starting Epoch 68/200
+2025-10-02 22:02:04,496 - CIFAR-10_Training - INFO - Epoch 68: Train Loss: 0.4828, Train Acc: 83.31%, Test Loss: 0.4860, Test Acc: 83.27%, Acc Diff: 0.04%, LR: 0.025000
+2025-10-02 22:02:04,496 - CIFAR-10_Training - INFO - Starting Epoch 69/200
+2025-10-02 22:02:46,163 - CIFAR-10_Training - INFO - Epoch 69: Train Loss: 0.4788, Train Acc: 83.48%, Test Loss: 0.4914, Test Acc: 83.55%, Acc Diff: -0.07%, LR: 0.025000
+2025-10-02 22:02:46,164 - CIFAR-10_Training - INFO - Starting Epoch 70/200
+2025-10-02 22:03:38,570 - CIFAR-10_Training - INFO - Epoch 70: Train Loss: 0.4790, Train Acc: 83.60%, Test Loss: 0.4695, Test Acc: 83.89%, Acc Diff: -0.29%, LR: 0.025000
+2025-10-02 22:03:38,572 - CIFAR-10_Training - INFO - Starting Epoch 71/200
+2025-10-02 22:04:30,288 - CIFAR-10_Training - INFO - Epoch 71: Train Loss: 0.4784, Train Acc: 83.51%, Test Loss: 0.4698, Test Acc: 84.17%, Acc Diff: -0.66%, LR: 0.025000
+2025-10-02 22:04:30,288 - CIFAR-10_Training - INFO - Starting Epoch 72/200
+2025-10-02 22:05:23,456 - CIFAR-10_Training - INFO - Epoch 72: Train Loss: 0.4800, Train Acc: 83.45%, Test Loss: 0.4659, Test Acc: 83.83%, Acc Diff: -0.38%, LR: 0.025000
+2025-10-02 22:05:23,457 - CIFAR-10_Training - INFO - Starting Epoch 73/200
+2025-10-02 22:06:15,995 - CIFAR-10_Training - INFO - Epoch 73: Train Loss: 0.4737, Train Acc: 83.60%, Test Loss: 0.4740, Test Acc: 83.94%, Acc Diff: -0.34%, LR: 0.025000
+2025-10-02 22:06:15,997 - CIFAR-10_Training - INFO - Starting Epoch 74/200
+2025-10-02 22:07:08,019 - CIFAR-10_Training - INFO - Epoch 74: Train Loss: 0.4736, Train Acc: 83.61%, Test Loss: 0.4653, Test Acc: 84.36%, Acc Diff: -0.75%, LR: 0.025000
+2025-10-02 22:07:08,021 - CIFAR-10_Training - INFO - Starting Epoch 75/200
+2025-10-02 22:08:01,127 - CIFAR-10_Training - INFO - Epoch 75: Train Loss: 0.4730, Train Acc: 83.77%, Test Loss: 0.4658, Test Acc: 83.86%, Acc Diff: -0.09%, LR: 0.025000
+2025-10-02 22:08:01,127 - CIFAR-10_Training - INFO - Starting Epoch 76/200
+2025-10-02 22:08:52,391 - CIFAR-10_Training - INFO - Epoch 76: Train Loss: 0.4707, Train Acc: 83.69%, Test Loss: 0.4750, Test Acc: 83.83%, Acc Diff: -0.14%, LR: 0.025000
+2025-10-02 22:08:52,393 - CIFAR-10_Training - INFO - Starting Epoch 77/200
+2025-10-02 22:09:44,376 - CIFAR-10_Training - INFO - Epoch 77: Train Loss: 0.4696, Train Acc: 83.69%, Test Loss: 0.4717, Test Acc: 84.08%, Acc Diff: -0.39%, LR: 0.025000
+2025-10-02 22:09:44,376 - CIFAR-10_Training - INFO - Starting Epoch 78/200
+2025-10-02 22:10:36,289 - CIFAR-10_Training - INFO - Epoch 78: Train Loss: 0.4713, Train Acc: 83.78%, Test Loss: 0.4584, Test Acc: 84.45%, Acc Diff: -0.67%, LR: 0.025000
+2025-10-02 22:10:36,289 - CIFAR-10_Training - INFO - Starting Epoch 79/200
+2025-10-02 22:11:28,523 - CIFAR-10_Training - INFO - Epoch 79: Train Loss: 0.4701, Train Acc: 83.90%, Test Loss: 0.4714, Test Acc: 83.67%, Acc Diff: 0.23%, LR: 0.025000
+2025-10-02 22:11:28,523 - CIFAR-10_Training - INFO - Starting Epoch 80/200
+2025-10-02 22:12:21,509 - CIFAR-10_Training - INFO - Epoch 80: Train Loss: 0.4668, Train Acc: 83.99%, Test Loss: 0.4682, Test Acc: 84.01%, Acc Diff: -0.02%, LR: 0.025000
+2025-10-02 22:12:21,509 - CIFAR-10_Training - INFO - Starting Epoch 81/200
+2025-10-02 22:13:05,531 - CIFAR-10_Training - INFO - Epoch 81: Train Loss: 0.4652, Train Acc: 84.21%, Test Loss: 0.4638, Test Acc: 84.12%, Acc Diff: 0.09%, LR: 0.025000
+2025-10-02 22:13:05,542 - CIFAR-10_Training - INFO - Starting Epoch 82/200
+2025-10-02 22:14:07,318 - CIFAR-10_Training - INFO - Epoch 82: Train Loss: 0.4684, Train Acc: 83.83%, Test Loss: 0.4718, Test Acc: 83.96%, Acc Diff: -0.13%, LR: 0.025000
+2025-10-02 22:14:07,318 - CIFAR-10_Training - INFO - Starting Epoch 83/200
+2025-10-02 22:15:07,011 - CIFAR-10_Training - INFO - Epoch 83: Train Loss: 0.4660, Train Acc: 84.01%, Test Loss: 0.4783, Test Acc: 83.64%, Acc Diff: 0.37%, LR: 0.025000
+2025-10-02 22:15:07,011 - CIFAR-10_Training - INFO - Starting Epoch 84/200
+2025-10-02 22:16:07,828 - CIFAR-10_Training - INFO - Epoch 84: Train Loss: 0.4635, Train Acc: 83.99%, Test Loss: 0.4744, Test Acc: 84.02%, Acc Diff: -0.03%, LR: 0.012500
+2025-10-02 22:16:07,828 - CIFAR-10_Training - INFO - Starting Epoch 85/200
+2025-10-02 22:17:07,588 - CIFAR-10_Training - INFO - Epoch 85: Train Loss: 0.4431, Train Acc: 84.57%, Test Loss: 0.4480, Test Acc: 84.53%, Acc Diff: 0.04%, LR: 0.012500
+2025-10-02 22:17:07,588 - CIFAR-10_Training - INFO - Starting Epoch 86/200
+2025-10-02 22:18:09,641 - CIFAR-10_Training - INFO - Epoch 86: Train Loss: 0.4448, Train Acc: 84.65%, Test Loss: 0.4517, Test Acc: 84.69%, Acc Diff: -0.04%, LR: 0.012500
+2025-10-02 22:18:09,641 - CIFAR-10_Training - INFO - Starting Epoch 87/200
+2025-10-02 22:19:09,139 - CIFAR-10_Training - INFO - Epoch 87: Train Loss: 0.4428, Train Acc: 84.71%, Test Loss: 0.4493, Test Acc: 84.98%, Acc Diff: -0.27%, LR: 0.012500
+2025-10-02 22:19:09,139 - CIFAR-10_Training - INFO - Starting Epoch 88/200
+2025-10-02 22:20:09,590 - CIFAR-10_Training - INFO - Epoch 88: Train Loss: 0.4419, Train Acc: 84.80%, Test Loss: 0.4527, Test Acc: 84.87%, Acc Diff: -0.07%, LR: 0.012500
+2025-10-02 22:20:09,590 - CIFAR-10_Training - INFO - Starting Epoch 89/200
+2025-10-02 22:21:09,415 - CIFAR-10_Training - INFO - Epoch 89: Train Loss: 0.4345, Train Acc: 85.01%, Test Loss: 0.4477, Test Acc: 84.93%, Acc Diff: 0.08%, LR: 0.012500
+2025-10-02 22:21:09,415 - CIFAR-10_Training - INFO - Starting Epoch 90/200
+2025-10-02 22:22:10,749 - CIFAR-10_Training - INFO - Epoch 90: Train Loss: 0.4365, Train Acc: 84.80%, Test Loss: 0.4624, Test Acc: 84.21%, Acc Diff: 0.59%, LR: 0.012500
+2025-10-02 22:22:10,749 - CIFAR-10_Training - INFO - Starting Epoch 91/200
+2025-10-02 22:23:10,039 - CIFAR-10_Training - INFO - Epoch 91: Train Loss: 0.4406, Train Acc: 84.74%, Test Loss: 0.4515, Test Acc: 84.56%, Acc Diff: 0.18%, LR: 0.012500
+2025-10-02 22:23:10,039 - CIFAR-10_Training - INFO - Starting Epoch 92/200
+2025-10-02 22:24:09,142 - CIFAR-10_Training - INFO - Epoch 92: Train Loss: 0.4325, Train Acc: 85.15%, Test Loss: 0.4529, Test Acc: 84.63%, Acc Diff: 0.52%, LR: 0.012500
+2025-10-02 22:24:09,146 - CIFAR-10_Training - INFO - Starting Epoch 93/200
+2025-10-02 22:25:09,307 - CIFAR-10_Training - INFO - Epoch 93: Train Loss: 0.4406, Train Acc: 84.70%, Test Loss: 0.4546, Test Acc: 84.54%, Acc Diff: 0.16%, LR: 0.012500
+2025-10-02 22:25:09,307 - CIFAR-10_Training - INFO - Starting Epoch 94/200
+2025-10-02 22:26:09,599 - CIFAR-10_Training - INFO - Epoch 94: Train Loss: 0.4347, Train Acc: 85.03%, Test Loss: 0.4488, Test Acc: 84.49%, Acc Diff: 0.54%, LR: 0.012500
+2025-10-02 22:26:09,599 - CIFAR-10_Training - INFO - Starting Epoch 95/200
+2025-10-02 22:27:10,822 - CIFAR-10_Training - INFO - Epoch 95: Train Loss: 0.4373, Train Acc: 85.01%, Test Loss: 0.4527, Test Acc: 84.72%, Acc Diff: 0.29%, LR: 0.006250
+2025-10-02 22:27:10,822 - CIFAR-10_Training - INFO - Starting Epoch 96/200
+2025-10-02 22:28:11,164 - CIFAR-10_Training - INFO - Epoch 96: Train Loss: 0.4229, Train Acc: 85.34%, Test Loss: 0.4413, Test Acc: 85.04%, Acc Diff: 0.30%, LR: 0.006250
+2025-10-02 22:28:11,164 - CIFAR-10_Training - INFO - Starting Epoch 97/200
+2025-10-02 22:29:10,468 - CIFAR-10_Training - INFO - Epoch 97: Train Loss: 0.4213, Train Acc: 85.39%, Test Loss: 0.4417, Test Acc: 85.07%, Acc Diff: 0.32%, LR: 0.006250
+2025-10-02 22:29:10,468 - CIFAR-10_Training - INFO - Starting Epoch 98/200
+2025-10-02 22:30:10,832 - CIFAR-10_Training - INFO - Epoch 98: Train Loss: 0.4232, Train Acc: 85.34%, Test Loss: 0.4389, Test Acc: 85.11%, Acc Diff: 0.23%, LR: 0.006250
+2025-10-02 22:30:10,832 - CIFAR-10_Training - INFO - Starting Epoch 99/200
+2025-10-02 22:31:09,341 - CIFAR-10_Training - INFO - Epoch 99: Train Loss: 0.4225, Train Acc: 85.48%, Test Loss: 0.4434, Test Acc: 84.88%, Acc Diff: 0.60%, LR: 0.006250
+2025-10-02 22:31:09,341 - CIFAR-10_Training - INFO - Starting Epoch 100/200
+2025-10-02 22:32:08,630 - CIFAR-10_Training - INFO - Epoch 100: Train Loss: 0.4158, Train Acc: 85.62%, Test Loss: 0.4450, Test Acc: 85.02%, Acc Diff: 0.60%, LR: 0.006250
+2025-10-02 22:32:08,632 - CIFAR-10_Training - INFO - Starting Epoch 101/200
+2025-10-02 22:33:07,422 - CIFAR-10_Training - INFO - Epoch 101: Train Loss: 0.4198, Train Acc: 85.57%, Test Loss: 0.4422, Test Acc: 85.10%, Acc Diff: 0.47%, LR: 0.006250
+2025-10-02 22:33:07,436 - CIFAR-10_Training - INFO - Starting Epoch 102/200
+2025-10-02 22:34:05,932 - CIFAR-10_Training - INFO - Epoch 102: Train Loss: 0.4164, Train Acc: 85.57%, Test Loss: 0.4384, Test Acc: 85.05%, Acc Diff: 0.52%, LR: 0.006250
+2025-10-02 22:34:05,932 - CIFAR-10_Training - INFO - Starting Epoch 103/200
+2025-10-02 22:35:06,387 - CIFAR-10_Training - INFO - Epoch 103: Train Loss: 0.4198, Train Acc: 85.66%, Test Loss: 0.4457, Test Acc: 84.85%, Acc Diff: 0.81%, LR: 0.006250
+2025-10-02 22:35:06,387 - CIFAR-10_Training - INFO - Starting Epoch 104/200
+2025-10-02 22:36:07,258 - CIFAR-10_Training - INFO - Epoch 104: Train Loss: 0.4179, Train Acc: 85.66%, Test Loss: 0.4367, Test Acc: 85.25%, Acc Diff: 0.41%, LR: 0.006250
+2025-10-02 22:36:07,258 - CIFAR-10_Training - INFO - Starting Epoch 105/200
+2025-10-02 22:37:07,982 - CIFAR-10_Training - INFO - Epoch 105: Train Loss: 0.4191, Train Acc: 85.52%, Test Loss: 0.4427, Test Acc: 84.90%, Acc Diff: 0.62%, LR: 0.006250
+2025-10-02 22:37:07,982 - CIFAR-10_Training - INFO - Starting Epoch 106/200
+2025-10-02 22:38:07,198 - CIFAR-10_Training - INFO - Epoch 106: Train Loss: 0.4206, Train Acc: 85.37%, Test Loss: 0.4422, Test Acc: 85.16%, Acc Diff: 0.21%, LR: 0.006250
+2025-10-02 22:38:07,198 - CIFAR-10_Training - INFO - Starting Epoch 107/200
+2025-10-02 22:39:05,632 - CIFAR-10_Training - INFO - Epoch 107: Train Loss: 0.4146, Train Acc: 85.55%, Test Loss: 0.4410, Test Acc: 85.04%, Acc Diff: 0.51%, LR: 0.006250
+2025-10-02 22:39:05,632 - CIFAR-10_Training - INFO - Starting Epoch 108/200
+2025-10-02 22:40:04,035 - CIFAR-10_Training - INFO - Epoch 108: Train Loss: 0.4180, Train Acc: 85.40%, Test Loss: 0.4391, Test Acc: 85.29%, Acc Diff: 0.11%, LR: 0.006250
+2025-10-02 22:40:04,035 - CIFAR-10_Training - INFO - Starting Epoch 109/200
+2025-10-02 22:41:04,715 - CIFAR-10_Training - INFO - Epoch 109: Train Loss: 0.4171, Train Acc: 85.48%, Test Loss: 0.4462, Test Acc: 85.00%, Acc Diff: 0.48%, LR: 0.006250
+2025-10-02 22:41:04,715 - CIFAR-10_Training - INFO - Starting Epoch 110/200
+2025-10-02 22:42:08,616 - CIFAR-10_Training - INFO - Epoch 110: Train Loss: 0.4140, Train Acc: 85.71%, Test Loss: 0.4475, Test Acc: 84.95%, Acc Diff: 0.76%, LR: 0.003125
+2025-10-02 22:42:08,616 - CIFAR-10_Training - INFO - Starting Epoch 111/200
+2025-10-02 22:43:08,979 - CIFAR-10_Training - INFO - Epoch 111: Train Loss: 0.4142, Train Acc: 85.71%, Test Loss: 0.4338, Test Acc: 85.30%, Acc Diff: 0.41%, LR: 0.003125
+2025-10-02 22:43:08,979 - CIFAR-10_Training - INFO - Starting Epoch 112/200
+2025-10-02 22:44:08,215 - CIFAR-10_Training - INFO - Epoch 112: Train Loss: 0.4114, Train Acc: 85.87%, Test Loss: 0.4379, Test Acc: 85.13%, Acc Diff: 0.74%, LR: 0.003125
+2025-10-02 22:44:08,215 - CIFAR-10_Training - INFO - Starting Epoch 113/200
+2025-10-02 22:45:07,464 - CIFAR-10_Training - INFO - Epoch 113: Train Loss: 0.4124, Train Acc: 85.61%, Test Loss: 0.4362, Test Acc: 85.24%, Acc Diff: 0.37%, LR: 0.003125
+2025-10-02 22:45:07,464 - CIFAR-10_Training - INFO - Starting Epoch 114/200
+2025-10-02 22:46:06,731 - CIFAR-10_Training - INFO - Epoch 114: Train Loss: 0.4055, Train Acc: 86.15%, Test Loss: 0.4371, Test Acc: 85.38%, Acc Diff: 0.77%, LR: 0.003125
+2025-10-02 22:46:06,731 - CIFAR-10_Training - INFO - Starting Epoch 115/200
+2025-10-02 22:47:06,338 - CIFAR-10_Training - INFO - Epoch 115: Train Loss: 0.4091, Train Acc: 85.89%, Test Loss: 0.4387, Test Acc: 85.20%, Acc Diff: 0.69%, LR: 0.003125
+2025-10-02 22:47:06,338 - CIFAR-10_Training - INFO - Starting Epoch 116/200
+2025-10-02 22:48:05,551 - CIFAR-10_Training - INFO - Epoch 116: Train Loss: 0.4123, Train Acc: 85.74%, Test Loss: 0.4355, Test Acc: 85.49%, Acc Diff: 0.25%, LR: 0.003125
+2025-10-02 22:48:05,551 - CIFAR-10_Training - INFO - Starting Epoch 117/200
+2025-10-02 22:49:04,061 - CIFAR-10_Training - INFO - Epoch 117: Train Loss: 0.4066, Train Acc: 86.07%, Test Loss: 0.4365, Test Acc: 85.22%, Acc Diff: 0.85%, LR: 0.001563
+2025-10-02 22:49:04,061 - CIFAR-10_Training - INFO - Starting Epoch 118/200
+2025-10-02 22:50:03,360 - CIFAR-10_Training - INFO - Epoch 118: Train Loss: 0.4092, Train Acc: 85.84%, Test Loss: 0.4376, Test Acc: 85.20%, Acc Diff: 0.64%, LR: 0.001563
+2025-10-02 22:50:03,360 - CIFAR-10_Training - INFO - Starting Epoch 119/200
+2025-10-02 22:51:02,471 - CIFAR-10_Training - INFO - Epoch 119: Train Loss: 0.4042, Train Acc: 86.04%, Test Loss: 0.4355, Test Acc: 85.18%, Acc Diff: 0.86%, LR: 0.001563
+2025-10-02 22:51:02,471 - CIFAR-10_Training - INFO - Starting Epoch 120/200
+2025-10-02 22:52:02,203 - CIFAR-10_Training - INFO - Epoch 120: Train Loss: 0.4038, Train Acc: 86.05%, Test Loss: 0.4401, Test Acc: 85.24%, Acc Diff: 0.81%, LR: 0.001563
+2025-10-02 22:52:02,203 - CIFAR-10_Training - INFO - Starting Epoch 121/200
+2025-10-02 22:53:01,659 - CIFAR-10_Training - INFO - Epoch 121: Train Loss: 0.4066, Train Acc: 86.04%, Test Loss: 0.4366, Test Acc: 85.25%, Acc Diff: 0.79%, LR: 0.001563
+2025-10-02 22:53:01,659 - CIFAR-10_Training - INFO - Starting Epoch 122/200
+2025-10-02 22:54:00,833 - CIFAR-10_Training - INFO - Epoch 122: Train Loss: 0.4037, Train Acc: 86.16%, Test Loss: 0.4387, Test Acc: 85.25%, Acc Diff: 0.91%, LR: 0.001563
+2025-10-02 22:54:00,834 - CIFAR-10_Training - INFO - Starting Epoch 123/200
+2025-10-02 22:54:59,860 - CIFAR-10_Training - INFO - Epoch 123: Train Loss: 0.4000, Train Acc: 85.98%, Test Loss: 0.4371, Test Acc: 85.24%, Acc Diff: 0.74%, LR: 0.000781
+2025-10-02 22:54:59,860 - CIFAR-10_Training - INFO - Starting Epoch 124/200
+2025-10-02 22:55:59,453 - CIFAR-10_Training - INFO - Epoch 124: Train Loss: 0.4004, Train Acc: 86.13%, Test Loss: 0.4373, Test Acc: 85.39%, Acc Diff: 0.74%, LR: 0.000781
+2025-10-02 22:55:59,453 - CIFAR-10_Training - INFO - Starting Epoch 125/200
+2025-10-02 22:57:25,795 - CIFAR-10_Training - INFO - Epoch 125: Train Loss: 0.4001, Train Acc: 86.22%, Test Loss: 0.4346, Test Acc: 85.44%, Acc Diff: 0.78%, LR: 0.000781
+2025-10-02 22:57:25,795 - CIFAR-10_Training - INFO - Starting Epoch 126/200
+2025-10-02 22:59:15,119 - CIFAR-10_Training - INFO - Epoch 126: Train Loss: 0.4032, Train Acc: 85.90%, Test Loss: 0.4393, Test Acc: 85.29%, Acc Diff: 0.61%, LR: 0.000781
+2025-10-02 22:59:15,119 - CIFAR-10_Training - INFO - Starting Epoch 127/200
+2025-10-02 23:01:03,616 - CIFAR-10_Training - INFO - Epoch 127: Train Loss: 0.4008, Train Acc: 86.09%, Test Loss: 0.4377, Test Acc: 85.34%, Acc Diff: 0.75%, LR: 0.000781
+2025-10-02 23:01:03,616 - CIFAR-10_Training - INFO - Starting Epoch 128/200
+2025-10-02 23:02:52,534 - CIFAR-10_Training - INFO - Epoch 128: Train Loss: 0.4019, Train Acc: 86.04%, Test Loss: 0.4353, Test Acc: 85.36%, Acc Diff: 0.68%, LR: 0.000781
+2025-10-02 23:02:52,535 - CIFAR-10_Training - INFO - Starting Epoch 129/200
+2025-10-02 23:04:41,760 - CIFAR-10_Training - INFO - Epoch 129: Train Loss: 0.4023, Train Acc: 86.12%, Test Loss: 0.4351, Test Acc: 85.10%, Acc Diff: 1.02%, LR: 0.000391
+2025-10-02 23:04:41,761 - CIFAR-10_Training - INFO - Starting Epoch 130/200
+2025-10-02 23:06:32,221 - CIFAR-10_Training - INFO - Epoch 130: Train Loss: 0.4029, Train Acc: 86.00%, Test Loss: 0.4344, Test Acc: 85.52%, Acc Diff: 0.48%, LR: 0.000391
+2025-10-02 23:06:32,221 - CIFAR-10_Training - INFO - Starting Epoch 131/200
+2025-10-02 23:08:22,033 - CIFAR-10_Training - INFO - Epoch 131: Train Loss: 0.3996, Train Acc: 86.20%, Test Loss: 0.4352, Test Acc: 85.34%, Acc Diff: 0.86%, LR: 0.000391
+2025-10-02 23:08:22,033 - CIFAR-10_Training - INFO - Starting Epoch 132/200
+2025-10-02 23:10:12,344 - CIFAR-10_Training - INFO - Epoch 132: Train Loss: 0.4035, Train Acc: 85.98%, Test Loss: 0.4411, Test Acc: 85.32%, Acc Diff: 0.66%, LR: 0.000391
+2025-10-02 23:10:12,344 - CIFAR-10_Training - INFO - Starting Epoch 133/200
+2025-10-02 23:12:09,822 - CIFAR-10_Training - INFO - Epoch 133: Train Loss: 0.3999, Train Acc: 86.17%, Test Loss: 0.4367, Test Acc: 85.40%, Acc Diff: 0.77%, LR: 0.000391
+2025-10-02 23:12:09,822 - CIFAR-10_Training - INFO - Starting Epoch 134/200
+2025-10-02 23:13:57,808 - CIFAR-10_Training - INFO - Epoch 134: Train Loss: 0.4053, Train Acc: 85.88%, Test Loss: 0.4355, Test Acc: 85.47%, Acc Diff: 0.41%, LR: 0.000391
+2025-10-02 23:13:57,808 - CIFAR-10_Training - INFO - Starting Epoch 135/200
+2025-10-02 23:15:46,223 - CIFAR-10_Training - INFO - Epoch 135: Train Loss: 0.4021, Train Acc: 86.05%, Test Loss: 0.4332, Test Acc: 85.46%, Acc Diff: 0.59%, LR: 0.000391
+2025-10-02 23:15:46,223 - CIFAR-10_Training - INFO - Starting Epoch 136/200
+2025-10-02 23:17:35,468 - CIFAR-10_Training - INFO - Epoch 136: Train Loss: 0.4008, Train Acc: 86.22%, Test Loss: 0.4357, Test Acc: 85.33%, Acc Diff: 0.89%, LR: 0.000391
+2025-10-02 23:17:35,468 - CIFAR-10_Training - INFO - Starting Epoch 137/200
+2025-10-02 23:19:23,220 - CIFAR-10_Training - INFO - Epoch 137: Train Loss: 0.4038, Train Acc: 86.01%, Test Loss: 0.4343, Test Acc: 85.36%, Acc Diff: 0.65%, LR: 0.000391
+2025-10-02 23:19:23,220 - CIFAR-10_Training - INFO - Starting Epoch 138/200
+2025-10-02 23:21:12,665 - CIFAR-10_Training - INFO - Epoch 138: Train Loss: 0.4001, Train Acc: 86.17%, Test Loss: 0.4362, Test Acc: 85.42%, Acc Diff: 0.75%, LR: 0.000391
+2025-10-02 23:21:12,665 - CIFAR-10_Training - INFO - Starting Epoch 139/200
+2025-10-02 23:24:39,764 - CIFAR-10_Training - INFO - Epoch 139: Train Loss: 0.4026, Train Acc: 86.10%, Test Loss: 0.4367, Test Acc: 85.41%, Acc Diff: 0.69%, LR: 0.000391
+2025-10-02 23:24:39,766 - CIFAR-10_Training - INFO - Starting Epoch 140/200
+2025-10-02 23:28:37,860 - CIFAR-10_Training - INFO - Epoch 140: Train Loss: 0.4013, Train Acc: 86.28%, Test Loss: 0.4363, Test Acc: 85.30%, Acc Diff: 0.98%, LR: 0.000391
+2025-10-02 23:28:37,860 - CIFAR-10_Training - INFO - Starting Epoch 141/200
+2025-10-02 23:32:35,868 - CIFAR-10_Training - INFO - Epoch 141: Train Loss: 0.4026, Train Acc: 86.05%, Test Loss: 0.4339, Test Acc: 85.42%, Acc Diff: 0.63%, LR: 0.000195
+2025-10-02 23:32:35,869 - CIFAR-10_Training - INFO - Starting Epoch 142/200
+2025-10-03 07:20:43,949 - CIFAR-10_Training - INFO - Epoch 142: Train Loss: 0.3978, Train Acc: 86.30%, Test Loss: 0.4341, Test Acc: 85.42%, Acc Diff: 0.88%, LR: 0.000195
+2025-10-03 07:20:43,949 - CIFAR-10_Training - INFO - Starting Epoch 143/200
+2025-10-03 07:21:18,532 - CIFAR-10_Training - INFO - Epoch 143: Train Loss: 0.3984, Train Acc: 86.18%, Test Loss: 0.4371, Test Acc: 85.45%, Acc Diff: 0.73%, LR: 0.000195
+2025-10-03 07:21:18,532 - CIFAR-10_Training - INFO - Starting Epoch 144/200
+2025-10-03 07:21:52,940 - CIFAR-10_Training - INFO - Epoch 144: Train Loss: 0.4036, Train Acc: 86.04%, Test Loss: 0.4366, Test Acc: 85.52%, Acc Diff: 0.52%, LR: 0.000195
+2025-10-03 07:21:52,940 - CIFAR-10_Training - INFO - Starting Epoch 145/200
+2025-10-03 07:22:27,953 - CIFAR-10_Training - INFO - Epoch 145: Train Loss: 0.4033, Train Acc: 86.20%, Test Loss: 0.4356, Test Acc: 85.25%, Acc Diff: 0.95%, LR: 0.000195
+2025-10-03 07:22:27,953 - CIFAR-10_Training - INFO - Starting Epoch 146/200
+2025-10-03 07:23:03,082 - CIFAR-10_Training - INFO - Epoch 146: Train Loss: 0.4056, Train Acc: 85.96%, Test Loss: 0.4353, Test Acc: 85.57%, Acc Diff: 0.39%, LR: 0.000195
+2025-10-03 07:23:03,082 - CIFAR-10_Training - INFO - Starting Epoch 147/200
+2025-10-03 07:23:37,701 - CIFAR-10_Training - INFO - Epoch 147: Train Loss: 0.4001, Train Acc: 86.16%, Test Loss: 0.4348, Test Acc: 85.46%, Acc Diff: 0.70%, LR: 0.000098
+2025-10-03 07:23:37,701 - CIFAR-10_Training - INFO - Starting Epoch 148/200
+2025-10-03 07:24:12,495 - CIFAR-10_Training - INFO - Epoch 148: Train Loss: 0.3987, Train Acc: 86.34%, Test Loss: 0.4359, Test Acc: 85.33%, Acc Diff: 1.01%, LR: 0.000098
+2025-10-03 07:24:12,495 - CIFAR-10_Training - INFO - Starting Epoch 149/200
+2025-10-03 07:24:47,528 - CIFAR-10_Training - INFO - Epoch 149: Train Loss: 0.4020, Train Acc: 86.04%, Test Loss: 0.4345, Test Acc: 85.37%, Acc Diff: 0.67%, LR: 0.000098
+2025-10-03 07:24:47,528 - CIFAR-10_Training - INFO - Starting Epoch 150/200
+2025-10-03 07:25:23,066 - CIFAR-10_Training - INFO - Epoch 150: Train Loss: 0.4004, Train Acc: 86.20%, Test Loss: 0.4319, Test Acc: 85.45%, Acc Diff: 0.75%, LR: 0.000098
+2025-10-03 07:25:23,066 - CIFAR-10_Training - INFO - Starting Epoch 151/200
+2025-10-03 07:25:58,246 - CIFAR-10_Training - INFO - Epoch 151: Train Loss: 0.4043, Train Acc: 86.22%, Test Loss: 0.4363, Test Acc: 85.39%, Acc Diff: 0.83%, LR: 0.000098
+2025-10-03 07:25:58,246 - CIFAR-10_Training - INFO - Starting Epoch 152/200
+2025-10-03 07:26:33,636 - CIFAR-10_Training - INFO - Epoch 152: Train Loss: 0.4017, Train Acc: 85.97%, Test Loss: 0.4349, Test Acc: 85.43%, Acc Diff: 0.54%, LR: 0.000098
+2025-10-03 07:26:33,636 - CIFAR-10_Training - INFO - Starting Epoch 153/200
+2025-10-03 07:27:08,852 - CIFAR-10_Training - INFO - Epoch 153: Train Loss: 0.4004, Train Acc: 86.00%, Test Loss: 0.4358, Test Acc: 85.23%, Acc Diff: 0.77%, LR: 0.000098
+2025-10-03 07:27:08,852 - CIFAR-10_Training - INFO - Starting Epoch 154/200
+2025-10-03 07:27:43,826 - CIFAR-10_Training - INFO - Epoch 154: Train Loss: 0.4004, Train Acc: 86.25%, Test Loss: 0.4351, Test Acc: 85.48%, Acc Diff: 0.77%, LR: 0.000098
+2025-10-03 07:27:43,826 - CIFAR-10_Training - INFO - Starting Epoch 155/200
+2025-10-03 07:28:18,885 - CIFAR-10_Training - INFO - Epoch 155: Train Loss: 0.4036, Train Acc: 85.91%, Test Loss: 0.4375, Test Acc: 85.28%, Acc Diff: 0.63%, LR: 0.000098
+2025-10-03 07:28:18,885 - CIFAR-10_Training - INFO - Starting Epoch 156/200
+2025-10-03 07:28:53,843 - CIFAR-10_Training - INFO - Epoch 156: Train Loss: 0.4042, Train Acc: 86.02%, Test Loss: 0.4351, Test Acc: 85.41%, Acc Diff: 0.61%, LR: 0.000049
+2025-10-03 07:28:53,843 - CIFAR-10_Training - INFO - Starting Epoch 157/200
+2025-10-03 07:29:29,145 - CIFAR-10_Training - INFO - Epoch 157: Train Loss: 0.3978, Train Acc: 86.32%, Test Loss: 0.4347, Test Acc: 85.36%, Acc Diff: 0.96%, LR: 0.000049
+2025-10-03 07:29:29,145 - CIFAR-10_Training - INFO - Starting Epoch 158/200
+2025-10-03 07:30:04,396 - CIFAR-10_Training - INFO - Epoch 158: Train Loss: 0.3968, Train Acc: 86.24%, Test Loss: 0.4344, Test Acc: 85.51%, Acc Diff: 0.73%, LR: 0.000049
+2025-10-03 07:30:04,396 - CIFAR-10_Training - INFO - Starting Epoch 159/200
+2025-10-03 07:30:39,360 - CIFAR-10_Training - INFO - Epoch 159: Train Loss: 0.4006, Train Acc: 86.12%, Test Loss: 0.4369, Test Acc: 85.36%, Acc Diff: 0.76%, LR: 0.000049
+2025-10-03 07:30:39,360 - CIFAR-10_Training - INFO - Starting Epoch 160/200
+2025-10-03 07:31:14,558 - CIFAR-10_Training - INFO - Epoch 160: Train Loss: 0.4034, Train Acc: 85.94%, Test Loss: 0.4326, Test Acc: 85.53%, Acc Diff: 0.41%, LR: 0.000049
+2025-10-03 07:31:14,558 - CIFAR-10_Training - INFO - Starting Epoch 161/200
+2025-10-03 07:31:49,956 - CIFAR-10_Training - INFO - Epoch 161: Train Loss: 0.4030, Train Acc: 86.08%, Test Loss: 0.4350, Test Acc: 85.28%, Acc Diff: 0.80%, LR: 0.000049
+2025-10-03 07:31:49,956 - CIFAR-10_Training - INFO - Starting Epoch 162/200
+2025-10-03 07:32:25,169 - CIFAR-10_Training - INFO - Epoch 162: Train Loss: 0.3974, Train Acc: 86.13%, Test Loss: 0.4363, Test Acc: 85.27%, Acc Diff: 0.86%, LR: 0.000024
+2025-10-03 07:32:25,180 - CIFAR-10_Training - INFO - Starting Epoch 163/200
+2025-10-03 07:33:00,336 - CIFAR-10_Training - INFO - Epoch 163: Train Loss: 0.4030, Train Acc: 86.03%, Test Loss: 0.4373, Test Acc: 85.33%, Acc Diff: 0.70%, LR: 0.000024
+2025-10-03 07:33:00,336 - CIFAR-10_Training - INFO - Starting Epoch 164/200
+2025-10-03 07:33:35,359 - CIFAR-10_Training - INFO - Epoch 164: Train Loss: 0.3973, Train Acc: 86.22%, Test Loss: 0.4342, Test Acc: 85.37%, Acc Diff: 0.85%, LR: 0.000024
+2025-10-03 07:33:35,359 - CIFAR-10_Training - INFO - Starting Epoch 165/200
+2025-10-03 07:34:11,144 - CIFAR-10_Training - INFO - Epoch 165: Train Loss: 0.3955, Train Acc: 86.23%, Test Loss: 0.4361, Test Acc: 85.31%, Acc Diff: 0.92%, LR: 0.000024
+2025-10-03 07:34:11,144 - CIFAR-10_Training - INFO - Starting Epoch 166/200
+2025-10-03 07:34:46,342 - CIFAR-10_Training - INFO - Epoch 166: Train Loss: 0.3977, Train Acc: 86.16%, Test Loss: 0.4334, Test Acc: 85.44%, Acc Diff: 0.72%, LR: 0.000024
+2025-10-03 07:34:46,342 - CIFAR-10_Training - INFO - Starting Epoch 167/200
+2025-10-03 07:35:21,486 - CIFAR-10_Training - INFO - Epoch 167: Train Loss: 0.3986, Train Acc: 86.28%, Test Loss: 0.4356, Test Acc: 85.40%, Acc Diff: 0.88%, LR: 0.000024
+2025-10-03 07:35:21,486 - CIFAR-10_Training - INFO - Starting Epoch 168/200
+2025-10-03 07:35:56,716 - CIFAR-10_Training - INFO - Epoch 168: Train Loss: 0.3998, Train Acc: 86.25%, Test Loss: 0.4368, Test Acc: 85.41%, Acc Diff: 0.84%, LR: 0.000012
+2025-10-03 07:35:56,716 - CIFAR-10_Training - INFO - Starting Epoch 169/200
+2025-10-03 07:36:31,781 - CIFAR-10_Training - INFO - Epoch 169: Train Loss: 0.4024, Train Acc: 86.12%, Test Loss: 0.4369, Test Acc: 85.38%, Acc Diff: 0.74%, LR: 0.000012
+2025-10-03 07:36:31,781 - CIFAR-10_Training - INFO - Starting Epoch 170/200
+2025-10-03 07:37:07,059 - CIFAR-10_Training - INFO - Epoch 170: Train Loss: 0.3971, Train Acc: 86.24%, Test Loss: 0.4341, Test Acc: 85.35%, Acc Diff: 0.89%, LR: 0.000012
+2025-10-03 07:37:07,059 - CIFAR-10_Training - INFO - Starting Epoch 171/200
+2025-10-03 07:37:42,080 - CIFAR-10_Training - INFO - Epoch 171: Train Loss: 0.4046, Train Acc: 85.99%, Test Loss: 0.4383, Test Acc: 85.34%, Acc Diff: 0.65%, LR: 0.000012
+2025-10-03 07:37:42,080 - CIFAR-10_Training - INFO - Starting Epoch 172/200
+2025-10-03 07:38:17,087 - CIFAR-10_Training - INFO - Epoch 172: Train Loss: 0.3987, Train Acc: 86.27%, Test Loss: 0.4369, Test Acc: 85.25%, Acc Diff: 1.02%, LR: 0.000012
+2025-10-03 07:38:17,087 - CIFAR-10_Training - INFO - Starting Epoch 173/200
+2025-10-03 07:38:52,482 - CIFAR-10_Training - INFO - Epoch 173: Train Loss: 0.3985, Train Acc: 86.34%, Test Loss: 0.4356, Test Acc: 85.52%, Acc Diff: 0.82%, LR: 0.000012
+2025-10-03 07:38:52,482 - CIFAR-10_Training - INFO - Starting Epoch 174/200
+2025-10-03 07:39:27,666 - CIFAR-10_Training - INFO - Epoch 174: Train Loss: 0.4008, Train Acc: 86.13%, Test Loss: 0.4329, Test Acc: 85.46%, Acc Diff: 0.67%, LR: 0.000006
+2025-10-03 07:39:27,666 - CIFAR-10_Training - INFO - Starting Epoch 175/200
+2025-10-03 07:40:02,657 - CIFAR-10_Training - INFO - Epoch 175: Train Loss: 0.3997, Train Acc: 86.24%, Test Loss: 0.4354, Test Acc: 85.40%, Acc Diff: 0.84%, LR: 0.000006
+2025-10-03 07:40:02,657 - CIFAR-10_Training - INFO - Starting Epoch 176/200
+2025-10-03 07:40:37,953 - CIFAR-10_Training - INFO - Epoch 176: Train Loss: 0.3976, Train Acc: 86.06%, Test Loss: 0.4369, Test Acc: 85.35%, Acc Diff: 0.71%, LR: 0.000006
+2025-10-03 07:40:37,953 - CIFAR-10_Training - INFO - Starting Epoch 177/200
+2025-10-03 07:41:13,250 - CIFAR-10_Training - INFO - Epoch 177: Train Loss: 0.4004, Train Acc: 86.16%, Test Loss: 0.4345, Test Acc: 85.39%, Acc Diff: 0.77%, LR: 0.000006
+2025-10-03 07:41:13,250 - CIFAR-10_Training - INFO - Starting Epoch 178/200
+2025-10-03 07:41:48,370 - CIFAR-10_Training - INFO - Epoch 178: Train Loss: 0.4031, Train Acc: 86.04%, Test Loss: 0.4337, Test Acc: 85.33%, Acc Diff: 0.71%, LR: 0.000006
+2025-10-03 07:41:48,370 - CIFAR-10_Training - INFO - Starting Epoch 179/200
+2025-10-03 07:42:23,371 - CIFAR-10_Training - INFO - Epoch 179: Train Loss: 0.3967, Train Acc: 86.26%, Test Loss: 0.4339, Test Acc: 85.41%, Acc Diff: 0.85%, LR: 0.000006
+2025-10-03 07:42:23,371 - CIFAR-10_Training - INFO - Starting Epoch 180/200
+2025-10-03 07:42:58,371 - CIFAR-10_Training - INFO - Epoch 180: Train Loss: 0.4006, Train Acc: 86.18%, Test Loss: 0.4371, Test Acc: 85.39%, Acc Diff: 0.79%, LR: 0.000003
+2025-10-03 07:42:58,371 - CIFAR-10_Training - INFO - Starting Epoch 181/200
+2025-10-03 07:43:33,982 - CIFAR-10_Training - INFO - Epoch 181: Train Loss: 0.4009, Train Acc: 86.09%, Test Loss: 0.4365, Test Acc: 85.37%, Acc Diff: 0.72%, LR: 0.000003
+2025-10-03 07:43:33,982 - CIFAR-10_Training - INFO - Starting Epoch 182/200
+2025-10-03 07:44:09,144 - CIFAR-10_Training - INFO - Epoch 182: Train Loss: 0.4026, Train Acc: 86.20%, Test Loss: 0.4354, Test Acc: 85.53%, Acc Diff: 0.67%, LR: 0.000003
+2025-10-03 07:44:09,144 - CIFAR-10_Training - INFO - Starting Epoch 183/200
+2025-10-03 07:44:44,369 - CIFAR-10_Training - INFO - Epoch 183: Train Loss: 0.4037, Train Acc: 86.23%, Test Loss: 0.4354, Test Acc: 85.37%, Acc Diff: 0.86%, LR: 0.000003
+2025-10-03 07:44:44,369 - CIFAR-10_Training - INFO - Starting Epoch 184/200
+2025-10-03 07:45:19,312 - CIFAR-10_Training - INFO - Epoch 184: Train Loss: 0.4015, Train Acc: 86.19%, Test Loss: 0.4324, Test Acc: 85.40%, Acc Diff: 0.79%, LR: 0.000003
+2025-10-03 07:45:19,312 - CIFAR-10_Training - INFO - Starting Epoch 185/200
+2025-10-03 07:45:54,500 - CIFAR-10_Training - INFO - Epoch 185: Train Loss: 0.4025, Train Acc: 86.15%, Test Loss: 0.4368, Test Acc: 85.46%, Acc Diff: 0.69%, LR: 0.000003
+2025-10-03 07:45:54,500 - CIFAR-10_Training - INFO - Starting Epoch 186/200
+2025-10-03 07:46:29,727 - CIFAR-10_Training - INFO - Epoch 186: Train Loss: 0.4031, Train Acc: 86.06%, Test Loss: 0.4350, Test Acc: 85.41%, Acc Diff: 0.65%, LR: 0.000002
+2025-10-03 07:46:29,728 - CIFAR-10_Training - INFO - Starting Epoch 187/200
+2025-10-03 07:47:05,066 - CIFAR-10_Training - INFO - Epoch 187: Train Loss: 0.3969, Train Acc: 86.13%, Test Loss: 0.4387, Test Acc: 85.26%, Acc Diff: 0.87%, LR: 0.000002
+2025-10-03 07:47:05,066 - CIFAR-10_Training - INFO - Starting Epoch 188/200
+2025-10-03 07:47:40,793 - CIFAR-10_Training - INFO - Epoch 188: Train Loss: 0.4006, Train Acc: 86.00%, Test Loss: 0.4332, Test Acc: 85.39%, Acc Diff: 0.61%, LR: 0.000002
+2025-10-03 07:47:40,794 - CIFAR-10_Training - INFO - Starting Epoch 189/200
+2025-10-03 07:48:15,859 - CIFAR-10_Training - INFO - Epoch 189: Train Loss: 0.4008, Train Acc: 86.10%, Test Loss: 0.4346, Test Acc: 85.45%, Acc Diff: 0.65%, LR: 0.000002
+2025-10-03 07:48:15,859 - CIFAR-10_Training - INFO - Starting Epoch 190/200
+2025-10-03 07:48:51,031 - CIFAR-10_Training - INFO - Epoch 190: Train Loss: 0.3989, Train Acc: 86.30%, Test Loss: 0.4337, Test Acc: 85.49%, Acc Diff: 0.81%, LR: 0.000002
+2025-10-03 07:48:51,031 - CIFAR-10_Training - INFO - Starting Epoch 191/200
+2025-10-03 07:49:26,247 - CIFAR-10_Training - INFO - Epoch 191: Train Loss: 0.4033, Train Acc: 85.99%, Test Loss: 0.4361, Test Acc: 85.51%, Acc Diff: 0.48%, LR: 0.000002
+2025-10-03 07:49:26,247 - CIFAR-10_Training - INFO - Starting Epoch 192/200
+2025-10-03 07:50:02,106 - CIFAR-10_Training - INFO - Epoch 192: Train Loss: 0.4004, Train Acc: 86.09%, Test Loss: 0.4350, Test Acc: 85.47%, Acc Diff: 0.62%, LR: 0.000001
+2025-10-03 07:50:02,106 - CIFAR-10_Training - INFO - Starting Epoch 193/200
+2025-10-03 07:50:37,896 - CIFAR-10_Training - INFO - Epoch 193: Train Loss: 0.3982, Train Acc: 86.27%, Test Loss: 0.4348, Test Acc: 85.54%, Acc Diff: 0.73%, LR: 0.000001
+2025-10-03 07:50:37,896 - CIFAR-10_Training - INFO - Starting Epoch 194/200
+2025-10-03 07:51:13,420 - CIFAR-10_Training - INFO - Epoch 194: Train Loss: 0.3964, Train Acc: 86.27%, Test Loss: 0.4376, Test Acc: 85.33%, Acc Diff: 0.94%, LR: 0.000001
+2025-10-03 07:51:13,420 - CIFAR-10_Training - INFO - Starting Epoch 195/200
+2025-10-03 07:51:50,225 - CIFAR-10_Training - INFO - Epoch 195: Train Loss: 0.4029, Train Acc: 86.18%, Test Loss: 0.4357, Test Acc: 85.21%, Acc Diff: 0.97%, LR: 0.000001
+2025-10-03 07:51:50,225 - CIFAR-10_Training - INFO - Starting Epoch 196/200
+2025-10-03 07:52:25,162 - CIFAR-10_Training - INFO - Epoch 196: Train Loss: 0.3995, Train Acc: 86.10%, Test Loss: 0.4358, Test Acc: 85.41%, Acc Diff: 0.69%, LR: 0.000001
+2025-10-03 07:52:25,162 - CIFAR-10_Training - INFO - Starting Epoch 197/200
+2025-10-03 07:52:59,749 - CIFAR-10_Training - INFO - Epoch 197: Train Loss: 0.3996, Train Acc: 86.11%, Test Loss: 0.4358, Test Acc: 85.37%, Acc Diff: 0.74%, LR: 0.000001
+2025-10-03 07:52:59,749 - CIFAR-10_Training - INFO - Starting Epoch 198/200
+2025-10-03 07:53:34,769 - CIFAR-10_Training - INFO - Epoch 198: Train Loss: 0.3957, Train Acc: 86.45%, Test Loss: 0.4353, Test Acc: 85.30%, Acc Diff: 1.15%, LR: 0.000000
+2025-10-03 07:53:34,769 - CIFAR-10_Training - INFO - Starting Epoch 199/200
+2025-10-03 07:54:09,773 - CIFAR-10_Training - INFO - Epoch 199: Train Loss: 0.4012, Train Acc: 85.99%, Test Loss: 0.4354, Test Acc: 85.38%, Acc Diff: 0.61%, LR: 0.000000
+2025-10-03 07:54:09,773 - CIFAR-10_Training - INFO - Starting Epoch 200/200
+2025-10-03 07:54:44,731 - CIFAR-10_Training - INFO - Epoch 200: Train Loss: 0.4039, Train Acc: 85.95%, Test Loss: 0.4347, Test Acc: 85.49%, Acc Diff: 0.46%, LR: 0.000000
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Training completed!
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Final Results: {'final_train_loss': 0.40389499315977706, 'final_test_loss': 0.43473001432418823, 'final_train_accuracy': 85.952, 'final_test_accuracy': 85.49, 'best_test_accuracy': 85.57, 'final_accuracy_difference': 0.4620000000000033, 'max_accuracy_difference': 1.166000000000011, 'avg_accuracy_difference': -0.15110999999999955, 'overfitting_epochs': 0, 'stopped_due_to_overfitting': False}
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - ==================================================
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - OVERFITTING ANALYSIS
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - ==================================================
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Final accuracy difference: 0.46%
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Maximum accuracy difference: 1.17%
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Average accuracy difference: -0.15%
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Consecutive overfitting epochs: 0
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - Stopped due to overfitting: False
+2025-10-03 07:54:44,741 - CIFAR-10_Training - INFO - ==================================================
+2025-10-03 07:54:45,883 - CIFAR-10_Training - INFO - Training curves saved to: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\Model_Evolution\FineTune\logs\training_curves_20251003_075444.png
+2025-10-03 07:55:26,760 - CIFAR-10_Training - INFO - Model saved to: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS7\Model_Evolution\FineTune\models\cifar10_model_20251003_075526.pth
+2025-10-03 07:55:26,760 - CIFAR-10_Training - INFO - ==================================================
+2025-10-03 07:55:26,760 - CIFAR-10_Training - INFO - TRAINING PIPELINE COMPLETED SUCCESSFULLY
+2025-10-03 07:55:26,760 - CIFAR-10_Training - INFO - ==================================================
+2025-10-03 07:55:26,760 - CIFAR-10_Training - INFO - Final Metrics: {'final_train_loss': 0.40389499315977706, 'final_test_loss': 0.43473001432418823, 'final_train_accuracy': 85.952, 'final_test_accuracy': 85.49, 'best_test_accuracy': 85.57, 'final_accuracy_difference': 0.4620000000000033, 'max_accuracy_difference': 1.166000000000011, 'avg_accuracy_difference': -0.15110999999999955, 'overfitting_epochs': 0, 'stopped_due_to_overfitting': False}

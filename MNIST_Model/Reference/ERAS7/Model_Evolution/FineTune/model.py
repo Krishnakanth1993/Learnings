@@ -107,7 +107,7 @@ class CIFAR10Model(nn.Module):
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
+            #nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 32
 
@@ -115,7 +115,7 @@ class CIFAR10Model(nn.Module):
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
+            #nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 32
 
@@ -123,7 +123,8 @@ class CIFAR10Model(nn.Module):
 
         self.convdialated1 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=9),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
+            nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 16
 
         self.pool1 = nn.MaxPool2d(2, 2) # output_size = 16
@@ -150,7 +151,7 @@ class CIFAR10Model(nn.Module):
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
+            #nn.Dropout2d(self.config.dropout_rate)
             #nn.Dropout2d(0.1)
         ) # output_size = 16
 
@@ -158,7 +159,8 @@ class CIFAR10Model(nn.Module):
 
         self.convdialated2 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=5),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
+            nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 8
 
         self.pool2 = nn.MaxPool2d(2, 2) # output_size = 8
@@ -186,7 +188,7 @@ class CIFAR10Model(nn.Module):
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=2,dilation = 2, bias=False),
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            nn.Dropout2d(self.config.dropout_rate)
+            
             #nn.Dropout2d(0.1)
         ) # output_size = 4
 
@@ -194,7 +196,8 @@ class CIFAR10Model(nn.Module):
 
         self.convdialated3 = nn.Sequential(
             nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, dilation=3),
-            nn.BatchNorm2d(32)
+            nn.BatchNorm2d(32),
+            nn.Dropout2d(self.config.dropout_rate)
         ) # output_size = 4 
 
         self.pool3 = nn.MaxPool2d(2, 2) # output_size = 4
