@@ -1,0 +1,5 @@
+2025-10-04 16:12:40,597 - CIFAR-100_Training - INFO - Logger initialized. Log file: c:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\logs\20251004_161240_cifar100_training.log
+2025-10-04 16:13:07,482 - CIFAR-100_Training - INFO - Loading CIFAR-100 dataset...
+2025-10-04 16:13:10,033 - CIFAR-100_Training - INFO - CIFAR-100 dataset loaded successfully!
+2025-10-04 16:13:10,034 - CIFAR-100_Training - INFO - Train samples: 50000
+2025-10-04 16:13:10,035 - CIFAR-100_Training - INFO - Test samples: 10000

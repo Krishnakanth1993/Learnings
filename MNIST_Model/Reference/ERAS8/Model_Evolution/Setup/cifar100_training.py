@@ -1,6 +1,6 @@
 """
-CIFAR-10 Training Script - Complete Monolithic Implementation
-A comprehensive, object-oriented Python script for training CIFAR-10 classification models.
+CIFAR-100 Training Script - Complete Monolithic Implementation
+A comprehensive, object-oriented Python script for training CIFAR-100 classification models.
 
 This script combines all functionality into a single file while maintaining:
 - Object-Oriented Design Principles
@@ -33,12 +33,9 @@ from typing import Tuple, Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
-import albumentations as A
-from albumentations.pytorch import ToTensorV2
-import numpy as np 
 
 # Import model classes from separate module
-from model import ModelConfig, ModelBuilder, CIFAR10Model
+from model import ModelConfig, ModelBuilder, CIFAR100Model
 
 
 # =============================================================================
@@ -53,12 +50,9 @@ class DataConfig:
     num_workers: int = 4
     pin_memory: bool = True
     shuffle: bool = True
-    # CIFAR-10 specific normalization values
-    mean: Tuple[float, ...] = (0.1307,)
-    std: Tuple[float, ...] = (0.3081,)
-    # CIFAR-10 specific normalization values
-    cifar10_mean: Tuple[float, ...] = (0.4914, 0.4822, 0.4465)
-    cifar10_std: Tuple[float, ...] = (0.2470, 0.2435, 0.2616)
+    # CIFAR-100 specific normalization values
+    cifar100_mean: Tuple[float, ...] = (0.507076, 0.486550, 0.440919)
+    cifar100_std: Tuple[float, ...] = (0.267334, 0.256438, 0.276150)
     # Data augmentation
     rotation_range: Tuple[float, float] = (-7.0, 7.0)
     fill_value: int = 1
@@ -95,7 +89,7 @@ class TrainingConfig:
 class LoggingConfig:
     """Configuration for logging."""
     log_dir: str = None  # Will be set to script directory
-    log_file: str = 'cifar10_training.log'
+    log_file: str = 'cifar100_training.log'
     log_level: str = 'INFO'
     save_model: bool = True
     model_save_dir: str = None  # Will be set to script directory
@@ -152,7 +146,7 @@ class Logger:
     def _setup_logger(self) -> None:
         """Setup the logger with file and console handlers."""
         # Create logger
-        self.logger = logging.getLogger('CIFAR-10_Training')
+        self.logger = logging.getLogger('CIFAR-100_Training')
         self.logger.setLevel(getattr(logging, self.config.log_level))
         
         # Clear any existing handlers
@@ -206,7 +200,7 @@ class Logger:
     def log_experiment_start(self, config: Config) -> None:
         """Log experiment start with configuration."""
         self.info("=" * 50)
-        self.info("CIFAR-10 TRAINING EXPERIMENT STARTED")
+        self.info("CIFAR-100 TRAINING EXPERIMENT STARTED")
         self.info("=" * 50)
         self.info(f"Data Config: {config.data}")
         self.info(f"Model Config: {config.model}")
@@ -301,197 +295,57 @@ class Logger:
 # =============================================================================
 # DATA LOADING SYSTEM (Factory & Strategy Patterns)
 # =============================================================================
+
 class TransformStrategy(ABC):
     """Abstract base class for transformation strategies."""
     
     @abstractmethod
-    def get_transforms(self):
+    def get_transforms(self) -> transforms.Compose:
         """Get the composed transforms."""
         pass
-    
-    @abstractmethod
-    def __call__(self, image):
-        """Apply transforms to an image."""
-        pass
 
 
-class AlbumentationsTransformStrategy(TransformStrategy):
-    """Strategy for Albumentations transformations."""
-    
-    def __init__(self, transform_pipeline):
-        """
-        Initialize with an Albumentations Compose pipeline.
-        
-        Args:
-            transform_pipeline: A.Compose object with transformations
-        """
-        self.transform_pipeline = transform_pipeline
-    
-    def get_transforms(self):
-        """Get the Albumentations transform pipeline."""
-        return self.transform_pipeline
-    
-    def __call__(self, image):
-        """
-        Apply Albumentations transforms to an image.
-        
-        Args:
-            image: PIL Image or numpy array
-            
-        Returns:
-            Transformed tensor
-        """
-        # Convert PIL Image to numpy array if needed
-        if not isinstance(image, np.ndarray):
-            image = np.array(image)
-        
-        # Apply Albumentations transforms
-        transformed = self.transform_pipeline(image=image)
-        return transformed['image']
-
-
-class CIFAR10TransformStrategy(AlbumentationsTransformStrategy):
-    """Strategy for CIFAR-10 basic transformations (no augmentation)."""
+class CIFAR10TransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-100 data transformations."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-        
-        # Create Albumentations pipeline for basic transforms
-        transform_pipeline = A.Compose([
-            A.Normalize(
-                mean=self.config.cifar10_mean,
-                std=self.config.cifar10_std,
-                max_pixel_value=255.0
-            ),
-            ToTensorV2()
-        ])
-        
-        super().__init__(transform_pipeline)
-
-
-class CIFAR10TrainTransformStrategy(AlbumentationsTransformStrategy):
-    """Strategy for CIFAR-10 training data transformations with Albumentations augmentation."""
     
-    def __init__(self, config: DataConfig):
-        self.config = config
-        
-        # Create Albumentations pipeline with augmentations
-        transform_pipeline = A.Compose([
-            # Augmentations FIRST (work on 0-255 numpy arrays)
-            A.HorizontalFlip(p=0.5),
-            A.ShiftScaleRotate(
-                shift_limit=0.1,  # Increased from 0.01 for better augmentation
-                scale_limit=0.1,
-                rotate_limit=15,
-                border_mode=0,  # cv2.BORDER_CONSTANT
-                p=0.5
-            ),
-            A.CoarseDropout(
-                max_holes=1,
-                max_height=16,  
-                max_width=16,
-                min_holes=1,
-                min_height=16,
-                min_width=16,
-                fill_value=(125, 123, 114),  # CIFAR-10 mean values (0-255 scale)
-                mask_fill_value=None,
-                p=0.5
-            ),
-            # Normalize AFTER augmentation
-            A.Normalize(
-                mean=self.config.cifar10_mean,
-                std=self.config.cifar10_std,
-                max_pixel_value=255.0
-            ),
-            # Convert to tensor LAST
-            ToTensorV2()
-        ])
-        
-        super().__init__(transform_pipeline)
-
-
-class CIFAR10TestTransformStrategy(AlbumentationsTransformStrategy):
-    """Strategy for CIFAR-10 test data transformations (no augmentation)."""
-    
-    def __init__(self, config: DataConfig):
-        self.config = config
-        
-        # Create Albumentations pipeline for test (no augmentation)
-        transform_pipeline = A.Compose([
-            A.Normalize(
-                mean=self.config.cifar10_mean,
-                std=self.config.cifar10_std,
-                max_pixel_value=255.0
-            ),
-            ToTensorV2()
-        ])
-        
-        super().__init__(transform_pipeline)
-
-
-# PyTorch Transform Strategies (Alternative - if you want to keep PyTorch option)
-class PyTorchTransformStrategy(TransformStrategy):
-    """Strategy for PyTorch native transformations."""
-    
-    def __init__(self, transform_pipeline):
-        """
-        Initialize with a torchvision.transforms.Compose pipeline.
-        
-        Args:
-            transform_pipeline: transforms.Compose object
-        """
-        self.transform_pipeline = transform_pipeline
-    
-    def get_transforms(self):
-        """Get the PyTorch transform pipeline."""
-        return self.transform_pipeline
-    
-    def __call__(self, image):
-        """Apply PyTorch transforms to an image."""
-        return self.transform_pipeline(image)
-
-
-class CIFAR10PyTorchTrainTransformStrategy(PyTorchTransformStrategy):
-    """Alternative PyTorch-only training transforms (if Albumentations not desired)."""
-    
-    def __init__(self, config: DataConfig):
-        self.config = config
-        
-        transform_pipeline = transforms.Compose([
-            transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomRotation(degrees=15),
+    def get_transforms(self) -> transforms.Compose:
+        """Get CIFAR-100 specific transforms."""
+        return transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(
-                mean=self.config.cifar10_mean,
-                std=self.config.cifar10_std
-            ),
-            transforms.RandomErasing(
-                p=0.5,
-                scale=(0.02, 0.33),
-                ratio=(0.3, 3.3),
-                value='random'
-            )
+            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
         ])
-        
-        super().__init__(transform_pipeline)
 
 
-class CIFAR10PyTorchTestTransformStrategy(PyTorchTransformStrategy):
-    """Alternative PyTorch-only test transforms."""
+class CIFAR10TrainTransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-100 training data transformations with augmentation."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-        
-        transform_pipeline = transforms.Compose([
+    
+    def get_transforms(self) -> transforms.Compose:
+        """Get CIFAR-100 training transforms with augmentation."""
+        return transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize(
-                mean=self.config.cifar10_mean,
-                std=self.config.cifar10_std
-            )
+            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
         ])
-        
-        super().__init__(transform_pipeline)
+
+
+class CIFAR10TestTransformStrategy(TransformStrategy):
+    """Strategy for CIFAR-100 test data transformations."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+    
+    def get_transforms(self) -> transforms.Compose:
+        """Get CIFAR-100 test transforms."""
+        return transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        ])
+
 
 class DataLoaderFactory:
     """Factory class for creating data loaders."""
@@ -514,51 +368,57 @@ class DataLoaderFactory:
         return DataLoader(dataset, **dataloader_args)
 
 
-class CIFAR10DataManager:
+class CIFAR100DataManager:
     """
-    Data manager class for CIFAR-10 dataset.
+    Data manager class for CIFAR-100 dataset.
     Implements the Facade pattern to provide a simple interface for data operations.
     """
     
-    def __init__(self, config: DataConfig, logger: Logger, use_albumentations: bool = True):
+    def __init__(self, config: DataConfig, logger: Logger):
         self.config = config
         self.logger = logger
-        self.use_albumentations = use_albumentations
         self.train_dataset = None
         self.test_dataset = None
         self.train_loader = None
         self.test_loader = None
         
-        # CIFAR-10 class names
-        self.classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-        
-        # Initialize transform strategies based on choice
-        if use_albumentations:
-            self.logger.info("Using Albumentations for data augmentation")
-            self.train_transform_strategy = CIFAR10TrainTransformStrategy(config)
-            self.test_transform_strategy = CIFAR10TestTransformStrategy(config)
-        else:
-            self.logger.info("Using PyTorch native transforms for data augmentation")
-            self.train_transform_strategy = CIFAR10PyTorchTrainTransformStrategy(config)
-            self.test_transform_strategy = CIFAR10PyTorchTestTransformStrategy(config)
+        # CIFAR-100 class names
+        self.classes = ('apple', 'aquarium_fish', 'baby', 'bear', 'beaver', 'bed', 'bee', 'beetle', 
+    'bicycle', 'bottle', 'bowl', 'boy', 'bridge', 'bus', 'butterfly', 'camel', 
+    'can', 'castle', 'caterpillar', 'cattle', 'chair', 'chimpanzee', 'clock', 
+    'cloud', 'cockroach', 'couch', 'crab', 'crocodile', 'cup', 'dinosaur', 
+    'dolphin', 'elephant', 'flatfish', 'forest', 'fox', 'girl', 'hamster', 
+    'house', 'kangaroo', 'keyboard', 'lamp', 'lawn_mower', 'leopard', 'lion', 
+    'lizard', 'lobster', 'man', 'maple_tree', 'motorcycle', 'mountain', 'mouse', 
+    'mushroom', 'oak_tree', 'orange', 'orchid', 'otter', 'palm_tree', 'pear', 
+    'pickup_truck', 'pine_tree', 'plain', 'plate', 'poppy', 'porcupine', 
+    'possum', 'rabbit', 'raccoon', 'ray', 'road', 'rocket', 'rose', 'sea', 
+    'seal', 'shark', 'shrew', 'skunk', 'skyscraper', 'snail', 'snake', 
+    'spider', 'squirrel', 'streetcar', 'sunflower', 'sweet_pepper', 'table', 
+    'tank', 'telephone', 'television', 'tiger', 'tractor', 'train', 'trout', 
+    'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm')
+    
+        # Initialize transform strategies
+        self.train_transform_strategy = CIFAR10TrainTransformStrategy(config)
+        self.test_transform_strategy = CIFAR10TestTransformStrategy(config)
 
     def load_data(self) -> Tuple[DataLoader, DataLoader]:
-        """Load CIFAR-10 dataset and create data loaders."""
-        self.logger.info("Loading CIFAR-10 dataset...")
+        """Load CIFAR-100 dataset and create data loaders."""
+        self.logger.info("Loading CIFAR-100 dataset...")
         
-        # Create datasets with transform strategies
-        self.train_dataset = datasets.CIFAR10(
+        # Create datasets
+        self.train_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=True,
             download=True,
-            transform=self.train_transform_strategy  # Pass the strategy directly
+            transform=self.train_transform_strategy.get_transforms()
         )
         
-        self.test_dataset = datasets.CIFAR10(
+        self.test_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=False,
             download=True,
-            transform=self.test_transform_strategy  # Pass the strategy directly
+            transform=self.test_transform_strategy.get_transforms()
         )
         
         # Create data loaders
@@ -569,16 +429,15 @@ class CIFAR10DataManager:
             self.test_dataset, self.config, is_train=False
         )
         
-        self.logger.info(f"CIFAR-10 dataset loaded successfully!")
+        self.logger.info(f"CIFAR-100 dataset loaded successfully!")
         self.logger.info(f"Train samples: {len(self.train_dataset)}")
         self.logger.info(f"Test samples: {len(self.test_dataset)}")
-        self.logger.info(f"Augmentation library: {'Albumentations' if self.use_albumentations else 'PyTorch'}")
         
         return self.train_loader, self.test_loader
     
     def get_data_statistics(self) -> Dict[str, Any]:
-        """Get comprehensive data statistics for CIFAR-10."""
-        self.logger.info("Computing CIFAR-10 data statistics...")
+        """Get comprehensive data statistics for CIFAR-100."""
+        self.logger.info("Computing CIFAR-100 data statistics...")
         
         # Get raw data for statistics
         raw_train_data = self.train_dataset.data
@@ -617,7 +476,7 @@ class CIFAR10DataManager:
         }
         
         # Log statistics
-        self.logger.info("CIFAR-10 Data Statistics:")
+        self.logger.info("CIFAR-100 Data Statistics:")
         self.logger.info(f"  - Shape: {stats['overall']['shape']}")
         self.logger.info(f"  - Size: {stats['overall']['size']:,}")
         self.logger.info(f"  - Min: {stats['overall']['min']:.4f}")
@@ -638,7 +497,7 @@ class CIFAR10DataManager:
     
     def get_input_size_from_dataloader(self) -> Tuple[int, int, int]:
         """Get input size dynamically from the first batch of data."""
-        self.logger.info("Getting input size from CIFAR-10 data loader...")
+        self.logger.info("Getting input size from CIFAR-100 data loader...")
         
         # Get a sample batch
         dataiter = iter(self.train_loader)
@@ -648,12 +507,12 @@ class CIFAR10DataManager:
         input_size = images.shape[1:]  # Remove batch dimension
         input_size_tuple = tuple(input_size)
         
-        self.logger.info(f"CIFAR-10 input size from data loader: {input_size_tuple}")
+        self.logger.info(f"CIFAR-100 input size from data loader: {input_size_tuple}")
         return input_size_tuple
     
     def visualize_samples(self, num_samples: int = 16, save_path: Optional[str] = None) -> None:
-        """Visualize sample images from the CIFAR-10 dataset."""
-        self.logger.info(f"Visualizing {num_samples} CIFAR-10 sample images...")
+        """Visualize sample images from the CIFAR-100 dataset."""
+        self.logger.info(f"Visualizing {num_samples} CIFAR-100 sample images...")
         
         # Get a batch of data
         dataiter = iter(self.train_loader)
@@ -661,7 +520,7 @@ class CIFAR10DataManager:
         
         # Create visualization with RGB channels
         fig, axes = plt.subplots(4, 4, figsize=(12, 12))
-        fig.suptitle('CIFAR-10 Sample Images', fontsize=16)
+        fig.suptitle('CIFAR-100 Sample Images', fontsize=16)
         
         for i in range(min(num_samples, len(images))):
             row = i // 4
@@ -671,7 +530,7 @@ class CIFAR10DataManager:
             img = images[i].permute(1, 2, 0)
             
             # Denormalize for display
-            img = img * torch.tensor(self.config.cifar10_std) + torch.tensor(self.config.cifar10_mean)
+            img = img * torch.tensor(self.config.cifar100_std) + torch.tensor(self.config.cifar100_mean)
             img = torch.clamp(img, 0, 1)
             
             axes[row, col].imshow(img.numpy())
@@ -682,13 +541,13 @@ class CIFAR10DataManager:
         
         if save_path:
             plt.savefig(save_path, dpi=150, bbox_inches='tight')
-            self.logger.info(f"CIFAR-10 sample visualization saved to: {save_path}")
+            self.logger.info(f"CIFAR-100 sample visualization saved to: {save_path}")
         
         plt.show()
     
     def visualize_rgb_channels(self, num_samples: int = 4, save_path: Optional[str] = None) -> None:
-        """Visualize RGB channel analysis for CIFAR-10 samples."""
-        self.logger.info(f"Visualizing RGB channel analysis for {num_samples} CIFAR-10 samples...")
+        """Visualize RGB channel analysis for CIFAR-100 samples."""
+        self.logger.info(f"Visualizing RGB channel analysis for {num_samples} CIFAR-100 samples...")
         
         # Get a batch of data
         dataiter = iter(self.train_loader)
@@ -696,14 +555,14 @@ class CIFAR10DataManager:
         
         # Create visualization showing original + RGB channels
         fig, axes = plt.subplots(num_samples, 4, figsize=(16, 4 * num_samples))
-        fig.suptitle('CIFAR-10 RGB Channel Analysis', fontsize=16)
+        fig.suptitle('CIFAR-100 RGB Channel Analysis', fontsize=16)
         
         for i in range(min(num_samples, len(images))):
             # Convert from (C, H, W) to (H, W, C) for display
             img = images[i].permute(1, 2, 0)
             
             # Denormalize for display
-            img = img * torch.tensor(self.config.cifar10_std) + torch.tensor(self.config.cifar10_mean)
+            img = img * torch.tensor(self.config.cifar100_std) + torch.tensor(self.config.cifar100_mean)
             img = torch.clamp(img, 0, 1)
             
             # Original RGB image
@@ -730,13 +589,13 @@ class CIFAR10DataManager:
         
         if save_path:
             plt.savefig(save_path, dpi=150, bbox_inches='tight')
-            self.logger.info(f"CIFAR-10 RGB channel visualization saved to: {save_path}")
+            self.logger.info(f"CIFAR-100 RGB channel visualization saved to: {save_path}")
         
         plt.show()
     
     def plot_channel_histograms(self, save_path: Optional[str] = None) -> None:
         """Plot histograms for each RGB channel."""
-        self.logger.info("Plotting CIFAR-10 channel histograms...")
+        self.logger.info("Plotting CIFAR-100 channel histograms...")
         
         # Get raw data for histogram analysis
         raw_train_data = self.train_dataset.data
@@ -778,7 +637,7 @@ class CIFAR10DataManager:
         
         if save_path:
             plt.savefig(save_path, dpi=150, bbox_inches='tight')
-            self.logger.info(f"CIFAR-10 channel histograms saved to: {save_path}")
+            self.logger.info(f"CIFAR-100 channel histograms saved to: {save_path}")
         
         plt.show()
     
@@ -797,7 +656,7 @@ class CIFAR10DataManager:
             'class_names': self.classes
         }
         
-        self.logger.info("CIFAR-10 Batch Information:")
+        self.logger.info("CIFAR-100 Batch Information:")
         self.logger.info(f"  - Batch size: {batch_info['batch_size']}")
         self.logger.info(f"  - Image shape: {batch_info['image_shape']}")
         self.logger.info(f"  - Label shape: {batch_info['label_shape']}")
@@ -896,9 +755,9 @@ class BaseTrainer(ABC):
         pass
 
 
-class CIFAR10Trainer(BaseTrainer):
+class CIFAR100Trainer(BaseTrainer):
     """
-    CIFAR-10 model trainer.
+    CIFAR-100 model trainer.
     Implements the Template Method pattern for training workflow.
     """
     
@@ -980,7 +839,8 @@ class CIFAR10Trainer(BaseTrainer):
                 mode=self.config.plateau_mode,
                 factor=self.config.plateau_factor,
                 patience=self.config.plateau_patience,
-                threshold=self.config.plateau_threshold
+                threshold=self.config.plateau_threshold,
+                verbose=True
             )
         else:
             raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
@@ -1259,7 +1119,7 @@ class TrainingFacade:
     def setup_data(self) -> tuple:
         """Setup data loading and get data loaders."""
         self.logger.info("Setting up data...")
-        self.data_manager = CIFAR10DataManager(self.config.data, self.logger)
+        self.data_manager = CIFAR100DataManager(self.config.data, self.logger)
         train_loader, test_loader = self.data_manager.load_data()
         
         # Get and log data statistics
@@ -1268,11 +1128,11 @@ class TrainingFacade:
         
         return train_loader, test_loader
     
-    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR10Model:
+    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR100Model:
         """Setup the model with dynamic input size."""
         self.logger.info("Setting up model...")
         builder = ModelBuilder()
-        self.model = builder.build_cifar10_model(self.config.model)
+        self.model = builder.build_cifar100_model(self.config.model)
         
         # Move model to device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -1283,10 +1143,10 @@ class TrainingFacade:
         
         return self.model
     
-    def setup_trainer(self) -> CIFAR10Trainer:
+    def setup_trainer(self) -> CIFAR100Trainer:
         """Setup the trainer."""
         self.logger.info("Setting up trainer...")
-        self.trainer = CIFAR10Trainer(self.config.training, self.logger)
+        self.trainer = CIFAR100Trainer(self.config.training, self.logger)
         return self.trainer
     
     def run_training(self, train_loader, test_loader) -> dict:
@@ -1307,14 +1167,14 @@ class TrainingFacade:
         if self.config.logging.save_model:
             model_path = os.path.join(
                 self.config.logging.model_save_dir,
-                f"cifar10_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
+                f"cifar100_model_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pth"
             )
             self.trainer.save_model(self.model, model_path)
         
         return metrics.get_final_metrics()
     
     def run_complete_pipeline(self) -> dict:
-        """Run the complete CIFAR-10 training pipeline."""
+        """Run the complete CIFAR-100 training pipeline."""
         try:
             # Log experiment start
             self.logger.log_experiment_start(self.config)
@@ -1351,27 +1211,22 @@ class TrainingFacade:
 
 def main():
     """
-    Main function to run the CIFAR-10 training.
+    Main function to run the CIFAR-100 training.
     Demonstrates usage of the complete training system.
     """
     print("=" * 60)
-    print("CIFAR-10 TRAINING SCRIPT - MONOLITHIC IMPLEMENTATION")
+    print("CIFAR-100 TRAINING SCRIPT - MONOLITHIC IMPLEMENTATION")
     print("=" * 60)
     
     # Create configuration
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 200
+    config.training.epochs = 50
     config.training.learning_rate = 0.05
     config.training.momentum = 0.9
     config.data.batch_size = 128
-    config.training.scheduler_type = 'ReduceLROnPlateau'
-    config.training.plateau_mode = 'min'
-    config.training.plateau_factor = 0.5
-    config.training.plateau_patience = 5
-    config.training.plateau_threshold = 1e-4
-    config.training.scheduler_step_size = 30
+    config.training.scheduler_step_size = 20
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")
