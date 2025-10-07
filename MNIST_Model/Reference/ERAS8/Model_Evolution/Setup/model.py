@@ -75,192 +75,71 @@ class CIFAR100Model(nn.Module):
         super(CIFAR100Model, self).__init__()
         self.config = config
         
-        # INPUT BLOCK
-        self.convblock1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 32
-
-        # CONVOLUTION BLOCK 1
-
-        self.convblock2 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 32
+        self.conv1 = nn.Sequential(nn.Conv2d(self.config.input_channels, 64, kernel_size=7, stride=1, padding=4),
+            nn.BatchNorm2d(64),nn.ReLU(inplace=True))
+           
+        self.res1 = nn.Sequential(self.conv_block(64, 64,activation=True), self.conv_block(64, 64))
+        self.res2 = nn.Sequential(self.conv_block(64, 64,activation=True), self.conv_block(64, 64))
+        self.res3 = nn.Sequential(self.conv_block(64, 64,activation=True), self.conv_block(64, 64))
+        self.downsample1=nn.Sequential(self.conv_block(64, 128,pool=True)) 
+        self.res4 = nn.Sequential(self.conv_block(64, 128,activation=True, pool=True),
+                                  self.conv_block(128,128))
+        self.res5 = nn.Sequential(self.conv_block(128, 128,activation=True), self.conv_block(128, 128))
+        self.res6 = nn.Sequential(self.conv_block(128, 128,activation=True), self.conv_block(128, 128))
+        self.res7 = nn.Sequential(self.conv_block(128, 128,activation=True), self.conv_block(128, 128))
+        self.res8 = nn.Sequential(self.conv_block(128, 256,activation=True, pool=True),
+                                  self.conv_block(256,256))
+        self.downsample2 = nn.Sequential(self.conv_block(128, 256,pool=True))
+        self.res9 = nn.Sequential(self.conv_block(256, 256,activation=True), self.conv_block(256, 256))
+        self.res10 = nn.Sequential(self.conv_block(256, 256,activation=True), self.conv_block(256, 256))
+        self.res11 = nn.Sequential(self.conv_block(256, 256,activation=True), self.conv_block(256, 256))
+        self.res12 = nn.Sequential(self.conv_block(256, 256,activation=True), self.conv_block(256, 256))
+        self.res13 = nn.Sequential(self.conv_block(256, 256,activation=True), self.conv_block(256, 256))
+        self.res14 = nn.Sequential(self.conv_block(256, 512,activation=True, pool=True),
+                                   self.conv_block(512,512))
         
-        self.convblock3 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 32
+        self.downsample3 = nn.Sequential(self.conv_block(256, 512,pool=True))
+        self.res15 = nn.Sequential(self.conv_block(512, 512,activation=True), self.conv_block(512, 512))
+        self.res16 = nn.Sequential(self.conv_block(512, 512,activation=True), self.conv_block(512, 512,activation=True))
 
-        self.convblock4 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=8, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(8),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 16
+        self.classifier = nn.Sequential(nn.AdaptiveMaxPool2d((1,1)), 
+                                        nn.Flatten(), 
+                                        #nn.Dropout(0.2),
+                                        nn.Linear(512,1000))
+        self.apply(self.init_weights)
+    
+    def conv_block(self, in_channels, out_channels, activation=True, pool=False):
+        layers = [nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1),nn.BatchNorm2d(out_channels)]
+        if activation:
+            layers.append(nn.ReLU(inplace=True))
+        if pool:
+            layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+        return nn.Sequential(*layers)
 
-        # TRANSITION BLOCK 1
-        self.pool1 = nn.MaxPool2d(2, 2) # output_size = 16
-
-        # CONVOLUTION BLOCK 2
+    def init_weights(self,m):
+        if isinstance(m, nn.Conv2d):
+            nn.init.kaiming_normal_(m.weight, mode='fan_in', nonlinearity='relu')
         
-        self.convblock5 = nn.Sequential(
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 16
-
-        self.convblock6 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 16
-
-        self.convblock7 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 16
-
-        # TRANSITION BLOCK 2
-        self.pool2 = nn.MaxPool2d(2, 2) # output_size = 8
-
-        # CONVOLUTION BLOCK 3
-        
-        
-        self.convblock8 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-        self.convblock9 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 8
-
-        self.convblock10 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-        # TRANSITION BLOCK 3
-        self.pool3 = nn.MaxPool2d(2, 2) # output_size = 4
-
-        # CONVOLUTION BLOCK 4
-        
-        
-        self.convblock11 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-        self.convblock12 = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=32, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-        self.convblock13 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=16, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-         # Additional convolution layer instead of GAP
-        self.convblock14 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=128, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            #nn.Dropout2d(0.1)
-        ) # output_size = 4
-
-        # 1x1 Convolution to reduce channels to 10 classes
-        self.conv1x1 = nn.Sequential(
-            nn.Conv2d(in_channels=128, out_channels=100, kernel_size=1, stride=1, padding=0, bias=False),
-            nn.BatchNorm2d(100),
-            nn.ReLU()
-        ) # output_size = 4
-
-        # Final pooling to reduce spatial dimensions
-        self.final_pool = nn.AdaptiveAvgPool2d(1) # output_size = 1x1
-
-
-        
-
-    def forward(self, x):
-        
-        x = self.convblock1(x)
-
-
-        # Convolution Block 1
-        x = self.convblock2(x)
-        x = self.convblock3(x)
-        x = self.convblock4(x)
-        x = self.pool1(x)  # 32x32 -> 16x16
-        
-        # Convolution Block 2
-        
-        x = self.convblock5(x)
-        x = self.convblock6(x)
-        x = self.convblock7(x)
-        x = self.pool2(x)  # 16x16 -> 8x8
-        
-        # Convolution Block 3
-        
-        x = self.convblock8(x)
-        x = self.convblock9(x)
-        x = self.convblock10(x)
-        x = self.pool3(x)  # 8x8 -> 4x4
-        
-        # # Convolution Block 4
-        x = self.convblock11(x)
-        x = self.convblock12(x)
-        x = self.convblock13(x)
-
-         # Additional convolution layer
-        x = self.convblock14(x)  # 256 channels -> 128 channels
-        
-        # 1x1 Convolution to get 10 classes
-        x = self.conv1x1(x)  # 128 channels -> 10 channels
-        
-        # Final pooling to reduce spatial dimensions
-        x = self.final_pool(x)  # 4x4 -> 1x1
-        
-        # Flatten
-        x = x.view(x.size(0), -1)  # Flatten while preserving batch dimension
-        
-        # No fully connected layers needed - we already have 10 outputs
-        return F.log_softmax(x, dim=-1)
+    def forward(self, xb):
+        out = self.conv1(xb)
+        out = self.res1(out) + out
+        out = self.res2(out) + out
+        out = self.res3(out) + out
+        out = self.downsample1(out) +self.res4(out)
+        out = self.res5(out) + out
+        out = self.res6(out) + out
+        out = self.res7(out) + out
+        out = self.downsample2(out) +self.res8(out)
+        out = self.res9(out) + out
+        out = self.res10(out) + out
+        out = self.res11(out) + out
+        out = self.res12(out) + out
+        out = self.res13(out) + out
+        out = self.downsample3(out) + self.res14(out) 
+        out = self.res15(out) + out
+        out = self.res16(out) + out
+        out = self.classifier(out)
+        return F.log_softmax(out, dim=-1)
     
     def get_model_summary(self, input_size: Tuple[int, int, int], logger) -> Dict[str, Any]:
         """Get comprehensive model summary."""
