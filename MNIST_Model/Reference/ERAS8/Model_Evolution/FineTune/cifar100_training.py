@@ -1411,6 +1411,7 @@ def main():
     #config.training.scheduler_step_size = 20
     config.training.optimizer_type = 'Adam'
     config.training.weight_decay = 0.0001
+    config.model.dropout_rate = 0.2
 
 
     # config.training.scheduler_type = 'OneCycleLR'
