@@ -25,6 +25,42 @@
 ✅ **Dropout regularization added**   
 ✅ **Better architecture efficiency**   
 
+## Resources
+
+### Files
+- **Training Log**: [20251009_104659_cifar100_training.log](logs/20251009_104659_cifar100_training.log)
+- **Training Curves**: [training_curves_20251009_122012.png](logs/training_curves_20251009_122012.png)
+- **Saved Model**: [cifar100_model_20251009_194111.pth](models/cifar100_model_20251009_194111.pth)
+- **Model Code**: [model.py](model.py)
+- **Training Script**: [cifar100_training.py](cifar100_training.py)
+
+### Key Metrics Summary
+
+**Training Duration**: ~1.5 hours (100 epochs)  
+**Hardware**: CUDA GPU  
+**Framework**: PyTorch + Albumentations
+
+| Metric | Value |
+|--------|-------|
+| **Best Test Accuracy** | 69.28% @ epoch 99 |
+| **Final Test Accuracy** | 69.24% @ epoch 100 |
+| **Final Train Accuracy** | 90.71% @ epoch 100 |
+| **Final Gap** | 21.47% |
+| **Average Gap** | 9.13% |
+| **Overfitting Epochs** | 26 |
+| **Parameters** | 929,572 |
+| **Model Size** | 3.55 MB |
+| **Params/Sample Ratio** | 18.6:1 |
+
+### Visual Analysis (from training curves)
+
+**Expected Curves**:
+- **Train Loss**: Smooth decrease to ~0.31
+- **Test Loss**: Decrease to ~1.22, plateau after epoch 60
+- **Train Acc**: Smooth increase to 90.71%
+- **Test Acc**: Increase to 69.28%, plateau after epoch 60
+- **Gap**: Widens after epoch 75 (LR reductions)
+
 Input: 32×32×3 RGB images
 ├── Initial Conv Block
 │ ├── Conv2d: 3→64, 3×3, stride=1, padding=1
@@ -340,189 +376,9 @@ in_channels → in_channels/4 → in_channels/4 → out_channels
 **Conclusion**: Initial LR (0.00251) was perfect. Reductions helped train more than test, worsening overfitting.
 
 ---
-
-## Problem Diagnosis & Recommendations
-
-### Root Causes of Remaining Overfitting
-
-1. **Dropout Rate Too Low**:
-   - Current: 0.05 (5%)
-   - Issue: Too conservative for 100-class problem
-   - Impact: Model still memorizing
-
-2. **LR Reduction Pattern**:
-   - Reductions triggered by test loss plateau
-   - But reductions help train accuracy more
-   - Creates widening gap
-
-3. **Insufficient Regularization**:
-   - Only dropout (5%) and weight decay (0.0001)
-   - No label smoothing, mixup, or cutmix
-   - No gradient clipping
-
-4. **Architecture May Be Too Small**:
-   - 0.93M parameters for 100 classes
-   - May lack capacity for complex dataset
-   - Trade-off: fewer params → less overfitting but lower accuracy
-
-### Recommended Improvements for Next Experiment (FT-2)
-
-#### High Priority (Must Try):
-
-1. **Increase Dropout Rate**:
-   ```python
-   # Conv layer dropout
-   dropout_rate = 0.15  # Up from 0.05
-   
-   # FC layer dropout
-   fc_dropout = 0.3  # Up from 0.05
-   ```
-
-2. **Add Label Smoothing**:
-   ```python
-   criterion = nn.CrossEntropyLoss(label_smoothing=0.1)
-   ```
-
-3. **Increase Weight Decay**:
-   ```python
-   weight_decay = 0.001  # Up from 0.0001 (10× increase)
-   ```
-
-4. **Try Different Scheduler**:
-   ```python
-   # Use OneCycleLR instead of ReduceLROnPlateau
-   scheduler = torch.optim.lr_scheduler.OneCycleLR(
-       optimizer, 
-       max_lr=0.00251,
-       epochs=100,
-       steps_per_epoch=len(train_loader)
-   )
-   ```
-
-#### Medium Priority (Should Try):
-
-5. **Add Mixup/CutMix**:
-   ```python
-   # In training loop
-   images, labels = mixup_data(images, labels, alpha=0.2)
-   ```
-
-6. **Gradient Clipping**:
-   ```python
-   torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-   ```
-
-7. **Stochastic Depth**:
-   - Drop entire residual blocks during training
-   - Improves generalization
-
-8. **Larger Model**:
-   - Try ResNet-34 Bottleneck (~3-4M parameters)
-   - Better capacity for 100 classes
-
-#### Low Priority (Nice to Have):
-
-9. **Advanced Augmentation**:
-   - AutoAugment or RandAugment
-   - More aggressive CoarseDropout
-
-10. **Warmup + Cosine Annealing**:
-    - 5-epoch warmup
-    - Cosine decay with restarts
-
 ---
 
-## Expected Improvements
 
-### With Increased Dropout + Label Smoothing (FT-2):
-- **Target Test Accuracy**: 70-72%
-- **Expected Gap**: 15-18%
-- **Overfitting Epochs**: < 20
-- **Rationale**: Better regularization should reduce memorization
-
-### With OneCycleLR Scheduler (FT-3):
-- **Target Test Accuracy**: 72-74%
-- **Expected Gap**: 12-15%
-- **Overfitting Epochs**: < 15
-- **Rationale**: Better LR schedule prevents late overfitting
-
-### With Larger Model (ResNet-34) + All Improvements (FT-4):
-- **Target Test Accuracy**: 75-77%
-- **Expected Gap**: < 10%
-- **Parameters**: ~3-4M
-- **Rationale**: More capacity + better regularization
-
----
-
-## Benchmark Comparison
-
-### CIFAR-100 Standard Benchmarks
-
-| Model | Parameters | Test Accuracy | Notes |
-|-------|------------|---------------|-------|
-| **Your FT-1** | 0.93M | 69.24% | ResNet-18 Bottleneck + Dropout |
-| **Your Exp-1** | 23.18M | 73.97% | Custom ResNet (overfitted) |
-| ResNet-18 (baseline) | ~11M | 75-77% | Standard implementation |
-| ResNet-34 (baseline) | ~21M | 77-79% | Standard implementation |
-| ResNet-50 (baseline) | ~23M | 79-81% | Standard implementation |
-| WideResNet-28-10 | ~36M | 80-82% | Wider variant |
-| DenseNet-121 | ~7M | 77-79% | Dense connections |
-
-**Analysis**: 
-- Your FT-1 achieves **69.24%** with only **0.93M** parameters
-- Standard ResNet-18 (~11M) gets **75-77%**
-- Your model is **91% smaller** but **6-8%** less accurate
-- **Efficiency vs Accuracy trade-off is reasonable**
-- Room for improvement with better regularization
-
-### Parameter Efficiency Comparison
-
-| Model | Params | Test Acc | Acc/M Params | Rank |
-|-------|--------|----------|--------------|------|
-| **Your FT-1** | 0.93M | 69.24% | **74.45** | 1st 🥇 |
-| DenseNet-121 | 7M | 78% | 11.14 | 2nd |
-| ResNet-18 | 11M | 76% | 6.91 | 3rd |
-| Your Exp-1 | 23.18M | 73.97% | 3.19 | 4th |
-
-**Winner**: FT-1 has **best parameter efficiency**!
-
----
-
-## Resources
-
-### Files
-- **Training Log**: [20251009_104659_cifar100_training.log](logs/20251009_104659_cifar100_training.log)
-- **Training Curves**: [training_curves_20251009_122012.png](logs/training_curves_20251009_122012.png)
-- **Saved Model**: [cifar100_model_20251009_194111.pth](models/cifar100_model_20251009_194111.pth)
-- **Model Code**: [model.py](model.py)
-- **Training Script**: [cifar100_training.py](cifar100_training.py)
-
-### Key Metrics Summary
-
-**Training Duration**: ~1.5 hours (100 epochs)  
-**Hardware**: CUDA GPU  
-**Framework**: PyTorch + Albumentations
-
-| Metric | Value |
-|--------|-------|
-| **Best Test Accuracy** | 69.28% @ epoch 99 |
-| **Final Test Accuracy** | 69.24% @ epoch 100 |
-| **Final Train Accuracy** | 90.71% @ epoch 100 |
-| **Final Gap** | 21.47% |
-| **Average Gap** | 9.13% |
-| **Overfitting Epochs** | 26 |
-| **Parameters** | 929,572 |
-| **Model Size** | 3.55 MB |
-| **Params/Sample Ratio** | 18.6:1 |
-
-### Visual Analysis (from training curves)
-
-**Expected Curves**:
-- **Train Loss**: Smooth decrease to ~0.31
-- **Test Loss**: Decrease to ~1.22, plateau after epoch 60
-- **Train Acc**: Smooth increase to 90.71%
-- **Test Acc**: Increase to 69.28%, plateau after epoch 60
-- **Gap**: Widens after epoch 75 (LR reductions)
 
 Detailed Log:
 
