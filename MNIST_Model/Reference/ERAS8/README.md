@@ -28,11 +28,11 @@
 ## Resources
 
 ### Files
-- **Training Log**: [20251009_104659_cifar100_training.log](FineTune/logs/20251009_104659_cifar100_training.log)
-- **Training Curves**: [training_curves_20251009_122012.png](FineTune/logs/training_curves_20251009_122012.png)
-- **Saved Model**: [cifar100_model_20251009_194111.pth](FineTune/models/cifar100_model_20251009_194111.pth)
-- **Model Code**: [model.py](FineTune/model.py)
-- **Training Script**: [cifar100_training.py](FineTune/cifar100_training.py)
+- **Training Log**: [20251009_104659_cifar100_training.log](Model_Evolution/FineTune/logs/20251009_104659_cifar100_training.log)
+- **Training Curves**: [training_curves_20251009_122012.png](Model_Evolution/FineTune/logs/training_curves_20251009_122012.png)
+- **Saved Model**: [cifar100_model_20251009_194111.pth](Model_Evolution/FineTune/models/cifar100_model_20251009_194111.pth)
+- **Model Code**: [model.py](Model_Evolution/FineTune/model.py)
+- **Training Script**: [cifar100_training.py](Model_Evolution/FineTune/cifar100_training.py)
 
 ### Key Metrics Summary
 
