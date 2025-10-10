@@ -1,15 +1,15 @@
 """
-CIFAR100 ResNet-18 Model Definition with 1x1 Bottleneck Layers
+CIFAR100 ResNet-34 Model Definition with Bottleneck Layers
 Contains the model architecture classes for CIFAR100 classification.
 
 This module provides:
 - ModelConfig: Configuration for model architecture
 - BottleneckBlock: 1x1 bottleneck convolution block
 - BasicBlock: Basic residual block
-- CIFAR100ResNet18: ResNet-18 architecture with bottleneck layers
+- CIFAR100ResNet34: ResNet-34 architecture for CIFAR-100
 
 Author: Krishnakanth
-Date: 2025-10-04
+Date: 2025-10-10
 """
 
 import os
@@ -46,7 +46,7 @@ class BottleneckBlock(nn.Module):
     Reduces computational complexity by using 1x1 convolutions to reduce and expand channels.
     """
     
-    def __init__(self, in_channels, out_channels, stride=1, downsample=None):
+    def __init__(self, in_channels, out_channels, stride=1, downsample=None, dropout_rate=0.0):
         super(BottleneckBlock, self).__init__()
         
         # First 1x1 conv: reduces channels
@@ -65,6 +65,7 @@ class BottleneckBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
+        self.dropout = nn.Dropout2d(dropout_rate) if dropout_rate > 0 else None
         
     def forward(self, x):
         residual = x
@@ -86,13 +87,16 @@ class BottleneckBlock(nn.Module):
         out += residual
         out = self.relu(out)
         
+        if self.dropout is not None:
+            out = self.dropout(out)
+        
         return out
 
 
 class BasicBlock(nn.Module):
     """Basic residual block for ResNet."""
     
-    def __init__(self, in_channels, out_channels, stride=1, downsample=None):
+    def __init__(self, in_channels, out_channels, stride=1, downsample=None, dropout_rate=0.0):
         super(BasicBlock, self).__init__()
         
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, 
@@ -106,6 +110,7 @@ class BasicBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
         self.stride = stride
+        self.dropout = nn.Dropout2d(dropout_rate) if dropout_rate > 0 else None
         
     def forward(self, x):
         residual = x
@@ -123,56 +128,53 @@ class BasicBlock(nn.Module):
         out += residual
         out = self.relu(out)
         
+        if self.dropout is not None:
+            out = self.dropout(out)
+        
         return out
 
 
 # =============================================================================
-# RESNET-18 WITH BOTTLENECK LAYERS
+# RESNET-34 FOR CIFAR-100
 # =============================================================================
 
-class CIFAR100ResNet18(nn.Module):
+class CIFAR100ResNet34(nn.Module):
     """
-    ResNet-18 architecture with 1x1 bottleneck layers for CIFAR-100.
-    Uses bottleneck blocks for efficiency while maintaining ResNet-18 structure.
+    ResNet-34 architecture for CIFAR-100.
+    Uses BasicBlock with the 3-4-6-3 layer structure of ResNet-34.
     """
     
     def __init__(self, config: ModelConfig):
-        super(CIFAR100ResNet18, self).__init__()
+        super(CIFAR100ResNet34, self).__init__()
         self.config = config
         
-        # Initial convolution layer
-        self.conv1 = nn.Conv2d(config.input_channels, 64, kernel_size=7, stride=2, padding=3, bias=False)
+        # For CIFAR-32x32, use modified initial layer (no stride/pooling)
+        self.conv1 = nn.Conv2d(config.input_channels, 64, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         
-        # For CIFAR-32x32, we'll modify the initial layers
-        self.conv1_cifar = nn.Conv2d(config.input_channels, 64, kernel_size=3, stride=1, padding=1, bias=False)
-        self.bn1_cifar = nn.BatchNorm2d(64)
-        self.relu_cifar = nn.ReLU(inplace=True)
+        # ResNet-34 uses BasicBlock with [3, 4, 6, 3] blocks per layer
+        # Layer 1: 64 channels, 3 blocks
+        self.layer1 = self._make_layer(BasicBlock, 64, 64, 3, stride=1, dropout_rate=config.dropout_rate)
         
-        # Layer 1: 64 channels, 2 blocks
-        self.layer1 = self._make_layer(BottleneckBlock, 64, 64, 2, stride=1)
+        # Layer 2: 128 channels, 4 blocks
+        self.layer2 = self._make_layer(BasicBlock, 64, 128, 4, stride=2, dropout_rate=config.dropout_rate)
         
-        # Layer 2: 128 channels, 2 blocks  
-        self.layer2 = self._make_layer(BottleneckBlock, 64, 128, 2, stride=2)
+        # Layer 3: 256 channels, 6 blocks
+        self.layer3 = self._make_layer(BasicBlock, 128, 256, 6, stride=2, dropout_rate=config.dropout_rate)
         
-        # Layer 3: 256 channels, 2 blocks
-        self.layer3 = self._make_layer(BottleneckBlock, 128, 256, 2, stride=2)
-        
-        # Layer 4: 512 channels, 2 blocks
-        self.layer4 = self._make_layer(BottleneckBlock, 256, 512, 2, stride=2)
+        # Layer 4: 512 channels, 3 blocks
+        self.layer4 = self._make_layer(BasicBlock, 256, 512, 3, stride=2, dropout_rate=config.dropout_rate)
         
         # Global Average Pooling and classifier
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
+        self.dropout = nn.Dropout(config.dropout_rate)
         self.fc = nn.Linear(512, config.num_classes)
         
         # Initialize weights
         self._initialize_weights()
-
-        self.dropout = nn.Dropout(config.dropout_rate)
     
-    def _make_layer(self, block, in_channels, out_channels, blocks, stride=1):
+    def _make_layer(self, block, in_channels, out_channels, blocks, stride=1, dropout_rate=0.0):
         """Create a layer with specified number of blocks."""
         downsample = None
         
@@ -185,11 +187,11 @@ class CIFAR100ResNet18(nn.Module):
         
         layers = []
         # First block with potential downsampling
-        layers.append(block(in_channels, out_channels, stride, downsample))
+        layers.append(block(in_channels, out_channels, stride, downsample, dropout_rate))
         
         # Remaining blocks
         for _ in range(1, blocks):
-            layers.append(block(out_channels, out_channels))
+            layers.append(block(out_channels, out_channels, dropout_rate=dropout_rate))
         
         return nn.Sequential(*layers)
     
@@ -203,31 +205,28 @@ class CIFAR100ResNet18(nn.Module):
                 nn.init.constant_(m.bias, 0)
     
     def forward(self, x):
-        # For CIFAR-32x32, use modified initial layers
-        x = self.conv1_cifar(x)
-        x = self.bn1_cifar(x)
-        x = self.relu_cifar(x)
+        # Initial layer
+        x = self.conv1(x)
+        x = self.bn1(x)
+        x = self.relu(x)
         
-        # Pass through ResNet layers
-        x = self.layer1(x)
-        #x = self.dropout(x)
-        x = self.layer2(x)
-        #x = self.dropout(x)
-        x = self.layer3(x)
-        #x = self.dropout(x)
-        x = self.layer4(x)
-        #x = self.dropout(x)
+        # ResNet layers (3-4-6-3 blocks)
+        x = self.layer1(x)  # 3 blocks
+        x = self.layer2(x)  # 4 blocks
+        x = self.layer3(x)  # 6 blocks
+        x = self.layer4(x)  # 3 blocks
+        
         # Global average pooling and classification
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        #x = self.dropout(x)
+        x = self.dropout(x)
         x = self.fc(x)
         
         return F.log_softmax(x, dim=1)
     
     def get_model_summary(self, input_size: Tuple[int, int, int], logger) -> Dict[str, Any]:
         """Get comprehensive model summary."""
-        logger.info("Generating ResNet-18 with Bottleneck summary...")
+        logger.info("Generating ResNet-34 summary...")
         
         # Capture summary output
         old_stdout = sys.stdout
@@ -249,7 +248,8 @@ class CIFAR100ResNet18(nn.Module):
         
         # Check for specific layer types
         has_batchnorm = any(isinstance(module, nn.BatchNorm2d) for module in self.modules())
-        has_dropout = any(isinstance(module, nn.Dropout) for module in self.modules())
+        has_dropout = any(isinstance(module, nn.Dropout) or isinstance(module, nn.Dropout2d) 
+                         for module in self.modules())
         has_fc = any(isinstance(module, nn.Linear) for module in self.modules())
         has_gap = any(isinstance(module, nn.AvgPool2d) or isinstance(module, nn.AdaptiveAvgPool2d) 
                      for module in self.modules())
@@ -263,7 +263,7 @@ class CIFAR100ResNet18(nn.Module):
         }
         
         # Log model information
-        logger.info("ResNet-18 with Bottleneck Architecture Summary:")
+        logger.info("ResNet-34 Architecture Summary:")
         logger.info(f"  - Total Parameters: {total_params:,}")
         logger.info(f"  - Batch Normalization: {'Yes' if has_batchnorm else 'No'}")
         logger.info(f"  - Dropout: {'Yes' if has_dropout else 'No'}")
@@ -291,13 +291,23 @@ class ModelBuilder:
         self._model = None
         return self
     
-    def build_resnet18_bottleneck(self, config: ModelConfig) -> 'CIFAR100ResNet18':
-        """Build ResNet-18 with bottleneck layers."""
-        self._model = CIFAR100ResNet18(config)
+    def build_resnet34(self, config: ModelConfig) -> 'ModelBuilder':
+        """Build ResNet-34 for CIFAR-100."""
+        self._model = CIFAR100ResNet34(config)
         return self
     
-    def build(self) -> 'CIFAR100ResNet18':
+    def build_cifar100_model(self, config: ModelConfig) -> 'ModelBuilder':
+        """Build CIFAR-100 ResNet-34 model. Alias for build_resnet34."""
+        self._model = CIFAR100ResNet34(config)
+        return self
+    
+    def build(self) -> 'CIFAR100ResNet34':
         """Return the built model."""
         if self._model is None:
             raise ValueError("No model has been built yet. Call a build method first.")
         return self._model
+
+
+# Aliases for compatibility
+CIFAR100Model = CIFAR100ResNet34
+CIFAR100ResNet18 = CIFAR100ResNet34  # Backward compatibility alias

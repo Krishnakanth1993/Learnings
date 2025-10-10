@@ -1,0 +1,73 @@
+2025-10-10 18:32:11,985 - CIFAR-100_Training - INFO - Logger initialized. Log file: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\logs\20251010_183211_cifar100_training.log
+2025-10-10 18:32:11,985 - CIFAR-100_Training - INFO - Updated Configuration (from main()):
+2025-10-10 18:32:11,985 - CIFAR-100_Training - INFO -   - Epochs: 200
+2025-10-10 18:32:11,985 - CIFAR-100_Training - INFO -   - Learning Rate: 0.001
+2025-10-10 18:32:11,985 - CIFAR-100_Training - INFO -   - Optimizer: Adam
+2025-10-10 18:32:11,986 - CIFAR-100_Training - INFO -   - Weight Decay: 0.0001
+2025-10-10 18:32:11,986 - CIFAR-100_Training - INFO -   - Adam Betas: (0.9, 0.999)
+2025-10-10 18:32:11,986 - CIFAR-100_Training - INFO -   - Adam Eps: 1e-08
+2025-10-10 18:32:11,986 - CIFAR-100_Training - INFO -   - Scheduler: ReduceLROnPlateau
+2025-10-10 18:32:11,986 - CIFAR-100_Training - INFO -   - Mode: min
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Factor: 0.5
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Patience: 10
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Threshold: 0.0001
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Batch Size: 128
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Num Workers: 4
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Pin Memory: True
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Shuffle: True
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Dropout Rate: 0.05
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Device: CUDA
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Log Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\logs
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Model Save Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\models
+2025-10-10 18:32:11,987 - CIFAR-100_Training - INFO -   - Save Model: True
+2025-10-10 18:32:11,988 - CIFAR-100_Training - INFO -   - Log Level: DEBUG
+2025-10-10 18:32:11,988 - CIFAR-100_Training - INFO - ==================================================
+2025-10-10 18:32:11,988 - CIFAR-100_Training - INFO - ==================================================
+2025-10-10 18:32:11,988 - CIFAR-100_Training - INFO - CIFAR-100 TRAINING EXPERIMENT STARTED
+2025-10-10 18:32:11,988 - CIFAR-100_Training - INFO - ==================================================
+2025-10-10 18:32:11,989 - CIFAR-100_Training - INFO - Data Config: DataConfig(data_dir='./data', batch_size=128, num_workers=4, pin_memory=True, shuffle=True, cifar100_mean=(0.507076, 0.48655, 0.440919), cifar100_std=(0.267334, 0.256438, 0.27615), rotation_range=(-7.0, 7.0), fill_value=1)
+2025-10-10 18:32:11,989 - CIFAR-100_Training - INFO - Model Config: ModelConfig(input_channels=3, input_size=(32, 32), num_classes=100, dropout_rate=0.05)
+2025-10-10 18:32:11,989 - CIFAR-100_Training - INFO - Training Config: TrainingConfig(epochs=200, learning_rate=0.001, momentum=0.9, weight_decay=0.0001, scheduler_step_size=10, scheduler_gamma=0.1, seed=1, optimizer_type='Adam', adam_betas=(0.9, 0.999), adam_eps=1e-08, rmsprop_alpha=0.99, scheduler_type='ReduceLROnPlateau', cosine_t_max=20, exponential_gamma=0.95, plateau_mode='min', plateau_factor=0.5, plateau_patience=10, plateau_threshold=0.0001, onecycle_max_lr=0.1, onecycle_pct_start=0.3, onecycle_div_factor=25.0, onecycle_final_div_factor=10000.0, onecycle_anneal_strategy='cos')
+2025-10-10 18:32:11,989 - CIFAR-100_Training - INFO - ==================================================
+2025-10-10 18:32:11,989 - CIFAR-100_Training - INFO - Setting up data...
+2025-10-10 18:32:11,990 - CIFAR-100_Training - INFO - Using Albumentations for data augmentation
+2025-10-10 18:32:11,996 - CIFAR-100_Training - INFO - Loading CIFAR-100 dataset...
+2025-10-10 18:32:13,277 - CIFAR-100_Training - INFO - CIFAR-100 dataset loaded successfully!
+2025-10-10 18:32:13,278 - CIFAR-100_Training - INFO - Train samples: 50000
+2025-10-10 18:32:13,278 - CIFAR-100_Training - INFO - Test samples: 10000
+2025-10-10 18:32:13,278 - CIFAR-100_Training - INFO - Augmentation library: Albumentations
+2025-10-10 18:32:13,278 - CIFAR-100_Training - INFO - Computing CIFAR-100 data statistics...
+2025-10-10 18:32:15,316 - CIFAR-100_Training - INFO - CIFAR-100 Data Statistics:
+2025-10-10 18:32:15,316 - CIFAR-100_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-10-10 18:32:15,317 - CIFAR-100_Training - INFO -   - Size: 153,600,000
+2025-10-10 18:32:15,317 - CIFAR-100_Training - INFO -   - Min: 0.0000
+2025-10-10 18:32:15,317 - CIFAR-100_Training - INFO -   - Max: 1.0000
+2025-10-10 18:32:15,317 - CIFAR-100_Training - INFO -   - Mean: 0.4782
+2025-10-10 18:32:15,318 - CIFAR-100_Training - INFO -   - Std: 0.2682
+2025-10-10 18:32:15,318 - CIFAR-100_Training - INFO -   - Variance: 0.0719
+2025-10-10 18:32:15,318 - CIFAR-100_Training - INFO - Channel-wise Statistics:
+2025-10-10 18:32:15,318 - CIFAR-100_Training - INFO -   Red Channel:
+2025-10-10 18:32:15,318 - CIFAR-100_Training - INFO -     - Mean: 0.5071
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Std: 0.2673
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -   Green Channel:
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Mean: 0.4865
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Std: 0.2564
+2025-10-10 18:32:15,319 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -   Blue Channel:
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -     - Mean: 0.4409
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -     - Std: 0.2762
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-10 18:32:15,320 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-10 18:32:28,909 - CIFAR-100_Training - INFO - CIFAR-100 Batch Information:
+2025-10-10 18:32:28,910 - CIFAR-100_Training - INFO -   - Batch size: 128
+2025-10-10 18:32:28,910 - CIFAR-100_Training - INFO -   - Image shape: torch.Size([3, 32, 32])
+2025-10-10 18:32:28,910 - CIFAR-100_Training - INFO -   - Label shape: torch.Size([128])
+2025-10-10 18:32:28,910 - CIFAR-100_Training - INFO -   - Data type: torch.float32
+2025-10-10 18:32:28,911 - CIFAR-100_Training - INFO -   - Number of classes: 100
+2025-10-10 18:32:30,146 - CIFAR-100_Training - INFO - Getting input size from CIFAR-100 data loader...
+2025-10-10 18:32:42,490 - CIFAR-100_Training - INFO - CIFAR-100 input size from data loader: (3, 32, 32)
+2025-10-10 18:32:43,400 - CIFAR-100_Training - INFO - Setting up model...
+2025-10-10 18:32:43,400 - CIFAR-100_Training - ERROR - Training pipeline failed: 'ModelBuilder' object has no attribute 'build_resnet18_bottleneck'

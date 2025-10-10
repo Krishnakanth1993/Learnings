@@ -38,7 +38,7 @@ from albumentations.pytorch import ToTensorV2
 import numpy as np
 
 # Import model classes from separate module
-from model import ModelConfig, ModelBuilder, CIFAR100ResNet18
+from model import ModelConfig, ModelBuilder, CIFAR100ResNet34
 
 
 # =============================================================================
@@ -1310,11 +1310,11 @@ class TrainingFacade:
         
         return train_loader, test_loader
     
-    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR100ResNet18:
+    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR100ResNet34:
         """Setup the model with dynamic input size."""
         self.logger.info("Setting up model...")
         builder = ModelBuilder()
-        self.model = builder.build_resnet18_bottleneck(self.config.model).build()
+        self.model = builder.build_resnet34(self.config.model).build()
         
         # Move model to device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -1404,7 +1404,7 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 200
+    config.training.epochs = 100
     config.training.learning_rate = 0.001
     config.training.momentum = 0.9
     config.data.batch_size = 128
