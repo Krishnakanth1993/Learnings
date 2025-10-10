@@ -33,9 +33,12 @@ from typing import Tuple, Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+import numpy as np
 
 # Import model classes from separate module
-from model import ModelConfig, ModelBuilder, CIFAR100ResNet18
+from model import ModelConfig, ModelBuilder, CIFAR100Model
 
 
 # =============================================================================
@@ -300,51 +303,193 @@ class TransformStrategy(ABC):
     """Abstract base class for transformation strategies."""
     
     @abstractmethod
-    def get_transforms(self) -> transforms.Compose:
+    def get_transforms(self):
         """Get the composed transforms."""
+        pass
+    
+    @abstractmethod
+    def __call__(self, image):
+        """Apply transforms to an image."""
         pass
 
 
-class CIFAR100TransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 data transformations."""
+class AlbumentationsTransformStrategy(TransformStrategy):
+    """Strategy for Albumentations transformations."""
+    
+    def __init__(self, transform_pipeline):
+        """
+        Initialize with an Albumentations Compose pipeline.
+        
+        Args:
+            transform_pipeline: A.Compose object with transformations
+        """
+        self.transform_pipeline = transform_pipeline
+    
+    def get_transforms(self):
+        """Get the Albumentations transform pipeline."""
+        return self.transform_pipeline
+    
+    def __call__(self, image):
+        """
+        Apply Albumentations transforms to an image.
+        
+        Args:
+            image: PIL Image or numpy array
+            
+        Returns:
+            Transformed tensor
+        """
+        # Convert PIL Image to numpy array if needed
+        if not isinstance(image, np.ndarray):
+            image = np.array(image)
+        
+        # Apply Albumentations transforms
+        transformed = self.transform_pipeline(image=image)
+        return transformed['image']
+
+
+class CIFAR100TransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 basic transformations (no augmentation)."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 specific transforms."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline for basic transforms
+        transform_pipeline = A.Compose([
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
 
 
-class CIFAR100TrainTransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 training data transformations with augmentation."""
+class CIFAR100TrainTransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 training data transformations with Albumentations augmentation."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 training transforms with augmentation."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline with augmentations
+        transform_pipeline = A.Compose([
+            # Augmentations FIRST (work on 0-255 numpy arrays)
+            A.HorizontalFlip(p=0.5),
+            A.ShiftScaleRotate(
+                shift_limit=0.1,
+                scale_limit=0.1,
+                rotate_limit=15,
+                border_mode=0,  # cv2.BORDER_CONSTANT
+                p=0.5
+            ),
+            A.CoarseDropout(
+                max_holes=1,
+                max_height=16,  
+                max_width=16,
+                min_holes=1,
+                min_height=16,
+                min_width=16,
+                fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),  # CIFAR-100 mean values (0-255 scale)
+                mask_fill_value=None,
+                p=0.5
+            ),
+            # Normalize AFTER augmentation
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            # Convert to tensor LAST
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
 
 
-class CIFAR100TestTransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 test data transformations."""
+class CIFAR100TestTransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 test data transformations (no augmentation)."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 test transforms."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline for test (no augmentation)
+        transform_pipeline = A.Compose([
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
+
+
+# PyTorch Transform Strategies (Alternative - if you want to keep PyTorch option)
+class PyTorchTransformStrategy(TransformStrategy):
+    """Strategy for PyTorch native transformations."""
+    
+    def __init__(self, transform_pipeline):
+        """
+        Initialize with a torchvision.transforms.Compose pipeline.
+        
+        Args:
+            transform_pipeline: transforms.Compose object
+        """
+        self.transform_pipeline = transform_pipeline
+    
+    def get_transforms(self):
+        """Get the PyTorch transform pipeline."""
+        return self.transform_pipeline
+    
+    def __call__(self, image):
+        """Apply PyTorch transforms to an image."""
+        return self.transform_pipeline(image)
+
+
+class CIFAR100PyTorchTrainTransformStrategy(PyTorchTransformStrategy):
+    """Alternative PyTorch-only training transforms (if Albumentations not desired)."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+        
+        transform_pipeline = transforms.Compose([
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomRotation(degrees=15),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std
+            ),
+            transforms.RandomErasing(
+                p=0.5,
+                scale=(0.02, 0.33),
+                ratio=(0.3, 3.3),
+                value='random'
+            )
+        ])
+        
+        super().__init__(transform_pipeline)
+
+
+class CIFAR100PyTorchTestTransformStrategy(PyTorchTransformStrategy):
+    """Alternative PyTorch-only test transforms."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+        
+        transform_pipeline = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std
+            )
+        ])
+        
+        super().__init__(transform_pipeline)
 
 
 class DataLoaderFactory:
@@ -374,9 +519,10 @@ class CIFAR100DataManager:
     Implements the Facade pattern to provide a simple interface for data operations.
     """
     
-    def __init__(self, config: DataConfig, logger: Logger):
+    def __init__(self, config: DataConfig, logger: Logger, use_albumentations: bool = True):
         self.config = config
         self.logger = logger
+        self.use_albumentations = use_albumentations
         self.train_dataset = None
         self.test_dataset = None
         self.train_loader = None
@@ -398,27 +544,33 @@ class CIFAR100DataManager:
     'tank', 'telephone', 'television', 'tiger', 'tractor', 'train', 'trout', 
     'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm')
     
-        # Initialize transform strategies
-        self.train_transform_strategy = CIFAR100TrainTransformStrategy(config)
-        self.test_transform_strategy = CIFAR100TestTransformStrategy(config)
+        # Initialize transform strategies based on choice
+        if use_albumentations:
+            self.logger.info("Using Albumentations for data augmentation")
+            self.train_transform_strategy = CIFAR100TrainTransformStrategy(config)
+            self.test_transform_strategy = CIFAR100TestTransformStrategy(config)
+        else:
+            self.logger.info("Using PyTorch native transforms for data augmentation")
+            self.train_transform_strategy = CIFAR100PyTorchTrainTransformStrategy(config)
+            self.test_transform_strategy = CIFAR100PyTorchTestTransformStrategy(config)
 
     def load_data(self) -> Tuple[DataLoader, DataLoader]:
         """Load CIFAR-100 dataset and create data loaders."""
         self.logger.info("Loading CIFAR-100 dataset...")
         
-        # Create datasets
+        # Create datasets with transform strategies
         self.train_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=True,
             download=True,
-            transform=self.train_transform_strategy.get_transforms()
+            transform=self.train_transform_strategy  # Pass the strategy directly
         )
         
         self.test_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=False,
             download=True,
-            transform=self.test_transform_strategy.get_transforms()
+            transform=self.test_transform_strategy  # Pass the strategy directly
         )
         
         # Create data loaders
@@ -432,6 +584,7 @@ class CIFAR100DataManager:
         self.logger.info(f"CIFAR-100 dataset loaded successfully!")
         self.logger.info(f"Train samples: {len(self.train_dataset)}")
         self.logger.info(f"Test samples: {len(self.test_dataset)}")
+        self.logger.info(f"Augmentation library: {'Albumentations' if self.use_albumentations else 'PyTorch'}")
         
         return self.train_loader, self.test_loader
     
@@ -839,8 +992,7 @@ class CIFAR100Trainer(BaseTrainer):
                 mode=self.config.plateau_mode,
                 factor=self.config.plateau_factor,
                 patience=self.config.plateau_patience,
-                threshold=self.config.plateau_threshold,
-                verbose=True
+                threshold=self.config.plateau_threshold
             )
         else:
             raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
@@ -995,7 +1147,7 @@ class CIFAR100Trainer(BaseTrainer):
                 self.logger.warning(f"Consecutive overfitting epochs: {overfitting_info['overfitting_epochs']}")
                 self.logger.warning(f"Patience: {self.early_stopping_patience} epochs")
                 self.logger.warning("=" * 60)
-                break
+                #break
         
         # Log final results
         final_metrics = self.metrics.get_final_metrics()
@@ -1128,11 +1280,11 @@ class TrainingFacade:
         
         return train_loader, test_loader
     
-    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR100ResNet18:
+    def setup_model(self, input_size: Tuple[int, int, int]) -> CIFAR100Model:
         """Setup the model with dynamic input size."""
         self.logger.info("Setting up model...")
         builder = ModelBuilder()
-        self.model = builder.build_resnet18_bottleneck(self.config.model)
+        self.model = builder.build_cifar100_model(self.config.model)
         
         # Move model to device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -1222,11 +1374,19 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 50
-    config.training.learning_rate = 0.5
+    config.training.epochs = 100
+    config.training.learning_rate = 0.05
     config.training.momentum = 0.9
-    config.data.batch_size = 512
-    config.training.scheduler_step_size = 20
+    config.data.batch_size = 128
+    #config.training.scheduler_step_size = 20
+    config.training.optimizer_type = 'SGD'
+    config.training.weight_decay = 0.0001
+    config.training.scheduler_type = 'ReduceLROnPlateau'
+    config.training.plateau_mode = 'min'
+    config.training.plateau_factor = 0.5
+    config.training.plateau_patience = 10
+    config.training.plateau_threshold = 1e-4
+    #config.training.weight_decay = 0.0001
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")

@@ -210,17 +210,17 @@ class CIFAR100ResNet18(nn.Module):
         
         # Pass through ResNet layers
         x = self.layer1(x)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         x = self.layer2(x)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         x = self.layer3(x)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         x = self.layer4(x)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         # Global average pooling and classification
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        x = self.dropout(x)
+        #x = self.dropout(x)
         x = self.fc(x)
         
         return F.log_softmax(x, dim=1)
@@ -291,12 +291,12 @@ class ModelBuilder:
         self._model = None
         return self
     
-    def build_resnet18_bottleneck(self, config: ModelConfig):
+    def build_resnet18_bottleneck(self, config: ModelConfig) -> 'CIFAR100ResNet18':
         """Build ResNet-18 with bottleneck layers."""
         self._model = CIFAR100ResNet18(config)
         return self
     
-    def build(self):
+    def build(self) -> 'CIFAR100ResNet18':
         """Return the built model."""
         if self._model is None:
             raise ValueError("No model has been built yet. Call a build method first.")

@@ -24,7 +24,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from torchsummary import summary
-from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR, ExponentialLR, ReduceLROnPlateau
+from torch.optim.lr_scheduler import StepLR, CosineAnnealingLR, ExponentialLR, ReduceLROnPlateau,OneCycleLR
 from tqdm import tqdm
 from io import StringIO
 import logging
@@ -33,6 +33,9 @@ from typing import Tuple, Dict, Any, Optional, List
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 import matplotlib.pyplot as plt
+import albumentations as A
+from albumentations.pytorch import ToTensorV2
+import numpy as np
 
 # Import model classes from separate module
 from model import ModelConfig, ModelBuilder, CIFAR100ResNet18
@@ -76,13 +79,20 @@ class TrainingConfig:
     rmsprop_alpha: float = 0.99
     
     # Scheduler configuration
-    scheduler_type: str = 'StepLR'  # Options: 'StepLR', 'CosineAnnealingLR', 'ExponentialLR', 'ReduceLROnPlateau'
+    scheduler_type: str = 'StepLR'  # Options: 'StepLR', 'CosineAnnealingLR', 'ExponentialLR', 'ReduceLROnPlateau', 'OneCycleLR'
     cosine_t_max: int = 20
     exponential_gamma: float = 0.95
     plateau_mode: str = 'min'
     plateau_factor: float = 0.5
     plateau_patience: int = 5
     plateau_threshold: float = 1e-4
+    
+    # OneCycleLR configuration
+    onecycle_max_lr: float = 0.1  # Maximum learning rate for OneCycleLR
+    onecycle_pct_start: float = 0.3  # Percentage of cycle spent increasing LR
+    onecycle_div_factor: float = 25.0  # Initial LR = max_lr / div_factor
+    onecycle_final_div_factor: float = 10000.0  # Final LR = max_lr / final_div_factor
+    onecycle_anneal_strategy: str = 'cos'  # 'cos' or 'linear'
 
 
 @dataclass
@@ -240,6 +250,13 @@ class Logger:
             self.info(f"  - Factor: {config.training.plateau_factor}")
             self.info(f"  - Patience: {config.training.plateau_patience}")
             self.info(f"  - Threshold: {config.training.plateau_threshold}")
+        elif config.training.scheduler_type == 'OneCycleLR':
+            self.info(f"  - Max LR: {config.training.onecycle_max_lr}")
+            self.info(f"  - Pct Start: {config.training.onecycle_pct_start}")
+            self.info(f"  - Div Factor: {config.training.onecycle_div_factor}")
+            self.info(f"  - Final Div Factor: {config.training.onecycle_final_div_factor}")
+            self.info(f"  - Anneal Strategy: {config.training.onecycle_anneal_strategy}")
+            
         self.info(f"  - Batch Size: {config.data.batch_size}")
         self.info(f"  - Num Workers: {config.data.num_workers}")
         self.info(f"  - Pin Memory: {config.data.pin_memory}")
@@ -300,51 +317,193 @@ class TransformStrategy(ABC):
     """Abstract base class for transformation strategies."""
     
     @abstractmethod
-    def get_transforms(self) -> transforms.Compose:
+    def get_transforms(self):
         """Get the composed transforms."""
+        pass
+    
+    @abstractmethod
+    def __call__(self, image):
+        """Apply transforms to an image."""
         pass
 
 
-class CIFAR100TransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 data transformations."""
+class AlbumentationsTransformStrategy(TransformStrategy):
+    """Strategy for Albumentations transformations."""
+    
+    def __init__(self, transform_pipeline):
+        """
+        Initialize with an Albumentations Compose pipeline.
+        
+        Args:
+            transform_pipeline: A.Compose object with transformations
+        """
+        self.transform_pipeline = transform_pipeline
+    
+    def get_transforms(self):
+        """Get the Albumentations transform pipeline."""
+        return self.transform_pipeline
+    
+    def __call__(self, image):
+        """
+        Apply Albumentations transforms to an image.
+        
+        Args:
+            image: PIL Image or numpy array
+            
+        Returns:
+            Transformed tensor
+        """
+        # Convert PIL Image to numpy array if needed
+        if not isinstance(image, np.ndarray):
+            image = np.array(image)
+        
+        # Apply Albumentations transforms
+        transformed = self.transform_pipeline(image=image)
+        return transformed['image']
+
+
+class CIFAR100TransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 basic transformations (no augmentation)."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 specific transforms."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline for basic transforms
+        transform_pipeline = A.Compose([
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
 
 
-class CIFAR100TrainTransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 training data transformations with augmentation."""
+class CIFAR100TrainTransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 training data transformations with Albumentations augmentation."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 training transforms with augmentation."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline with augmentations
+        transform_pipeline = A.Compose([
+            # Augmentations FIRST (work on 0-255 numpy arrays)
+            A.HorizontalFlip(p=0.5),
+            A.ShiftScaleRotate(
+                shift_limit=0.1,
+                scale_limit=0.1,
+                rotate_limit=15,
+                border_mode=0,  # cv2.BORDER_CONSTANT
+                p=0.5
+            ),
+            A.CoarseDropout(
+                max_holes=1,
+                max_height=16,  
+                max_width=16,
+                min_holes=1,
+                min_height=16,
+                min_width=16,
+                fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),  # CIFAR-100 mean values (0-255 scale)
+                mask_fill_value=None,
+                p=0.5
+            ),
+            # Normalize AFTER augmentation
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            # Convert to tensor LAST
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
 
 
-class CIFAR100TestTransformStrategy(TransformStrategy):
-    """Strategy for CIFAR-100 test data transformations."""
+class CIFAR100TestTransformStrategy(AlbumentationsTransformStrategy):
+    """Strategy for CIFAR-100 test data transformations (no augmentation)."""
     
     def __init__(self, config: DataConfig):
         self.config = config
-    
-    def get_transforms(self) -> transforms.Compose:
-        """Get CIFAR-100 test transforms."""
-        return transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(self.config.cifar100_mean, self.config.cifar100_std)
+        
+        # Create Albumentations pipeline for test (no augmentation)
+        transform_pipeline = A.Compose([
+            A.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std,
+                max_pixel_value=255.0
+            ),
+            ToTensorV2()
         ])
+        
+        super().__init__(transform_pipeline)
+
+
+# PyTorch Transform Strategies (Alternative - if you want to keep PyTorch option)
+class PyTorchTransformStrategy(TransformStrategy):
+    """Strategy for PyTorch native transformations."""
+    
+    def __init__(self, transform_pipeline):
+        """
+        Initialize with a torchvision.transforms.Compose pipeline.
+        
+        Args:
+            transform_pipeline: transforms.Compose object
+        """
+        self.transform_pipeline = transform_pipeline
+    
+    def get_transforms(self):
+        """Get the PyTorch transform pipeline."""
+        return self.transform_pipeline
+    
+    def __call__(self, image):
+        """Apply PyTorch transforms to an image."""
+        return self.transform_pipeline(image)
+
+
+class CIFAR100PyTorchTrainTransformStrategy(PyTorchTransformStrategy):
+    """Alternative PyTorch-only training transforms (if Albumentations not desired)."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+        
+        transform_pipeline = transforms.Compose([
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomRotation(degrees=15),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std
+            ),
+            transforms.RandomErasing(
+                p=0.5,
+                scale=(0.02, 0.33),
+                ratio=(0.3, 3.3),
+                value='random'
+            )
+        ])
+        
+        super().__init__(transform_pipeline)
+
+
+class CIFAR100PyTorchTestTransformStrategy(PyTorchTransformStrategy):
+    """Alternative PyTorch-only test transforms."""
+    
+    def __init__(self, config: DataConfig):
+        self.config = config
+        
+        transform_pipeline = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.config.cifar100_mean,
+                std=self.config.cifar100_std
+            )
+        ])
+        
+        super().__init__(transform_pipeline)
 
 
 class DataLoaderFactory:
@@ -374,9 +533,10 @@ class CIFAR100DataManager:
     Implements the Facade pattern to provide a simple interface for data operations.
     """
     
-    def __init__(self, config: DataConfig, logger: Logger):
+    def __init__(self, config: DataConfig, logger: Logger, use_albumentations: bool = True):
         self.config = config
         self.logger = logger
+        self.use_albumentations = use_albumentations
         self.train_dataset = None
         self.test_dataset = None
         self.train_loader = None
@@ -398,27 +558,33 @@ class CIFAR100DataManager:
     'tank', 'telephone', 'television', 'tiger', 'tractor', 'train', 'trout', 
     'tulip', 'turtle', 'wardrobe', 'whale', 'willow_tree', 'wolf', 'woman', 'worm')
     
-        # Initialize transform strategies
-        self.train_transform_strategy = CIFAR100TrainTransformStrategy(config)
-        self.test_transform_strategy = CIFAR100TestTransformStrategy(config)
+        # Initialize transform strategies based on choice
+        if use_albumentations:
+            self.logger.info("Using Albumentations for data augmentation")
+            self.train_transform_strategy = CIFAR100TrainTransformStrategy(config)
+            self.test_transform_strategy = CIFAR100TestTransformStrategy(config)
+        else:
+            self.logger.info("Using PyTorch native transforms for data augmentation")
+            self.train_transform_strategy = CIFAR100PyTorchTrainTransformStrategy(config)
+            self.test_transform_strategy = CIFAR100PyTorchTestTransformStrategy(config)
 
     def load_data(self) -> Tuple[DataLoader, DataLoader]:
         """Load CIFAR-100 dataset and create data loaders."""
         self.logger.info("Loading CIFAR-100 dataset...")
         
-        # Create datasets
+        # Create datasets with transform strategies
         self.train_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=True,
             download=True,
-            transform=self.train_transform_strategy.get_transforms()
+            transform=self.train_transform_strategy  # Pass the strategy directly
         )
         
         self.test_dataset = datasets.CIFAR100(
             self.config.data_dir,
             train=False,
             download=True,
-            transform=self.test_transform_strategy.get_transforms()
+            transform=self.test_transform_strategy  # Pass the strategy directly
         )
         
         # Create data loaders
@@ -432,6 +598,7 @@ class CIFAR100DataManager:
         self.logger.info(f"CIFAR-100 dataset loaded successfully!")
         self.logger.info(f"Train samples: {len(self.train_dataset)}")
         self.logger.info(f"Test samples: {len(self.test_dataset)}")
+        self.logger.info(f"Augmentation library: {'Albumentations' if self.use_albumentations else 'PyTorch'}")
         
         return self.train_loader, self.test_loader
     
@@ -814,7 +981,7 @@ class CIFAR100Trainer(BaseTrainer):
         else:
             raise ValueError(f"Unsupported optimizer type: {self.config.optimizer_type}")
     
-    def create_scheduler(self, optimizer) -> Any:
+    def create_scheduler(self, optimizer, steps_per_epoch: int = None) -> Any:
         """Create scheduler based on configuration."""
         if self.config.scheduler_type == 'StepLR':
             return StepLR(
@@ -839,13 +1006,26 @@ class CIFAR100Trainer(BaseTrainer):
                 mode=self.config.plateau_mode,
                 factor=self.config.plateau_factor,
                 patience=self.config.plateau_patience,
-                threshold=self.config.plateau_threshold,
-                verbose=True
+                threshold=self.config.plateau_threshold
+            )
+        elif self.config.scheduler_type == 'OneCycleLR':
+            if steps_per_epoch is None:
+                raise ValueError("OneCycleLR requires steps_per_epoch parameter")
+            
+            return OneCycleLR(
+                optimizer,
+                max_lr=self.config.onecycle_max_lr,
+                steps_per_epoch=steps_per_epoch,
+                epochs=self.config.epochs,
+                pct_start=self.config.onecycle_pct_start,
+                div_factor=self.config.onecycle_div_factor,
+                final_div_factor=self.config.onecycle_final_div_factor,
+                anneal_strategy=self.config.onecycle_anneal_strategy
             )
         else:
             raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
     
-    def train_epoch(self, model, device, train_loader, optimizer, epoch: int) -> Tuple[float, float]:
+    def train_epoch(self, model, device, train_loader, optimizer, epoch: int, scheduler=None) -> Tuple[float, float]:
         """Train the model for one epoch."""
         model.train()
         pbar = tqdm(train_loader, desc=f'Epoch {epoch}')
@@ -867,6 +1047,10 @@ class CIFAR100Trainer(BaseTrainer):
             # Backward pass
             loss.backward()
             optimizer.step()
+            
+            # Update OneCycleLR scheduler per batch
+            if scheduler is not None and self.config.scheduler_type == 'OneCycleLR':
+                scheduler.step()
             
             # Update metrics
             pred = output.argmax(dim=1, keepdim=True)
@@ -913,7 +1097,10 @@ class CIFAR100Trainer(BaseTrainer):
         
         # Setup optimizer and scheduler
         optimizer = self.create_optimizer(model)
-        scheduler = self.create_scheduler(optimizer)
+        
+        # Calculate steps per epoch for OneCycleLR
+        steps_per_epoch = len(train_loader)
+        scheduler = self.create_scheduler(optimizer, steps_per_epoch=steps_per_epoch)
         
         self.logger.info(f"Using optimizer: {self.config.optimizer_type}")
         self.logger.info(f"Using scheduler: {self.config.scheduler_type}")
@@ -949,6 +1136,13 @@ class CIFAR100Trainer(BaseTrainer):
             self.logger.info(f"  - Factor: {self.config.plateau_factor}")
             self.logger.info(f"  - Patience: {self.config.plateau_patience}")
             self.logger.info(f"  - Threshold: {self.config.plateau_threshold}")
+        elif self.config.scheduler_type == 'OneCycleLR':
+            self.logger.info(f"  - Max LR: {self.config.onecycle_max_lr}")
+            self.logger.info(f"  - Steps per Epoch: {steps_per_epoch}")
+            self.logger.info(f"  - Pct Start: {self.config.onecycle_pct_start}")
+            self.logger.info(f"  - Div Factor: {self.config.onecycle_div_factor}")
+            self.logger.info(f"  - Final Div Factor: {self.config.onecycle_final_div_factor}")
+            self.logger.info(f"  - Anneal Strategy: {self.config.onecycle_anneal_strategy}")
         
         # Training loop with early stopping
         for epoch in range(self.config.epochs):
@@ -956,17 +1150,18 @@ class CIFAR100Trainer(BaseTrainer):
             
             # Train
             train_loss, train_acc = self.train_epoch(
-                model, self.device, train_loader, optimizer, epoch + 1
+                model, self.device, train_loader, optimizer, epoch + 1, scheduler
             )
             
             # Test
             test_loss, test_acc = self.test_epoch(model, self.device, test_loader)
             
-            # Update scheduler
+            # Update scheduler (except OneCycleLR which updates per batch)
             if self.config.scheduler_type == 'ReduceLROnPlateau':
                 scheduler.step(test_loss)  # ReduceLROnPlateau needs a metric
-            else:
+            elif self.config.scheduler_type != 'OneCycleLR':
                 scheduler.step()
+            # OneCycleLR is stepped inside train_epoch (per batch)
             
             # Store metrics
             self.metrics.add_epoch_metrics(train_loss, train_acc, test_loss, test_acc)
@@ -983,19 +1178,6 @@ class CIFAR100Trainer(BaseTrainer):
                 epoch + 1, train_loss, train_acc, test_loss, test_acc, 
                 current_lr, acc_diff, overfitting_info['overfitting_epochs']
             )
-            
-            # Check for early stopping
-            if self.metrics.should_stop_training(self.early_stopping_patience):
-                self.logger.warning("=" * 60)
-                self.logger.warning("EARLY STOPPING TRIGGERED!")
-                self.logger.warning("=" * 60)
-                self.logger.warning(f"Training stopped due to overfitting.")
-                self.logger.warning(f"Train accuracy - Test accuracy = {acc_diff:.2f}%")
-                self.logger.warning(f"Overfitting threshold: {self.overfitting_threshold}%")
-                self.logger.warning(f"Consecutive overfitting epochs: {overfitting_info['overfitting_epochs']}")
-                self.logger.warning(f"Patience: {self.early_stopping_patience} epochs")
-                self.logger.warning("=" * 60)
-                break
         
         # Log final results
         final_metrics = self.metrics.get_final_metrics()
@@ -1132,7 +1314,7 @@ class TrainingFacade:
         """Setup the model with dynamic input size."""
         self.logger.info("Setting up model...")
         builder = ModelBuilder()
-        self.model = builder.build_resnet18_bottleneck(self.config.model)
+        self.model = builder.build_resnet18_bottleneck(self.config.model).build()
         
         # Move model to device
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -1222,11 +1404,28 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 50
-    config.training.learning_rate = 0.5
+    config.training.epochs = 200
+    config.training.learning_rate = 0.001
     config.training.momentum = 0.9
-    config.data.batch_size = 512
-    config.training.scheduler_step_size = 20
+    config.data.batch_size = 128
+    #config.training.scheduler_step_size = 20
+    config.training.optimizer_type = 'Adam'
+    config.training.weight_decay = 0.0001
+
+
+    # config.training.scheduler_type = 'OneCycleLR'
+    # config.training.onecycle_max_lr = 2.51e-02
+    # config.training.onecycle_pct_start = 0.3
+    # config.training.onecycle_div_factor = 25.0
+    # config.training.onecycle_final_div_factor = 10000.0
+    # config.training.onecycle_anneal_strategy = 'cos'
+
+    config.training.scheduler_type = 'ReduceLROnPlateau'
+    config.training.plateau_mode = 'min'
+    config.training.plateau_factor = 0.5
+    config.training.plateau_patience = 10
+    config.training.plateau_threshold = 1e-4
+    config.training.weight_decay = 0.0001
     config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")

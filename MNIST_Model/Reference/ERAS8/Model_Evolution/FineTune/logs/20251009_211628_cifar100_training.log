@@ -1,0 +1,237 @@
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Logger initialized. Log file: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\logs\20251009_211628_cifar100_training.log
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Updated Configuration (from main()):
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Epochs: 100
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Learning Rate: 0.000251
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Optimizer: Adam
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Weight Decay: 0.0001
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Adam Betas: (0.9, 0.999)
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Adam Eps: 1e-08
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Scheduler: OneCycleLR
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Max LR: 0.1
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Pct Start: 0.3
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Div Factor: 25.0
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Final Div Factor: 10000.0
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Anneal Strategy: cos
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Batch Size: 128
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Num Workers: 4
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Pin Memory: True
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Shuffle: True
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Dropout Rate: 0.05
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Device: CUDA
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Log Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\logs
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Model Save Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\FineTune\models
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Save Model: True
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO -   - Log Level: DEBUG
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - CIFAR-100 TRAINING EXPERIMENT STARTED
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Data Config: DataConfig(data_dir='./data', batch_size=128, num_workers=4, pin_memory=True, shuffle=True, cifar100_mean=(0.507076, 0.48655, 0.440919), cifar100_std=(0.267334, 0.256438, 0.27615), rotation_range=(-7.0, 7.0), fill_value=1)
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Model Config: ModelConfig(input_channels=3, input_size=(32, 32), num_classes=100, dropout_rate=0.05)
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Training Config: TrainingConfig(epochs=100, learning_rate=0.000251, momentum=0.9, weight_decay=0.0001, scheduler_step_size=10, scheduler_gamma=0.1, seed=1, optimizer_type='Adam', adam_betas=(0.9, 0.999), adam_eps=1e-08, rmsprop_alpha=0.99, scheduler_type='OneCycleLR', cosine_t_max=20, exponential_gamma=0.95, plateau_mode='min', plateau_factor=0.5, plateau_patience=5, plateau_threshold=0.0001, onecycle_max_lr=0.1, onecycle_pct_start=0.3, onecycle_div_factor=25.0, onecycle_final_div_factor=10000.0, onecycle_anneal_strategy='cos')
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Setting up data...
+2025-10-09 21:16:28,917 - CIFAR-100_Training - INFO - Using Albumentations for data augmentation
+2025-10-09 21:16:28,936 - CIFAR-100_Training - INFO - Loading CIFAR-100 dataset...
+2025-10-09 21:16:30,234 - CIFAR-100_Training - INFO - CIFAR-100 dataset loaded successfully!
+2025-10-09 21:16:30,234 - CIFAR-100_Training - INFO - Train samples: 50000
+2025-10-09 21:16:30,234 - CIFAR-100_Training - INFO - Test samples: 10000
+2025-10-09 21:16:30,234 - CIFAR-100_Training - INFO - Augmentation library: Albumentations
+2025-10-09 21:16:30,234 - CIFAR-100_Training - INFO - Computing CIFAR-100 data statistics...
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO - CIFAR-100 Data Statistics:
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Shape: (50000, 32, 32, 3)
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Size: 153,600,000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Min: 0.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Max: 1.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Mean: 0.4782
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Std: 0.2682
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   - Variance: 0.0719
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO - Channel-wise Statistics:
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   Red Channel:
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Mean: 0.5071
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Std: 0.2673
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   Green Channel:
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Mean: 0.4865
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Std: 0.2564
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -   Blue Channel:
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Mean: 0.4409
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Std: 0.2762
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Min: 0.0000
+2025-10-09 21:16:32,329 - CIFAR-100_Training - INFO -     - Max: 1.0000
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO - CIFAR-100 Batch Information:
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO -   - Batch size: 128
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO -   - Image shape: torch.Size([3, 32, 32])
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO -   - Label shape: torch.Size([128])
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO -   - Data type: torch.float32
+2025-10-09 21:16:45,709 - CIFAR-100_Training - INFO -   - Number of classes: 100
+2025-10-09 21:16:46,823 - CIFAR-100_Training - INFO - Getting input size from CIFAR-100 data loader...
+2025-10-09 21:16:58,782 - CIFAR-100_Training - INFO - CIFAR-100 input size from data loader: (3, 32, 32)
+2025-10-09 21:16:59,568 - CIFAR-100_Training - INFO - Setting up model...
+2025-10-09 21:16:59,605 - CIFAR-100_Training - INFO - Generating ResNet-18 with Bottleneck summary...
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - ResNet-18 with Bottleneck Architecture Summary:
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   - Total Parameters: 929,572
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   - Batch Normalization: Yes
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   - Dropout: Yes
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   - FC Layers: Yes
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   - GAP Layers: Yes
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - DETAILED MODEL ARCHITECTURE SUMMARY
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - ----------------------------------------------------------------
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -         Layer (type)               Output Shape         Param #
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO - ================================================================
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -             Conv2d-1           [-1, 64, 32, 32]           1,728
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -        BatchNorm2d-2           [-1, 64, 32, 32]             128
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -               ReLU-3           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -             Conv2d-4           [-1, 16, 32, 32]           1,024
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -        BatchNorm2d-5           [-1, 16, 32, 32]              32
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -               ReLU-6           [-1, 16, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -             Conv2d-7           [-1, 16, 32, 32]           2,304
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -        BatchNorm2d-8           [-1, 16, 32, 32]              32
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -               ReLU-9           [-1, 16, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -            Conv2d-10           [-1, 64, 32, 32]           1,024
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -       BatchNorm2d-11           [-1, 64, 32, 32]             128
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -              ReLU-12           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   BottleneckBlock-13           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -            Conv2d-14           [-1, 16, 32, 32]           1,024
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -       BatchNorm2d-15           [-1, 16, 32, 32]              32
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -              ReLU-16           [-1, 16, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -            Conv2d-17           [-1, 16, 32, 32]           2,304
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -       BatchNorm2d-18           [-1, 16, 32, 32]              32
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -              ReLU-19           [-1, 16, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -            Conv2d-20           [-1, 64, 32, 32]           1,024
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -       BatchNorm2d-21           [-1, 64, 32, 32]             128
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -              ReLU-22           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,093 - CIFAR-100_Training - INFO -   BottleneckBlock-23           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -           Dropout-24           [-1, 64, 32, 32]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-25           [-1, 32, 32, 32]           2,048
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-26           [-1, 32, 32, 32]              64
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-27           [-1, 32, 32, 32]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-28           [-1, 32, 16, 16]           9,216
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-29           [-1, 32, 16, 16]              64
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-30           [-1, 32, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-31          [-1, 128, 16, 16]           4,096
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-32          [-1, 128, 16, 16]             256
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-33          [-1, 128, 16, 16]           8,192
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-34          [-1, 128, 16, 16]             256
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-35          [-1, 128, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -   BottleneckBlock-36          [-1, 128, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-37           [-1, 32, 16, 16]           4,096
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-38           [-1, 32, 16, 16]              64
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-39           [-1, 32, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-40           [-1, 32, 16, 16]           9,216
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-41           [-1, 32, 16, 16]              64
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-42           [-1, 32, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-43          [-1, 128, 16, 16]           4,096
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-44          [-1, 128, 16, 16]             256
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-45          [-1, 128, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -   BottleneckBlock-46          [-1, 128, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -           Dropout-47          [-1, 128, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-48           [-1, 64, 16, 16]           8,192
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-49           [-1, 64, 16, 16]             128
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-50           [-1, 64, 16, 16]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-51             [-1, 64, 8, 8]          36,864
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-52             [-1, 64, 8, 8]             128
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-53             [-1, 64, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-54            [-1, 256, 8, 8]          16,384
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-55            [-1, 256, 8, 8]             512
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-56            [-1, 256, 8, 8]          32,768
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-57            [-1, 256, 8, 8]             512
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-58            [-1, 256, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -   BottleneckBlock-59            [-1, 256, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-60             [-1, 64, 8, 8]          16,384
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-61             [-1, 64, 8, 8]             128
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-62             [-1, 64, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-63             [-1, 64, 8, 8]          36,864
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-64             [-1, 64, 8, 8]             128
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-65             [-1, 64, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-66            [-1, 256, 8, 8]          16,384
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-67            [-1, 256, 8, 8]             512
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-68            [-1, 256, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -   BottleneckBlock-69            [-1, 256, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -           Dropout-70            [-1, 256, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-71            [-1, 128, 8, 8]          32,768
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-72            [-1, 128, 8, 8]             256
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-73            [-1, 128, 8, 8]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-74            [-1, 128, 4, 4]         147,456
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-75            [-1, 128, 4, 4]             256
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -              ReLU-76            [-1, 128, 4, 4]               0
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -            Conv2d-77            [-1, 512, 4, 4]          65,536
+2025-10-09 21:17:00,100 - CIFAR-100_Training - INFO -       BatchNorm2d-78            [-1, 512, 4, 4]           1,024
+2025-10-09 21:17:00,104 - CIFAR-100_Training - INFO -            Conv2d-79            [-1, 512, 4, 4]         131,072
+2025-10-09 21:17:00,104 - CIFAR-100_Training - INFO -       BatchNorm2d-80            [-1, 512, 4, 4]           1,024
+2025-10-09 21:17:00,104 - CIFAR-100_Training - INFO -              ReLU-81            [-1, 512, 4, 4]               0
+2025-10-09 21:17:00,104 - CIFAR-100_Training - INFO -   BottleneckBlock-82            [-1, 512, 4, 4]               0
+2025-10-09 21:17:00,104 - CIFAR-100_Training - INFO -            Conv2d-83            [-1, 128, 4, 4]          65,536
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -       BatchNorm2d-84            [-1, 128, 4, 4]             256
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -              ReLU-85            [-1, 128, 4, 4]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -            Conv2d-86            [-1, 128, 4, 4]         147,456
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -       BatchNorm2d-87            [-1, 128, 4, 4]             256
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -              ReLU-88            [-1, 128, 4, 4]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -            Conv2d-89            [-1, 512, 4, 4]          65,536
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -       BatchNorm2d-90            [-1, 512, 4, 4]           1,024
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -              ReLU-91            [-1, 512, 4, 4]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -   BottleneckBlock-92            [-1, 512, 4, 4]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -           Dropout-93            [-1, 512, 4, 4]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO - AdaptiveAvgPool2d-94            [-1, 512, 1, 1]               0
+2025-10-09 21:17:00,105 - CIFAR-100_Training - INFO -           Dropout-95                  [-1, 512]               0
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO -            Linear-96                  [-1, 100]          51,300
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - ================================================================
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Total params: 929,572
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Trainable params: 929,572
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Non-trainable params: 0
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - ----------------------------------------------------------------
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Input size (MB): 0.01
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Forward/backward pass size (MB): 14.62
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Params size (MB): 3.55
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Estimated Total Size (MB): 18.18
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - ----------------------------------------------------------------
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - ==================================================
+2025-10-09 21:17:00,106 - CIFAR-100_Training - INFO - Setting up trainer...
+2025-10-09 21:17:00,108 - CIFAR-100_Training - INFO - Using device: cuda
+2025-10-09 21:17:00,108 - CIFAR-100_Training - INFO - Early stopping: Stop if train_acc - test_acc > 15.0% for 10 epochs
+2025-10-09 21:17:00,108 - CIFAR-100_Training - INFO - Starting training process...
+2025-10-09 21:17:00,108 - CIFAR-100_Training - INFO - Starting training process...
+2025-10-09 21:17:00,109 - CIFAR-100_Training - INFO - Using optimizer: Adam
+2025-10-09 21:17:00,109 - CIFAR-100_Training - INFO - Using scheduler: OneCycleLR
+2025-10-09 21:17:00,109 - CIFAR-100_Training - INFO - Optimizer Configuration:
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Learning Rate: 0.000251
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Betas: (0.9, 0.999)
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Eps: 1e-08
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Weight Decay: 0.0001
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO - Scheduler Configuration:
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Max LR: 0.1
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Steps per Epoch: 391
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Pct Start: 0.3
+2025-10-09 21:17:00,110 - CIFAR-100_Training - INFO -   - Div Factor: 25.0
+2025-10-09 21:17:00,111 - CIFAR-100_Training - INFO -   - Final Div Factor: 10000.0
+2025-10-09 21:17:00,111 - CIFAR-100_Training - INFO -   - Anneal Strategy: cos
+2025-10-09 21:17:00,111 - CIFAR-100_Training - INFO - Starting Epoch 1/100
+2025-10-09 21:17:55,835 - CIFAR-100_Training - INFO - Epoch  1: Train Loss: 4.0856, Train Acc: 6.85%, Test Loss: 3.7539, Test Acc: 11.52%, Acc Diff: -4.67%, LR: 0.004263
+2025-10-09 21:17:55,835 - CIFAR-100_Training - INFO - Starting Epoch 2/100
+2025-10-09 21:18:51,355 - CIFAR-100_Training - INFO - Epoch  2: Train Loss: 3.5519, Train Acc: 14.67%, Test Loss: 3.3706, Test Acc: 18.17%, Acc Diff: -3.50%, LR: 0.005049
+2025-10-09 21:18:51,355 - CIFAR-100_Training - INFO - Starting Epoch 3/100
+2025-10-09 21:19:46,878 - CIFAR-100_Training - INFO - Epoch  3: Train Loss: 3.2393, Train Acc: 20.31%, Test Loss: 3.1257, Test Acc: 22.91%, Acc Diff: -2.60%, LR: 0.006350
+2025-10-09 21:19:46,878 - CIFAR-100_Training - INFO - Starting Epoch 4/100
+2025-10-09 21:20:42,942 - CIFAR-100_Training - INFO - Epoch  4: Train Loss: 3.0156, Train Acc: 24.68%, Test Loss: 2.8908, Test Acc: 26.85%, Acc Diff: -2.17%, LR: 0.008151
+2025-10-09 21:20:42,942 - CIFAR-100_Training - INFO - Starting Epoch 5/100
+2025-10-09 21:21:39,653 - CIFAR-100_Training - INFO - Epoch  5: Train Loss: 2.8519, Train Acc: 27.70%, Test Loss: 2.7942, Test Acc: 29.27%, Acc Diff: -1.57%, LR: 0.010432
+2025-10-09 21:21:39,653 - CIFAR-100_Training - INFO - Starting Epoch 6/100
+2025-10-09 21:22:44,696 - CIFAR-100_Training - INFO - Epoch  6: Train Loss: 2.7457, Train Acc: 29.96%, Test Loss: 2.8024, Test Acc: 28.97%, Acc Diff: 0.99%, LR: 0.013169
+2025-10-09 21:22:44,696 - CIFAR-100_Training - INFO - Starting Epoch 7/100
+2025-10-09 21:23:40,662 - CIFAR-100_Training - INFO - Epoch  7: Train Loss: 2.6789, Train Acc: 31.22%, Test Loss: 2.8500, Test Acc: 28.39%, Acc Diff: 2.83%, LR: 0.016331
+2025-10-09 21:23:40,662 - CIFAR-100_Training - INFO - Starting Epoch 8/100
+2025-10-09 21:24:36,340 - CIFAR-100_Training - INFO - Epoch  8: Train Loss: 2.6686, Train Acc: 31.18%, Test Loss: 2.7272, Test Acc: 30.52%, Acc Diff: 0.66%, LR: 0.019884
+2025-10-09 21:24:36,340 - CIFAR-100_Training - INFO - Starting Epoch 9/100
+2025-10-09 21:25:31,573 - CIFAR-100_Training - INFO - Epoch  9: Train Loss: 2.6901, Train Acc: 30.89%, Test Loss: 2.9202, Test Acc: 26.69%, Acc Diff: 4.20%, LR: 0.023789
+2025-10-09 21:25:31,573 - CIFAR-100_Training - INFO - Starting Epoch 10/100
+2025-10-09 21:26:26,922 - CIFAR-100_Training - INFO - Epoch 10: Train Loss: 2.7194, Train Acc: 30.33%, Test Loss: 2.8954, Test Acc: 27.57%, Acc Diff: 2.76%, LR: 0.028004
+2025-10-09 21:26:26,922 - CIFAR-100_Training - INFO - Starting Epoch 11/100
+2025-10-09 21:27:22,849 - CIFAR-100_Training - INFO - Epoch 11: Train Loss: 2.7543, Train Acc: 29.88%, Test Loss: 2.8971, Test Acc: 27.60%, Acc Diff: 2.28%, LR: 0.032481
+2025-10-09 21:27:22,849 - CIFAR-100_Training - INFO - Starting Epoch 12/100
+2025-10-09 21:28:18,201 - CIFAR-100_Training - INFO - Epoch 12: Train Loss: 2.8106, Train Acc: 28.37%, Test Loss: 3.0984, Test Acc: 24.73%, Acc Diff: 3.64%, LR: 0.037172
+2025-10-09 21:28:18,201 - CIFAR-100_Training - INFO - Starting Epoch 13/100

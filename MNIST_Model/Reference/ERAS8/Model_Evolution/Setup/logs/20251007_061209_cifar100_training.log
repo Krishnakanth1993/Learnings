@@ -1,0 +1,30 @@
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Logger initialized. Log file: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\Setup\logs\20251007_061209_cifar100_training.log
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Updated Configuration (from main()):
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Epochs: 50
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Learning Rate: 0.05
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Optimizer: SGD
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Weight Decay: 0.0
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Momentum: 0.9
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Scheduler: StepLR
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Step Size: 20
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Gamma: 0.1
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Batch Size: 128
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Num Workers: 4
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Pin Memory: True
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Shuffle: True
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Dropout Rate: 0.05
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Device: CUDA
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Log Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\Setup\logs
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Model Save Directory: C:\Users\krish\Documents\Krishnakanth\Learnings\Learnings\MNIST_Model\Reference\ERAS8\Model_Evolution\Setup\models
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Save Model: True
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO -   - Log Level: DEBUG
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - ==================================================
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - ==================================================
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - CIFAR-100 TRAINING EXPERIMENT STARTED
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - ==================================================
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Data Config: DataConfig(data_dir='./data', batch_size=128, num_workers=4, pin_memory=True, shuffle=True, cifar100_mean=(0.507076, 0.48655, 0.440919), cifar100_std=(0.267334, 0.256438, 0.27615), rotation_range=(-7.0, 7.0), fill_value=1)
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Model Config: ModelConfig(input_channels=3, input_size=(32, 32), num_classes=100, dropout_rate=0.05)
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Training Config: TrainingConfig(epochs=50, learning_rate=0.05, momentum=0.9, weight_decay=0.0, scheduler_step_size=20, scheduler_gamma=0.1, seed=1, optimizer_type='SGD', adam_betas=(0.9, 0.999), adam_eps=1e-08, rmsprop_alpha=0.99, scheduler_type='StepLR', cosine_t_max=20, exponential_gamma=0.95, plateau_mode='min', plateau_factor=0.5, plateau_patience=5, plateau_threshold=0.0001)
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - ==================================================
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Setting up data...
+2025-10-07 06:12:09,172 - CIFAR-100_Training - INFO - Loading CIFAR-100 dataset...
