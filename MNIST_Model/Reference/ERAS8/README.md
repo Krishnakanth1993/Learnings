@@ -45,7 +45,7 @@
 
 **FT-3 (ResNet-34 + Adam OneCycleLR)** 🎯 **Best Model**:
 - **Training Log**: [20251011_093929_cifar100_training.log](Model_Evolution/FineTune/logs/20251011_093929_cifar100_training.log)
-- **Training Curves**: training_curves_20251011_093929.png
+- **Training Curves**: [training_curves_20251011_093929.png](Model_Evolution/FineTune/logs/training_curves_20251011_093929.png)
 - **Saved Model**: [cifar100_model_20251011_093931.pth](Model_Evolution/FineTune/models/cifar100_model_20251011_093931.pth)
 
 **Shared Code**:
@@ -57,14 +57,14 @@
 ================================================================================
 
 📁 OUTPUT FILES GENERATED:
-  1. **Confusion Matrix**: [link here](/gradcam_results/confusion_matrix_full.png)
-  2. **Per-Class Accuracy CSV**: [link here](/gradcam_results/per_class_accuracy.csv)
-  3. **Interactive Accuracy Chart**: [link here](/gradcam_results/per_class_accuracy_interactive.html)
-  4. **Confused Pairs CSV**: [link here](/gradcam_results/most_confused_pairs.csv)
-  5. **Confused Pairs Chart**: [link here](/gradcam_results/top_confused_pairs.png)
-  6. **Per-Class Grad-CAM Images**: [link here](/gradcam_results/worst_predictions/)
-  7. **Confused Pair Examples**: [link here](/gradcam_results/confused_pair_*.png)
-  8. **Analysis Summary**: [link here](/gradcam_results/analysis_summary.txt)
+  1. **Confusion Matrix**: [link here](gradcam_results/confusion_matrix_full.png)
+  2. **Per-Class Accuracy CSV**: [link here](gradcam_results/per_class_accuracy.csv)
+  3. **Interactive Accuracy Chart**: [link here](gradcam_results/per_class_accuracy_interactive.html)
+  4. **Confused Pairs CSV**: [link here](gradcam_results/most_confused_pairs.csv)
+  5. **Confused Pairs Chart**: [link here](gradcam_results/top_confused_pairs.png)
+  6. **Per-Class Grad-CAM Images**: [link here](gradcam_results/worst_predictions/)
+  7. **Confused Pair Examples**: [link here](gradcam_results/confused_pair_*.png)
+  8. **Analysis Summary**: [link here](gradcam_results/analysis_summary.txt)
 
 🎯 KEY FINDINGS:
   - Test Accuracy: 73.56%
