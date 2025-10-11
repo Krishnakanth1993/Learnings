@@ -61,6 +61,34 @@
 - **Test Acc**: Increase to 69.28%, plateau after epoch 60
 - **Gap**: Widens after epoch 75 (LR reductions)
 
+================================================================================
+### GRAD-CAM ANALYSIS
+================================================================================
+
+📁 OUTPUT FILES GENERATED:
+  1. **Confusion Matrix**: [link here](/gradcam_results/confusion_matrix_full.png)
+  2. **Per-Class Accuracy CSV**: [link here](/gradcam_results/per_class_accuracy.csv)
+  3. **Interactive Accuracy Chart**: [link here](/gradcam_results/per_class_accuracy_interactive.html)
+  4. **Confused Pairs CSV**: [link here](/gradcam_results/most_confused_pairs.csv)
+  5. **Confused Pairs Chart**: [link here](/gradcam_results/top_confused_pairs.png)
+  6. **Per-Class Grad-CAM Images**: [link here](/gradcam_results/worst_predictions/)
+  7. **Confused Pair Examples**: [link here](/gradcam_results/confused_pair_*.png)
+  8. **Analysis Summary**: [link here](/gradcam_results/analysis_summary.txt)
+
+🎯 KEY FINDINGS:
+  - Test Accuracy: 73.56%
+  - Main Issue: Within-category confusions (7/20)
+  - High-confidence errors: 806 cases
+  - Worst performing category: Check visualization above
+
+💡 USAGE:
+  1. Use interactive widget above to explore any class
+  2. Review saved PNG files for offline analysis
+  3. Open HTML file in browser for interactive charts
+  4. Read recommendations.txt for next steps
+
+✅ Analysis pipeline completed successfully!
+
 Input: 32×32×3 RGB images
 ├── Initial Conv Block
 │ ├── Conv2d: 3→64, 3×3, stride=1, padding=1

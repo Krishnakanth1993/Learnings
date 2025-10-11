@@ -377,7 +377,7 @@ class CIFAR100TransformStrategy(AlbumentationsTransformStrategy):
             ),
             ToTensorV2()
         ])
-        
+
         super().__init__(transform_pipeline)
 
 
@@ -389,33 +389,59 @@ class CIFAR100TrainTransformStrategy(AlbumentationsTransformStrategy):
         
         # Create Albumentations pipeline with augmentations
         transform_pipeline = A.Compose([
-            # Augmentations FIRST (work on 0-255 numpy arrays)
+            # Geometric
             A.HorizontalFlip(p=0.5),
             A.ShiftScaleRotate(
-                shift_limit=0.1,
-                scale_limit=0.1,
-                rotate_limit=15,
-                border_mode=0,  # cv2.BORDER_CONSTANT
-                p=0.5
+                shift_limit=0.125,  # Slightly increased
+                scale_limit=0.15,    # Slightly increased
+                rotate_limit=20,     # Increased from 15
+                border_mode=0,
+                p=0.7               # Increased probability
             ),
-            A.CoarseDropout(
-                max_holes=1,
-                max_height=16,  
-                max_width=16,
-                min_holes=1,
-                min_height=16,
-                min_width=16,
-                fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),  # CIFAR-100 mean values (0-255 scale)
-                mask_fill_value=None,
-                p=0.5
-            ),
-            # Normalize AFTER augmentation
+            
+            # Color Augmentations (Critical for CIFAR-100!)
+            A.Sequential([
+                A.OneOf([
+                    A.ColorJitter(brightness=0.3, contrast=0.3, saturation=0.3, hue=0.15, p=1.0),
+                    A.RGBShift(r_shift_limit=25, g_shift_limit=25, b_shift_limit=25, p=1.0),
+                    A.HueSaturationValue(hue_shift_limit=25, sat_shift_limit=40, val_shift_limit=25, p=1.0),
+                ], p=0.7),
+                
+                A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
+            ]),
+            
+            # Cutout variations
+            A.OneOf([
+                A.CoarseDropout(
+                    max_holes=3,
+                    max_height=16,
+                    max_width=16,
+                    min_holes=1,
+                    min_height=4,
+                    min_width=4,
+                    fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),
+                    p=1.0
+                ),
+                A.GridDropout(ratio=0.4, p=1.0)
+            ], p=0.6),
+            
+            # Noise and blur (light regularization)
+            A.OneOf([
+                A.GaussNoise(var_limit=(10.0, 50.0), p=1.0),
+                A.GaussianBlur(blur_limit=(3, 5), p=1.0),
+                A.MotionBlur(blur_limit=5, p=1.0),
+            ], p=0.3),
+            
+            # Optional: CLAHE for contrast enhancement
+            A.CLAHE(clip_limit=2.0, tile_grid_size=(4, 4), p=0.3),
+            
+            # Normalize and convert
             A.Normalize(
                 mean=self.config.cifar100_mean,
                 std=self.config.cifar100_std,
                 max_pixel_value=255.0
             ),
-            # Convert to tensor LAST
+
             ToTensorV2()
         ])
         
@@ -1405,29 +1431,33 @@ def main():
     
     # You can customize the configuration here
     config.training.epochs = 100
-    config.training.learning_rate = 0.001
+    config.training.learning_rate = 0.00251
     config.training.momentum = 0.9
     config.data.batch_size = 128
     #config.training.scheduler_step_size = 20
-    config.training.optimizer_type = 'Adam'
+    config.training.optimizer_type = 'SGD'
     config.training.weight_decay = 0.0001
-    config.model.dropout_rate = 0.2
+    config.model.dropout_rate = 0.0
 
 
-    # config.training.scheduler_type = 'OneCycleLR'
-    # config.training.onecycle_max_lr = 2.51e-02
-    # config.training.onecycle_pct_start = 0.3
-    # config.training.onecycle_div_factor = 25.0
-    # config.training.onecycle_final_div_factor = 10000.0
-    # config.training.onecycle_anneal_strategy = 'cos'
+    config.training.scheduler_type = 'OneCycleLR'
+    # OneCycleLR optimized for SGD with momentum
+    # Initial LR = max_lr / div_factor = 0.01 / 10 = 0.001
+    # Max LR = 0.01 (safe for SGD + momentum 0.9)
+    # Final LR = max_lr / final_div_factor = 0.01 / 1000 = 0.00001
+    config.training.onecycle_max_lr = 0.01  # Reduced from 0.0251 (too high for SGD)
+    config.training.onecycle_pct_start = 0.3  # Increased warmup: 30 epochs instead of 10
+    config.training.onecycle_div_factor = 5  # Start higher: 0.001 instead of 0.0004
+    config.training.onecycle_final_div_factor = 1000.0  # Less aggressive final decay
+    config.training.onecycle_anneal_strategy = 'cos'
 
-    config.training.scheduler_type = 'ReduceLROnPlateau'
-    config.training.plateau_mode = 'min'
-    config.training.plateau_factor = 0.5
-    config.training.plateau_patience = 10
-    config.training.plateau_threshold = 1e-4
-    config.training.weight_decay = 0.0001
-    config.logging.log_level = 'DEBUG'
+    # config.training.scheduler_type = 'ReduceLROnPlateau'
+    # config.training.plateau_mode = 'min'
+    # config.training.plateau_factor = 0.5
+    # config.training.plateau_patience = 10
+    # config.training.plateau_threshold = 1e-4
+    # config.training.weight_decay = 0.0001
+    # config.logging.log_level = 'DEBUG'
     
     print(f"Configuration:")
     print(f"  - Epochs: {config.training.epochs}")
