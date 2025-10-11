@@ -15,9 +15,51 @@ import numpy as np
 from typing import Dict, Tuple, List
 import torchvision.transforms as transforms
 import plotly.graph_objects as go
+import sys
+from dataclasses import dataclass
+import types
 
 # Import model architecture
 from model import CIFAR100ResNet34, ModelConfig
+
+# Create dummy TrainingConfig class for unpickling checkpoints
+@dataclass
+class TrainingConfig:
+    """Dummy class to allow unpickling checkpoints saved with TrainingConfig."""
+    epochs: int = 100
+    learning_rate: float = 0.001
+    momentum: float = 0.9
+    weight_decay: float = 0.0001
+    scheduler_step_size: int = 10
+    scheduler_gamma: float = 0.1
+    seed: int = 1
+    optimizer_type: str = 'Adam'
+    adam_betas: tuple = (0.9, 0.999)
+    adam_eps: float = 1e-08
+    rmsprop_alpha: float = 0.99
+    scheduler_type: str = 'OneCycleLR'
+    cosine_t_max: int = 20
+    exponential_gamma: float = 0.95
+    plateau_mode: str = 'min'
+    plateau_factor: float = 0.5
+    plateau_patience: int = 5
+    plateau_threshold: float = 0.0001
+    onecycle_max_lr: float = 0.003
+    onecycle_pct_start: float = 0.3
+    onecycle_div_factor: float = 5
+    onecycle_final_div_factor: float = 1000.0
+    onecycle_anneal_strategy: str = 'cos'
+
+# Register dummy module for unpickling
+cifar100_training_module = types.ModuleType('cifar100_training')
+cifar100_training_module.TrainingConfig = TrainingConfig
+sys.modules['cifar100_training'] = cifar100_training_module
+
+# Add to safe globals for torch.load
+try:
+    torch.serialization.add_safe_globals([TrainingConfig])
+except:
+    pass  # Older PyTorch versions don't have this
 
 # CIFAR-100 class names
 CIFAR100_CLASSES = [
@@ -57,7 +99,7 @@ def load_model(model_path: str = "cifar100_model.pth"):
         input_channels=3,
         input_size=(32, 32),
         num_classes=100,
-        dropout_rate=0.05
+        dropout_rate=0.0  # Model was trained with no dropout
     )
     
     # Initialize model
@@ -65,7 +107,9 @@ def load_model(model_path: str = "cifar100_model.pth"):
     
     # Load trained weights
     try:
-        checkpoint = torch.load(model_path, map_location=device)
+        # Load checkpoint (weights_only=False needed for PyTorch 2.6+)
+        checkpoint = torch.load(model_path, map_location=device, weights_only=False)
+        
         if 'model_state_dict' in checkpoint:
             model.load_state_dict(checkpoint['model_state_dict'])
             print(f"✅ Model loaded with metrics: {checkpoint.get('metrics', {})}")
@@ -83,6 +127,8 @@ def load_model(model_path: str = "cifar100_model.pth"):
         
     except Exception as e:
         print(f"❌ Error loading model: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return False
 
 

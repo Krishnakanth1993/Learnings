@@ -52,35 +52,8 @@
 - **Model Code**: [model.py](Model_Evolution/FineTune/model.py)
 - **Training Script**: [cifar100_training.py](Model_Evolution/FineTune/cifar100_training.py)
 
-### Key Metrics Summary
-
-**Training Duration**: ~1.5 hours (100 epochs)  
-**Hardware**: CUDA GPU  
-**Framework**: PyTorch + Albumentations
-
-| Metric | Value |
-|--------|-------|
-| **Best Test Accuracy** | 69.28% @ epoch 99 |
-| **Final Test Accuracy** | 69.24% @ epoch 100 |
-| **Final Train Accuracy** | 90.71% @ epoch 100 |
-| **Final Gap** | 21.47% |
-| **Average Gap** | 9.13% |
-| **Overfitting Epochs** | 26 |
-| **Parameters** | 929,572 |
-| **Model Size** | 3.55 MB |
-| **Params/Sample Ratio** | 18.6:1 |
-
-### Visual Analysis (from training curves)
-
-**Expected Curves**:
-- **Train Loss**: Smooth decrease to ~0.31
-- **Test Loss**: Decrease to ~1.22, plateau after epoch 60
-- **Train Acc**: Smooth increase to 90.71%
-- **Test Acc**: Increase to 69.28%, plateau after epoch 60
-- **Gap**: Widens after epoch 75 (LR reductions)
-
 ================================================================================
-### GRAD-CAM ANALYSIS
+### GRAD-CAM ANALYSIS -FT-3 Model
 ================================================================================
 
 📁 OUTPUT FILES GENERATED:
