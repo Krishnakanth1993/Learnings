@@ -71,6 +71,10 @@ class TrainingConfig:
     scheduler_step_size: int = 10
     scheduler_gamma: float = 0.1
     seed: int = 1
+
+    # Gradient accumulation
+
+    gradient_accumulation_steps: int = 1  # Number of batches to accumulate (1 = no accumulation)
     
     # Optimizer configuration
     optimizer_type: str = 'SGD'  # Options: 'SGD', 'Adam', 'AdamW', 'RMSprop'
@@ -262,6 +266,7 @@ class Logger:
         self.info(f"  - Pin Memory: {config.data.pin_memory}")
         self.info(f"  - Shuffle: {config.data.shuffle}")
         self.info(f"  - Dropout Rate: {config.model.dropout_rate}")
+        self.info(f"  - Gradient Accumulation Steps: {config.training.gradient_accumulation_steps}")
         self.info(f"  - Device: {'CUDA' if torch.cuda.is_available() else 'CPU'}")
         self.info(f"  - Log Directory: {config.logging.log_dir}")
         self.info(f"  - Model Save Directory: {config.logging.model_save_dir}")
@@ -392,11 +397,11 @@ class CIFAR100TrainTransformStrategy(AlbumentationsTransformStrategy):
             # Geometric
             A.HorizontalFlip(p=0.5),
             A.ShiftScaleRotate(
-                shift_limit=0.125,  # Slightly increased
-                scale_limit=0.15,    # Slightly increased
-                rotate_limit=20,     # Increased from 15
+                shift_limit=0.05,  # Slightly increased
+                scale_limit=0.05,    # Slightly increased
+                rotate_limit=5,     # Increased from 15
                 border_mode=0,
-                p=0.7               # Increased probability
+                p=0.7              # Increased probability
             ),
             
             # Color Augmentations (Critical for CIFAR-100!)
@@ -410,30 +415,37 @@ class CIFAR100TrainTransformStrategy(AlbumentationsTransformStrategy):
                 A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
             ]),
             
-            # Cutout variations
-            A.OneOf([
-                A.CoarseDropout(
-                    max_holes=3,
-                    max_height=16,
-                    max_width=16,
-                    min_holes=1,
-                    min_height=4,
-                    min_width=4,
-                    fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),
-                    p=1.0
-                ),
-                A.GridDropout(ratio=0.4, p=1.0)
-            ], p=0.6),
+            # # Cutout variations
+            # A.OneOf([
+            #     A.CoarseDropout(
+            #         max_holes=3,
+            #         max_height=16,
+            #         max_width=16,
+            #         min_holes=1,
+            #         min_height=4,
+            #         min_width=4,
+            #         fill_value=tuple([int(x * 255) for x in self.config.cifar100_mean]),
+            #         p=1.0
+            #     ),
+            #     A.GridDropout(ratio=0.4, p=1.0)
+            # ], p=0.6),
             
-            # Noise and blur (light regularization)
-            A.OneOf([
-                A.GaussNoise(var_limit=(10.0, 50.0), p=1.0),
-                A.GaussianBlur(blur_limit=(3, 5), p=1.0),
-                A.MotionBlur(blur_limit=5, p=1.0),
-            ], p=0.3),
+            # # Noise and blur (light regularization)
+            # A.OneOf([
+            #     A.GaussNoise(var_limit=(10.0, 50.0), p=1.0),
+            #     A.GaussianBlur(blur_limit=(3, 5), p=1.0),
+            #     A.MotionBlur(blur_limit=5, p=1.0),
+            # ], p=0.3),
             
-            # Optional: CLAHE for contrast enhancement
-            A.CLAHE(clip_limit=2.0, tile_grid_size=(4, 4), p=0.3),
+            # # Optional: CLAHE for contrast enhancement
+            # A.CLAHE(clip_limit=2.0, p=0.3),
+            # A.Sharpen(alpha=(0.2, 0.5), p=0.3),
+
+            A.OneOf([
+                A.RandomFog(p=1.0),
+                A.RandomRain(p=1.0),
+                A.GaussNoise(var_limit=(20, 50), p=1.0),
+            ], p=0.5),
             
             # Normalize and convert
             A.Normalize(
@@ -1038,55 +1050,70 @@ class CIFAR100Trainer(BaseTrainer):
             if steps_per_epoch is None:
                 raise ValueError("OneCycleLR requires steps_per_epoch parameter")
             
+            # Adjust steps per epoch for gradient accumulation
+            effective_steps_per_epoch = steps_per_epoch // self.config.gradient_accumulation_steps
+            
             return OneCycleLR(
                 optimizer,
                 max_lr=self.config.onecycle_max_lr,
-                steps_per_epoch=steps_per_epoch,
+                steps_per_epoch=effective_steps_per_epoch,  # Use effective steps
                 epochs=self.config.epochs,
                 pct_start=self.config.onecycle_pct_start,
                 div_factor=self.config.onecycle_div_factor,
                 final_div_factor=self.config.onecycle_final_div_factor,
                 anneal_strategy=self.config.onecycle_anneal_strategy
-            )
+    )
         else:
             raise ValueError(f"Unsupported scheduler type: {self.config.scheduler_type}")
-    
     def train_epoch(self, model, device, train_loader, optimizer, epoch: int, scheduler=None) -> Tuple[float, float]:
-        """Train the model for one epoch."""
+        """Train the model for one epoch with gradient accumulation."""
         model.train()
         pbar = tqdm(train_loader, desc=f'Epoch {epoch}')
         
         correct = 0
         processed = 0
         epoch_loss = 0.0
+        accumulation_steps = self.config.gradient_accumulation_steps
+        
+        # Zero gradients at the start
+        optimizer.zero_grad()
         
         for batch_idx, (data, target) in enumerate(pbar):
             data, target = data.to(device), target.to(device)
-            
-            # Zero gradients
-            optimizer.zero_grad()
             
             # Forward pass
             output = model(data)
             loss = F.nll_loss(output, target)
             
-            # Backward pass
+            # Normalize loss by accumulation steps
+            loss = loss / accumulation_steps
+            
+            # Backward pass (accumulate gradients)
             loss.backward()
-            optimizer.step()
             
-            # Update OneCycleLR scheduler per batch
-            if scheduler is not None and self.config.scheduler_type == 'OneCycleLR':
-                scheduler.step()
+            # Update weights every accumulation_steps batches
+            if (batch_idx + 1) % accumulation_steps == 0:
+                optimizer.step()
+                optimizer.zero_grad()
+                
+                # Update OneCycleLR scheduler per effective batch (after accumulation)
+                if scheduler is not None and self.config.scheduler_type == 'OneCycleLR':
+                    scheduler.step()
+
+            # Handle final incomplete accumulation batch
+            elif (batch_idx + 1) == len(train_loader):
+                optimizer.step()
+                optimizer.zero_grad()
             
-            # Update metrics
+            # Update metrics (use original loss for tracking)
             pred = output.argmax(dim=1, keepdim=True)
             correct += pred.eq(target.view_as(pred)).sum().item()
             processed += len(data)
-            epoch_loss += loss.item()
+            epoch_loss += loss.item() * accumulation_steps  # Un-normalize for tracking
             
             # Update progress bar
             pbar.set_description(
-                f'Epoch {epoch} - Loss: {loss.item():.4f}, '
+                f'Epoch {epoch} - Loss: {loss.item() * accumulation_steps:.4f}, '
                 f'Accuracy: {100*correct/processed:.2f}%'
             )
         
@@ -1094,7 +1121,7 @@ class CIFAR100Trainer(BaseTrainer):
         accuracy = 100. * correct / processed
         
         return avg_loss, accuracy
-    
+
     def test_epoch(self, model, device, test_loader) -> Tuple[float, float]:
         """Test the model for one epoch."""
         model.eval()
@@ -1430,12 +1457,13 @@ def main():
     config = Config()
     
     # You can customize the configuration here
-    config.training.epochs = 100
-    config.training.learning_rate = 0.00251
+    config.training.epochs = 50
+    config.training.learning_rate = 0.001
     config.training.momentum = 0.9
     config.data.batch_size = 128
     #config.training.scheduler_step_size = 20
-    config.training.optimizer_type = 'SGD'
+    config.training.gradient_accumulation_steps = 2
+    config.training.optimizer_type = 'Adam'
     config.training.weight_decay = 0.0001
     config.model.dropout_rate = 0.0
 
@@ -1445,7 +1473,7 @@ def main():
     # Initial LR = max_lr / div_factor = 0.01 / 10 = 0.001
     # Max LR = 0.01 (safe for SGD + momentum 0.9)
     # Final LR = max_lr / final_div_factor = 0.01 / 1000 = 0.00001
-    config.training.onecycle_max_lr = 0.01  # Reduced from 0.0251 (too high for SGD)
+    config.training.onecycle_max_lr = 0.003  # Reduced from 0.0251 (too high for SGD)
     config.training.onecycle_pct_start = 0.3  # Increased warmup: 30 epochs instead of 10
     config.training.onecycle_div_factor = 5  # Start higher: 0.001 instead of 0.0004
     config.training.onecycle_final_div_factor = 1000.0  # Less aggressive final decay

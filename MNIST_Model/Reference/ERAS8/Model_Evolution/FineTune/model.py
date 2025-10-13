@@ -169,7 +169,9 @@ class CIFAR100ResNet34(nn.Module):
         # Global Average Pooling and classifier
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.dropout = nn.Dropout(config.dropout_rate)
-        self.fc = nn.Linear(512, config.num_classes)
+        self.fc = nn.Linear(512, 1000)
+        self.dropoutfc = nn.Dropout(0.2)
+        self.fc1 = nn.Linear(1000, config.num_classes)
         
         # Initialize weights
         self._initialize_weights()
@@ -221,6 +223,8 @@ class CIFAR100ResNet34(nn.Module):
         x = torch.flatten(x, 1)
         x = self.dropout(x)
         x = self.fc(x)
+        x = self.dropoutfc(x)
+        x = self.fc1(x)
         
         return F.log_softmax(x, dim=1)
     
