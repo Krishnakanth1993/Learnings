@@ -36,6 +36,7 @@ env.bak/
 venv.bak/
 .uv/
 uv.lock
+*.pem
 
 # =============================================================================
 # PyTorch Models and Checkpoints
