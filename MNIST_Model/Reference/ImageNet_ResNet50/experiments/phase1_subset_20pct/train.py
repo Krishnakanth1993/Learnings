@@ -100,9 +100,9 @@ def main():
     config.model.use_pretrained = False  # Train from scratch
     
     # Training configuration
-    config.training.epochs = 30  # Fast iteration on subset
+    config.training.epochs = 100  # Fast iteration on subset
     config.training.learning_rate = 0.001  # Will be updated by LR finder
-    config.training.optimizer_type = 'Adam'
+    config.training.optimizer_type = 'SGD'
     config.training.weight_decay = 1e-4
     config.training.gradient_accumulation_steps = 4  # Effective batch = 32*4 = 128
     config.training.use_amp = True  # Mixed precision for speed
@@ -110,7 +110,7 @@ def main():
     config.training.label_smoothing = 0.1
     
     # Scheduler configuration
-    config.training.scheduler_type = 'OneCycleLR'
+    config.training.scheduler_type = 'ReduceLROnPlateau'
     config.training.onecycle_max_lr = 0.003  # Will be updated by LR finder
     config.training.onecycle_pct_start = 0.3
     config.training.onecycle_div_factor = 5.0
