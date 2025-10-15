@@ -1,4 +1,4 @@
-    """
+"""
 Training System for ImageNet ResNet-50
 Supports gradient accumulation, mixed precision, and checkpointing.
 
