@@ -108,6 +108,9 @@ def main():
     config.training.use_amp = True  # Mixed precision for speed
     config.training.max_grad_norm = 1.0
     config.training.label_smoothing = 0.1
+
+    # Loss function configuration
+    config.training.loss_function = 'CrossEntropyLoss'
     
     # Scheduler configuration
     config.training.scheduler_type = 'OneCycleLR'
