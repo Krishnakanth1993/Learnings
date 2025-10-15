@@ -14,7 +14,7 @@ from typing import Tuple, Optional
 @dataclass
 class DataConfig:
     """Configuration for data loading and preprocessing."""
-    data_dir: str = './data/imagenet'
+    data_dir: str = '~/data/imagenet'
     batch_size: int = 32
     num_workers: int = 8
     pin_memory: bool = True
@@ -78,7 +78,7 @@ class ModelConfig:
 @dataclass
 class TrainingConfig:
     """Configuration for training process."""
-    epochs: int = 30
+    epochs: int = 100
     learning_rate: float = 0.001
     momentum: float = 0.9
     weight_decay: float = 1e-4
@@ -93,13 +93,13 @@ class TrainingConfig:
     max_grad_norm: Optional[float] = 1.0
     
     # Optimizer configuration
-    optimizer_type: str = 'Adam'  # 'SGD', 'Adam', 'AdamW', 'RMSprop'
+    optimizer_type: str = 'SGD'  # 'SGD', 'Adam', 'AdamW', 'RMSprop'
     adam_betas: Tuple[float, float] = (0.9, 0.999)
     adam_eps: float = 1e-8
     rmsprop_alpha: float = 0.99
     
     # Scheduler configuration
-    scheduler_type: str = 'OneCycleLR'
+    scheduler_type: str = 'ReduceLROnPlateau'
     
     # OneCycleLR parameters
     onecycle_max_lr: float = 0.003
