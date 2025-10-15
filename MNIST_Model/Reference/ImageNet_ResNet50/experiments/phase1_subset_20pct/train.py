@@ -84,7 +84,7 @@ def main():
     config = Config()
     
     # Data configuration
-    config.data.data_dir = '../../data/imagenet'  # Adjust path as needed
+    config.data.data_dir = '~/data/imagenet'  # Adjust path as needed
     config.data.batch_size = 32  # Small batch for VRAM efficiency
     config.data.num_workers = 8
     config.data.input_size = 128  # Start with smaller size for faster training
