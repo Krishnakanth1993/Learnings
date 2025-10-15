@@ -84,10 +84,10 @@ def main():
     config = Config()
     
     # Data configuration
-    config.data.data_dir = '~/data/imagenet'  # Adjust path as needed
-    config.data.batch_size = 32  # Small batch for VRAM efficiency
+    config.data.data_dir = '/home/ubuntu/data/imagenet'  # Adjust path as needed
+    config.data.batch_size = 64  # Small batch for VRAM efficiency
     config.data.num_workers = 8
-    config.data.input_size = 128  # Start with smaller size for faster training
+    #config.data.input_size = 128  # Start with smaller size for faster training
     config.data.use_subset = True
     config.data.subset_percentage = 0.2  # 20% stratified sampling
     config.data.subset_seed = 42
@@ -101,7 +101,7 @@ def main():
     
     # Training configuration
     config.training.epochs = 100  # Fast iteration on subset
-    config.training.learning_rate = 0.001  # Will be updated by LR finder
+    config.training.learning_rate = 0.05  # Will be updated by LR finder
     config.training.optimizer_type = 'SGD'
     config.training.weight_decay = 1e-4
     config.training.gradient_accumulation_steps = 4  # Effective batch = 32*4 = 128

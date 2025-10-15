@@ -391,29 +391,49 @@ class ImageNetTrainer:
     def save_checkpoint(self, model: nn.Module, optimizer: optim.Optimizer,
                        scheduler: Any, epoch: int, is_best: bool = False) -> str:
         """Save training checkpoint."""
+        # Ensure model save directory exists
+        try:
+            os.makedirs(self.model_save_dir, exist_ok=True)
+        except Exception as e:
+            self.logger.error(f"Unable to create model save directory '{self.model_save_dir}': {e}")
+            raise
+        # Build checkpoint dict
         checkpoint = {
             'epoch': epoch,
             'model_state_dict': model.state_dict(),
             'optimizer_state_dict': optimizer.state_dict(),
-            'scheduler_state_dict': scheduler.state_dict() if scheduler else None,
-            'metrics': self.metrics.get_final_metrics(),
             'config': self.config,
-            'scaler_state_dict': self.scaler.state_dict() if self.scaler else None
+            'metrics': self.metrics.get_final_metrics()
         }
-        
-        # Save checkpoint
+        # Add scheduler state if available
+        try:
+            if scheduler is not None and hasattr(scheduler, 'state_dict'):
+                checkpoint['scheduler_state_dict'] = scheduler.state_dict()
+        except Exception:
+            # Non-fatal: continue without scheduler state
+            pass
+
+        # Filename & path
+        filename = f"checkpoint_epoch{epoch:03d}.pt"
         if is_best:
-            filepath = os.path.join(self.model_save_dir, 'best_model.pth')
-        else:
-            filepath = os.path.join(self.model_save_dir, f'checkpoint_epoch_{epoch}.pth')
-        
-        torch.save(checkpoint, filepath)
-        self.logger.log_checkpoint_save(epoch, filepath, is_best)
-        
-        # Keep only best N checkpoints (not including best_model.pth)
-        if not is_best:
+            filename = f"best_{filename}"
+        filepath = os.path.join(self.model_save_dir, filename)
+
+        # Save checkpoint
+        try:
+            torch.save(checkpoint, filepath)
+        except Exception as e:
+            self.logger.error(f"Failed to save checkpoint to '{filepath}': {e}")
+            raise
+
+        # Log and cleanup old checkpoints
+        self.logger.log_checkpoint_save(epoch, filepath, is_best=is_best)
+        try:
             self._cleanup_old_checkpoints()
-        
+        except Exception as e:
+            # Non-fatal: log but don't stop training
+            self.logger.warning(f"Cleanup of old checkpoints failed: {e}")
+
         return filepath
     
     def _cleanup_old_checkpoints(self):

@@ -46,23 +46,35 @@ class Logger:
             '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
         )
         
-        # File handler
+        # Ensure log directory exists
+        try:
+            os.makedirs(self.config.log_dir, exist_ok=True)
+        except Exception as e:
+            # If directory creation fails, continue and rely on console logging
+            # We don't call logger.* yet because handlers aren't set up
+            pass
+        
+        # File handler (optional - fall back to console only if file can't be created)
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         log_file_path = os.path.join(
             self.config.log_dir, 
             f"{timestamp}_{self.config.log_file}"
         )
-        file_handler = logging.FileHandler(log_file_path, encoding='utf-8')
-        file_handler.setLevel(logging.DEBUG)
-        file_handler.setFormatter(formatter)
+        try:
+            file_handler = logging.FileHandler(log_file_path, encoding='utf-8')
+            file_handler.setLevel(logging.DEBUG)
+            file_handler.setFormatter(formatter)
+            self.logger.addHandler(file_handler)
+        except Exception:
+            # If file handler cannot be created (e.g., permissions), continue with console handler only
+            pass
         
         # Console handler
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
         console_handler.setFormatter(formatter)
         
-        # Add handlers
-        self.logger.addHandler(file_handler)
+        # Add console handler (always)
         self.logger.addHandler(console_handler)
         
         self.logger.info(f"Logger initialized. Log file: {log_file_path}")

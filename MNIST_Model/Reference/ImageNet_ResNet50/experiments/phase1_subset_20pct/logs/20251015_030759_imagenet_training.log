@@ -1,0 +1,43 @@
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO - Logger initialized. Log file: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/logs/20251015_030759_imagenet_training.log
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO - Configuration Summary:
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Dataset: ImageNet-1k
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Model: resnet50
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Input Size: 128x128
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Num Classes: 1000
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Batch Size: 32
+2025-10-15 03:07:59,229 - ImageNet_Training - INFO -   Gradient Accumulation: 4
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Effective Batch Size: 128
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Num Workers: 8
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Using Subset: 20.0% (stratified)
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Epochs: 100
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Learning Rate: 0.001
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Optimizer: SGD
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Scheduler: ReduceLROnPlateau
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Weight Decay: 0.0001
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Mixed Precision: True
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Gradient Clipping: 1.0
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Label Smoothing: 0.1
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Dropout Rate: 0.0
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO -   Use Pretrained: False
+2025-10-15 03:07:59,230 - ImageNet_Training - INFO - ======================================================================
+2025-10-15 03:07:59,342 - ImageNet_Training - INFO - Using device: cuda
+2025-10-15 03:07:59,366 - ImageNet_Training - INFO - GPU: Tesla T4
+2025-10-15 03:07:59,366 - ImageNet_Training - INFO - GPU Memory: 14.6 GB
+2025-10-15 03:07:59,366 - ImageNet_Training - INFO - Setting up data...
+2025-10-15 03:07:59,366 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-15 03:07:59,366 - ImageNet_Training - ERROR - ImageNet data not found at ../../../../../../data/imagenet
+Please download ImageNet-1k dataset manually and extract to:
+  - ../../../../../../data/imagenet/train (training set)
+  - ../../../../../../data/imagenet/val (validation set)
+See README.md for download instructions.
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - ImageNet data not found at ../../../../../../data/imagenet
+Please download ImageNet-1k dataset manually and extract to:
+  - ../../../../../../data/imagenet/train (training set)
+  - ../../../../../../data/imagenet/val (validation set)
+See README.md for download instructions.
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - 
+Please download ImageNet-1k dataset manually:
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - 1. Register at https://image-net.org/download.php
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - 2. Download ILSVRC2012 training and validation sets
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - 3. Extract to data/imagenet/train and data/imagenet/val
+2025-10-15 03:07:59,367 - ImageNet_Training - ERROR - 4. Run this script again

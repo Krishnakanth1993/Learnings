@@ -144,8 +144,7 @@ class ImageNetDataManager:
         """Get training data transforms with Albumentations."""
         transform_pipeline = A.Compose([
             A.RandomResizedCrop(
-                height=self.config.input_size,
-                width=self.config.input_size,
+                (self.config.input_size,self.config.input_size),
                 scale=self.config.random_resized_crop_scale,
                 p=1.0
             ),
