@@ -75,6 +75,29 @@ class TrainingMetrics:
             'best_epoch': self.best_epoch,
             'final_lr': self.learning_rates[-1]
         }
+class FocalLoss(nn.Module):
+    """Focal Loss for addressing class imbalance."""
+    
+    def __init__(self, alpha=None, gamma=2.0, reduction='mean'):
+        super().__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.reduction = reduction
+    
+    def forward(self, inputs, targets):
+        ce_loss = F.cross_entropy(inputs, targets, reduction='none')
+        pt = torch.exp(-ce_loss)
+        focal_loss = ((1 - pt) ** self.gamma) * ce_loss
+        
+        if self.alpha is not None:
+            focal_loss = self.alpha * focal_loss
+        
+        if self.reduction == 'mean':
+            return focal_loss.mean()
+        elif self.reduction == 'sum':
+            return focal_loss.sum()
+        return focal_loss
+
 
 
 class ImageNetTrainer:
@@ -90,6 +113,9 @@ class ImageNetTrainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.scaler = GradScaler() if config.use_amp else None
         self.start_epoch = 0
+
+         # Create loss function
+        self.criterion = self.create_loss_function()
         
         # Set random seeds
         torch.manual_seed(config.seed)
@@ -100,8 +126,48 @@ class ImageNetTrainer:
                 torch.backends.cudnn.benchmark = False
         
         self.logger.info(f"Using device: {self.device}")
+        self.logger.info(f"Loss function: {config.loss_function}")
         self.logger.info(f"Mixed Precision (AMP): {config.use_amp}")
         self.logger.info(f"Gradient Accumulation Steps: {config.gradient_accumulation_steps}")
+    
+    def create_loss_function(self) -> nn.Module:
+        """Create loss function based on configuration."""
+        loss_fn = self.config.loss_function
+        
+        if loss_fn == 'CrossEntropyLoss':
+            return nn.CrossEntropyLoss(
+                label_smoothing=self.config.label_smoothing
+            )
+        
+        elif loss_fn == 'NLLLoss':
+            # Requires log_softmax in model output
+            return nn.NLLLoss(
+                reduction='mean'
+            )
+        
+        elif loss_fn == 'BCEWithLogitsLoss':
+            # For multi-label classification
+            pos_weight = None
+            if self.config.bce_pos_weight is not None:
+                pos_weight = torch.tensor([self.config.bce_pos_weight]).to(self.device)
+            return nn.BCEWithLogitsLoss(pos_weight=pos_weight)
+        
+        elif loss_fn == 'FocalLoss':
+            alpha = self.config.focal_alpha
+            if alpha is not None:
+                alpha = torch.tensor([alpha]).to(self.device)
+            return FocalLoss(
+                alpha=alpha,
+                gamma=self.config.focal_gamma,
+                reduction='mean'
+            )
+        
+        elif loss_fn == 'MSELoss':
+            # For regression tasks or distillation
+            return nn.MSELoss()
+        
+        else:
+            raise ValueError(f"Unsupported loss function: {loss_fn}")
     
     def create_optimizer(self, model: nn.Module) -> optim.Optimizer:
         """Create optimizer based on configuration."""
@@ -192,16 +258,29 @@ class ImageNetTrainer:
             if self.config.use_amp:
                 with autocast():
                     outputs = model(images)
-                    loss = F.nll_loss(outputs, targets, 
-                                     label_smoothing=self.config.label_smoothing)
+                    
+                    # Handle different loss functions
+                    if self.config.loss_function == 'BCEWithLogitsLoss':
+                        # Convert targets to one-hot for BCE
+                        targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
+                        loss = self.criterion(outputs, targets_one_hot)
+                    else:
+                        loss = self.criterion(outputs, targets)
+                    
                     loss = loss / self.config.gradient_accumulation_steps
                 
                 # Backward pass with gradient scaling
                 self.scaler.scale(loss).backward()
             else:
                 outputs = model(images)
-                loss = F.nll_loss(outputs, targets,
-                                 label_smoothing=self.config.label_smoothing)
+                
+                # Handle different loss functions
+                if self.config.loss_function == 'BCEWithLogitsLoss':
+                    targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
+                    loss = self.criterion(outputs, targets_one_hot)
+                else:
+                    loss = self.criterion(outputs, targets)
+                
                 loss = loss / self.config.gradient_accumulation_steps
                 loss.backward()
             
@@ -272,10 +351,26 @@ class ImageNetTrainer:
                 if self.config.use_amp:
                     with autocast():
                         outputs = model(images)
-                        loss = F.nll_loss(outputs, targets, reduction='sum')
+                        
+                        # Handle different loss functions
+                        if self.config.loss_function == 'BCEWithLogitsLoss':
+                            targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
+                            loss = self.criterion(outputs, targets_one_hot)
+                        else:
+                            loss = self.criterion(outputs, targets)
+                        
+                        # Sum for proper averaging
+                        loss = loss * targets.size(0)
                 else:
                     outputs = model(images)
-                    loss = F.nll_loss(outputs, targets, reduction='sum')
+                    
+                    if self.config.loss_function == 'BCEWithLogitsLoss':
+                        targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
+                        loss = self.criterion(outputs, targets_one_hot)
+                    else:
+                        loss = self.criterion(outputs, targets)
+                    
+                    loss = loss * targets.size(0)
                 
                 # Calculate accuracies
                 _, pred = outputs.topk(5, 1, True, True)

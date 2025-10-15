@@ -82,7 +82,17 @@ class TrainingConfig:
     learning_rate: float = 0.001
     momentum: float = 0.9
     weight_decay: float = 1e-4
+
+    # Loss function configuration
+    loss_function: str = 'CrossEntropyLoss'  # 'CrossEntropyLoss', 'NLLLoss', 'BCEWithLogitsLoss', 'FocalLoss'
     
+    # Focal Loss specific parameters (if using FocalLoss)
+    focal_alpha: Optional[float] = None  # Class weights, None for balanced
+    focal_gamma: float = 2.0  # Focusing parameter
+    
+    # BCE Loss specific
+    bce_pos_weight: Optional[float] = None  # Positive class weight for imbalanced datasets
+        
     # Gradient accumulation for memory efficiency
     gradient_accumulation_steps: int = 4  # Effective batch = 32*4 = 128
     
