@@ -271,3 +271,6 @@
 2025-10-15 05:00:38,908 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/models/best_checkpoint_epoch005.pt
 2025-10-15 05:00:39,178 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 5): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/models/checkpoint_epoch005.pt
 2025-10-15 05:00:39,179 - ImageNet_Training - INFO - Starting Epoch 6/100
+2025-10-15 05:17:06,535 - ImageNet_Training - INFO - Epoch   6: Train Loss: 4.9659, Train Top-1: 14.03%, Train Top-5: 33.03% | Test Loss: 4.8839, Test Top-1: 16.20%, Test Top-5: 37.32% | LR: 0.050000 | Gap: -2.17% | GPU: 3111MB
+2025-10-15 05:17:06,776 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/models/best_checkpoint_epoch006.pt
+2025-10-15 05:17:06,777 - ImageNet_Training - INFO - Starting Epoch 7/100

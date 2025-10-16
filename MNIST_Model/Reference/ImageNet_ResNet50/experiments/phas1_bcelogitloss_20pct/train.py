@@ -100,8 +100,8 @@ def main():
     config.model.use_pretrained = False  # Train from scratch
     
     # Training configuration
-    config.training.epochs = 100  # Fast iteration on subset
-    config.training.learning_rate = 0.05  # Will be updated by LR finder
+    config.training.epochs = 30  # Fast iteration on subset
+    config.training.learning_rate = 0.01  # Will be updated by LR finder
     config.training.optimizer_type = 'SGD'
     config.training.weight_decay = 1e-4
     config.training.gradient_accumulation_steps = 4  # Effective batch = 32*4 = 128
@@ -110,11 +110,11 @@ def main():
     config.training.label_smoothing = 0.1
 
     # Loss function configuration
-    config.training.loss_function = 'CrossEntropyLoss'
+    config.training.loss_function = 'CrossEntropyLoss'  # 'CrossEntropyLoss', 'NLLLoss', 'BCEWithLogitsLoss', 'FocalLoss'
     
     # Scheduler configuration
-    config.training.scheduler_type = 'ReduceLROnPlateau'
-    config.training.onecycle_max_lr = 0.003  # Will be updated by LR finder
+    config.training.scheduler_type = 'OneCycleLR'
+    config.training.onecycle_max_lr = 0.05  # Will be updated by LR finder
     config.training.onecycle_pct_start = 0.3
     config.training.onecycle_div_factor = 5.0
     config.training.onecycle_final_div_factor = 1000.0
@@ -123,7 +123,7 @@ def main():
     config.training.save_every_n_epochs = 5
     config.training.keep_best_n_checkpoints = 3
     config.training.early_stopping_patience = 10
-    config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/models/checkpoint_epoch030.pt'
+    #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase1_subset_20pct/models/checkpoint_epoch005.pt'
     
     # Logging configuration
     script_dir = os.path.dirname(os.path.abspath(__file__))

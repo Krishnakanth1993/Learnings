@@ -1,0 +1,9 @@
+2025-10-15 14:24:30,588 - ImageNet_Training - INFO - Logger initialized. Log file: ./logs/20251015_142430_imagenet_training.log
+2025-10-15 14:24:30,617 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-15 14:24:30,617 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-15 14:24:30,618 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-15 14:24:33,597 - ImageNet_Training - INFO - Using full training set: 1281167 samples
+2025-10-15 14:24:33,598 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-15 14:24:33,599 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-15 14:24:33,599 - ImageNet_Training - INFO -   Train batches: 5005
+2025-10-15 14:24:33,600 - ImageNet_Training - INFO -   Val batches: 196

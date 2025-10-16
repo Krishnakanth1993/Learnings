@@ -1,0 +1,25 @@
+2025-10-15 14:25:10,798 - ImageNet_Training - INFO - Logger initialized. Log file: ./logs/20251015_142510_imagenet_training.log
+2025-10-15 14:25:10,828 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-15 14:25:10,829 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-15 14:25:10,829 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-15 14:25:13,862 - ImageNet_Training - INFO - Using full training set: 1281167 samples
+2025-10-15 14:25:13,863 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-15 14:25:13,864 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-15 14:25:13,865 - ImageNet_Training - INFO -   Train batches: 20019
+2025-10-15 14:25:13,865 - ImageNet_Training - INFO -   Val batches: 782
+2025-10-15 14:33:22,368 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-15 14:33:22,370 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-15 14:33:22,371 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-15 14:33:25,351 - ImageNet_Training - INFO - Using full training set: 1281167 samples
+2025-10-15 14:33:25,352 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-15 14:33:25,353 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-15 14:33:25,354 - ImageNet_Training - INFO -   Train batches: 20019
+2025-10-15 14:33:25,354 - ImageNet_Training - INFO -   Val batches: 782
+2025-10-15 15:22:13,084 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-15 15:22:13,086 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-15 15:22:13,088 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-15 15:22:15,976 - ImageNet_Training - INFO - Using full training set: 1281167 samples
+2025-10-15 15:22:15,977 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-15 15:22:15,978 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-15 15:22:15,979 - ImageNet_Training - INFO -   Train batches: 20019
+2025-10-15 15:22:15,980 - ImageNet_Training - INFO -   Val batches: 782
