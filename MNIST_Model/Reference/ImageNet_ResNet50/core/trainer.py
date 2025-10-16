@@ -24,6 +24,7 @@ import glob
 
 from .config import TrainingConfig
 from .logger import Logger
+from .augmentations import MixupCutmix, mixup_criterion
 
 
 class TrainingMetrics:
@@ -116,6 +117,23 @@ class ImageNetTrainer:
 
          # Create loss function
         self.criterion = self.create_loss_function()
+        
+        # Initialize Mixup/Cutmix if enabled
+        self.mixup_cutmix = None
+        if hasattr(config, 'use_mixup') or hasattr(config, 'use_cutmix'):
+            if getattr(config, 'use_mixup', False) or getattr(config, 'use_cutmix', False):
+                mixup_prob = 0.5 if getattr(config, 'use_mixup', False) else 0.0
+                cutmix_prob = 0.5 if getattr(config, 'use_cutmix', False) else 0.0
+                mixup_alpha = getattr(config, 'mixup_alpha', 0.2)
+                cutmix_alpha = getattr(config, 'cutmix_alpha', 1.0)
+                
+                self.mixup_cutmix = MixupCutmix(
+                    mixup_alpha=mixup_alpha,
+                    cutmix_alpha=cutmix_alpha,
+                    mixup_prob=mixup_prob,
+                    cutmix_prob=cutmix_prob
+                )
+                self.logger.info(f"Mixup/Cutmix enabled - Mixup: {getattr(config, 'use_mixup', False)}, Cutmix: {getattr(config, 'use_cutmix', False)}")
         
         # Set random seeds
         torch.manual_seed(config.seed)
@@ -254,6 +272,11 @@ class ImageNetTrainer:
         for batch_idx, (images, targets) in enumerate(pbar):
             images, targets = images.to(self.device), targets.to(self.device)
             
+            # Apply Mixup/Cutmix if enabled
+            targets_a, targets_b, lam = targets, targets, 1.0
+            if self.mixup_cutmix is not None:
+                images, targets_a, targets_b, lam = self.mixup_cutmix(images, targets)
+            
             # Forward pass with mixed precision
             if self.config.use_amp:
                 with autocast():
@@ -262,10 +285,15 @@ class ImageNetTrainer:
                     # Handle different loss functions
                     if self.config.loss_function == 'BCEWithLogitsLoss':
                         # Convert targets to one-hot for BCE
-                        targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
-                        loss = self.criterion(outputs, targets_one_hot)
+                        targets_one_hot_a = F.one_hot(targets_a, num_classes=outputs.size(1)).float()
+                        targets_one_hot_b = F.one_hot(targets_b, num_classes=outputs.size(1)).float()
+                        loss = mixup_criterion(self.criterion, outputs, targets_one_hot_a, targets_one_hot_b, lam)
                     else:
-                        loss = self.criterion(outputs, targets)
+                        # Use mixup criterion for mixed samples
+                        if self.mixup_cutmix is not None and lam < 1.0:
+                            loss = mixup_criterion(self.criterion, outputs, targets_a, targets_b, lam)
+                        else:
+                            loss = self.criterion(outputs, targets)
                     
                     loss = loss / self.config.gradient_accumulation_steps
                 
@@ -276,10 +304,15 @@ class ImageNetTrainer:
                 
                 # Handle different loss functions
                 if self.config.loss_function == 'BCEWithLogitsLoss':
-                    targets_one_hot = F.one_hot(targets, num_classes=outputs.size(1)).float()
-                    loss = self.criterion(outputs, targets_one_hot)
+                    targets_one_hot_a = F.one_hot(targets_a, num_classes=outputs.size(1)).float()
+                    targets_one_hot_b = F.one_hot(targets_b, num_classes=outputs.size(1)).float()
+                    loss = mixup_criterion(self.criterion, outputs, targets_one_hot_a, targets_one_hot_b, lam)
                 else:
-                    loss = self.criterion(outputs, targets)
+                    # Use mixup criterion for mixed samples
+                    if self.mixup_cutmix is not None and lam < 1.0:
+                        loss = mixup_criterion(self.criterion, outputs, targets_a, targets_b, lam)
+                    else:
+                        loss = self.criterion(outputs, targets)
                 
                 loss = loss / self.config.gradient_accumulation_steps
                 loss.backward()
@@ -307,14 +340,14 @@ class ImageNetTrainer:
                 if self.config.scheduler_type == 'OneCycleLR':
                     scheduler.step()
             
-            # Calculate accuracies
+            # Calculate accuracies (use targets_a as primary target)
             _, pred = outputs.topk(5, 1, True, True)
             pred = pred.t()
-            correct = pred.eq(targets.view(1, -1).expand_as(pred))
+            correct = pred.eq(targets_a.view(1, -1).expand_as(pred))
             
             correct_top1 += correct[:1].sum().item()
             correct_top5 += correct[:5].sum().item()
-            total += targets.size(0)
+            total += targets_a.size(0)
             running_loss += loss.item() * self.config.gradient_accumulation_steps
             
             # Update progress bar

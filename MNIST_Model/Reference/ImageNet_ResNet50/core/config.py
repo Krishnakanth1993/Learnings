@@ -131,6 +131,22 @@ class TrainingConfig:
     # Label smoothing
     label_smoothing: float = 0.1
     
+    # Loss function configuration
+    loss_function: str = 'CrossEntropyLoss'  # 'CrossEntropyLoss', 'NLLLoss', 'BCEWithLogitsLoss', 'FocalLoss'
+    
+    # Focal Loss specific parameters (if using FocalLoss)
+    focal_alpha: Optional[float] = None  # Class weights, None for balanced
+    focal_gamma: float = 2.0  # Focusing parameter
+    
+    # BCE Loss specific
+    bce_pos_weight: Optional[float] = None  # Positive class weight for imbalanced datasets
+    
+    # Mixup and Cutmix (set via DataConfig but used in trainer)
+    use_mixup: bool = False
+    mixup_alpha: float = 0.2
+    use_cutmix: bool = False
+    cutmix_alpha: float = 1.0
+    
     # EMA (Exponential Moving Average)
     use_ema: bool = False
     ema_decay: float = 0.9999

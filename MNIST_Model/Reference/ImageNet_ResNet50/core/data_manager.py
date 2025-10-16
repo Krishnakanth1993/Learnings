@@ -142,7 +142,7 @@ class ImageNetDataManager:
     
     def _get_train_transforms(self) -> AlbumentationsTransform:
         """Get training data transforms with Albumentations."""
-        transform_pipeline = A.Compose([
+        transforms_list = [
             A.RandomResizedCrop(
                 (self.config.input_size,self.config.input_size),
                 scale=self.config.random_resized_crop_scale,
@@ -156,6 +156,32 @@ class ImageNetDataManager:
                 hue=self.config.color_jitter_hue,
                 p=0.8
             ),
+        ]
+        
+        # Add RandAugment if enabled
+        if self.config.use_randaugment:
+            # Enhanced augmentations similar to RandAugment
+            self.logger.info(f"RandAugment enabled: N={self.config.randaugment_n}, M={self.config.randaugment_m}")
+            transforms_list.extend([
+                A.OneOf([
+                    A.ShiftScaleRotate(shift_limit=0.1, scale_limit=0.1, rotate_limit=15, p=0.5),
+                    A.ElasticTransform(alpha=1, sigma=50, alpha_affine=50, p=0.5),
+                    A.GridDistortion(num_steps=5, distort_limit=0.3, p=0.5),
+                ], p=0.3),
+                A.OneOf([
+                    A.GaussNoise(var_limit=(10.0, 50.0), p=0.5),
+                    A.GaussianBlur(blur_limit=(3, 7), p=0.5),
+                    A.MotionBlur(blur_limit=7, p=0.5),
+                ], p=0.3),
+                A.OneOf([
+                    A.RandomBrightnessContrast(brightness_limit=0.2, contrast_limit=0.2, p=0.5),
+                    A.HueSaturationValue(hue_shift_limit=20, sat_shift_limit=30, val_shift_limit=20, p=0.5),
+                    A.RGBShift(r_shift_limit=20, g_shift_limit=20, b_shift_limit=20, p=0.5),
+                ], p=0.3),
+            ])
+        
+        # Add normalization and tensor conversion
+        transforms_list.extend([
             A.Normalize(
                 mean=self.config.imagenet_mean,
                 std=self.config.imagenet_std,
@@ -163,6 +189,8 @@ class ImageNetDataManager:
             ),
             ToTensorV2()
         ])
+        
+        transform_pipeline = A.Compose(transforms_list)
         
         return AlbumentationsTransform(transform_pipeline)
     
