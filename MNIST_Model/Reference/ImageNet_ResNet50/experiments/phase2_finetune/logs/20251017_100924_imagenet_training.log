@@ -1,0 +1,316 @@
+2025-10-17 10:09:24,423 - ImageNet_Training - INFO - Logger initialized. Log file: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/logs/20251017_100924_imagenet_training.log
+2025-10-17 10:09:24,423 - ImageNet_Training - INFO - Configuration Summary:
+2025-10-17 10:09:24,423 - ImageNet_Training - INFO -   Dataset: ImageNet-1k
+2025-10-17 10:09:24,423 - ImageNet_Training - INFO -   Model: resnet50
+2025-10-17 10:09:24,423 - ImageNet_Training - INFO -   Input Size: 224x224
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Num Classes: 1000
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Batch Size: 32
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Gradient Accumulation: 4
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Effective Batch Size: 128
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Num Workers: 8
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Using Subset: 20.0% (stratified)
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Epochs: 50
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Learning Rate: 0.05
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Optimizer: SGD
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Scheduler: OneCycleLR
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Weight Decay: 0.0001
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Mixed Precision: True
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Gradient Clipping: 1.0
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Label Smoothing: 0.1
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Dropout Rate: 0.02
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO -   Use Pretrained: False
+2025-10-17 10:09:24,424 - ImageNet_Training - INFO - ======================================================================
+2025-10-17 10:09:24,544 - ImageNet_Training - INFO - Using device: cuda
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - GPU: Tesla T4
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - GPU Memory: 14.6 GB
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - Setting up data with advanced augmentation...
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-17 10:09:24,570 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-17 10:09:24,572 - ImageNet_Training - INFO - RandAugment enabled: N=2, M=9
+2025-10-17 10:09:27,367 - ImageNet_Training - INFO - Creating stratified 20.0% subset...
+2025-10-17 10:09:27,378 - ImageNet_Training - INFO - Subset created: 256190 / 1281167 samples
+2025-10-17 10:09:27,378 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Train batches: 8006
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Val batches: 1563
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO - Computing dataset statistics...
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO - Dataset Statistics:
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Train samples: 256,190
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Val samples: 50,000
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Num classes: 1000
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Batch size: 32
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Input size: 224x224
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO -   Subset: 20.0% stratified
+2025-10-17 10:09:27,379 - ImageNet_Training - INFO - Verifying stratified subset distribution...
+2025-10-17 10:09:27,457 - ImageNet_Training - INFO - Subset contains 1000 classes
+2025-10-17 10:09:27,458 - ImageNet_Training - INFO - Samples per class - Min: 732, Max: 1300, Mean: 1281.2, Std: 70.2
+2025-10-17 10:09:27,458 - ImageNet_Training - INFO - Building ResNet-50 model with dropout...
+2025-10-17 10:09:27,994 - ImageNet_Training - INFO - Generating RESNET50 summary...
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - RESNET50 Architecture Summary:
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Total Parameters: 25,557,032
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Trainable Parameters: 25,557,032
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Model Size: 97.49 MB
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Batch Normalization: Yes
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Dropout: Yes
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   FC Layers: Yes
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO -   Global Pooling: Yes
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - ======================================================================
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - DETAILED MODEL ARCHITECTURE
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - ======================================================================
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - Layer (type:depth-idx)                   Output Shape              Param #
+2025-10-17 10:09:28,266 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - ├─Conv2d: 1-1                            [-1, 64, 112, 112]        9,408
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - ├─BatchNorm2d: 1-2                       [-1, 64, 112, 112]        128
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - ├─ReLU: 1-3                              [-1, 64, 112, 112]        --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - ├─MaxPool2d: 1-4                         [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - ├─Sequential: 1-5                        [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-1              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-1                  [-1, 64, 56, 56]          4,096
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-2             [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-3                    [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-4                  [-1, 64, 56, 56]          36,864
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-5             [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-6                    [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-7                  [-1, 256, 56, 56]         16,384
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-8             [-1, 256, 56, 56]         512
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Sequential: 3-9              [-1, 256, 56, 56]         16,896
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-10                   [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-11              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-2              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-12                 [-1, 64, 56, 56]          16,384
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-13            [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-14                   [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-15                 [-1, 64, 56, 56]          36,864
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-16            [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-17                   [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-18                 [-1, 256, 56, 56]         16,384
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-19            [-1, 256, 56, 56]         512
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─ReLU: 3-20                   [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-21              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-3              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,267 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-22                 [-1, 64, 56, 56]          16,384
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-23            [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-24                   [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-25                 [-1, 64, 56, 56]          36,864
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-26            [-1, 64, 56, 56]          128
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-27                   [-1, 64, 56, 56]          --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-28                 [-1, 256, 56, 56]         16,384
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-29            [-1, 256, 56, 56]         512
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-30                   [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-31              [-1, 256, 56, 56]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - ├─Sequential: 1-6                        [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-4              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-32                 [-1, 128, 56, 56]         32,768
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-33            [-1, 128, 56, 56]         256
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-34                   [-1, 128, 56, 56]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-35                 [-1, 128, 28, 28]         147,456
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-36            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-37                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-38                 [-1, 512, 28, 28]         65,536
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-39            [-1, 512, 28, 28]         1,024
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Sequential: 3-40             [-1, 512, 28, 28]         132,096
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-41                   [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-42              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-5              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-43                 [-1, 128, 28, 28]         65,536
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-44            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-45                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-46                 [-1, 128, 28, 28]         147,456
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-47            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─ReLU: 3-48                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,268 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-49                 [-1, 512, 28, 28]         65,536
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-50            [-1, 512, 28, 28]         1,024
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-51                   [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-52              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-6              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-53                 [-1, 128, 28, 28]         65,536
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-54            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-55                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-56                 [-1, 128, 28, 28]         147,456
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-57            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-58                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-59                 [-1, 512, 28, 28]         65,536
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-60            [-1, 512, 28, 28]         1,024
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-61                   [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-62              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-7              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-63                 [-1, 128, 28, 28]         65,536
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-64            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-65                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-66                 [-1, 128, 28, 28]         147,456
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-67            [-1, 128, 28, 28]         256
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-68                   [-1, 128, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-69                 [-1, 512, 28, 28]         65,536
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-70            [-1, 512, 28, 28]         1,024
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-71                   [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-72              [-1, 512, 28, 28]         --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - ├─Sequential: 1-7                        [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-8              [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-73                 [-1, 256, 28, 28]         131,072
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-74            [-1, 256, 28, 28]         512
+2025-10-17 10:09:28,269 - ImageNet_Training - INFO - |    |    └─ReLU: 3-75                   [-1, 256, 28, 28]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-76                 [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-77            [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-78                   [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-79                 [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-80            [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Sequential: 3-81             [-1, 1024, 14, 14]        526,336
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-82                   [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-83              [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-9              [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-84                 [-1, 256, 14, 14]         262,144
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-85            [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-86                   [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-87                 [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-88            [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-89                   [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-90                 [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-91            [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-92                   [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-93              [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-10             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-94                 [-1, 256, 14, 14]         262,144
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-95            [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-96                   [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-97                 [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-98            [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-99                   [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-100                [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-101           [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─ReLU: 3-102                  [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,270 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-103             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-11             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-104                [-1, 256, 14, 14]         262,144
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-105           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-106                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-107                [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-108           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-109                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-110                [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-111           [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-112                  [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-113             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-12             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-114                [-1, 256, 14, 14]         262,144
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-115           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-116                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-117                [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-118           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-119                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-120                [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-121           [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-122                  [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-123             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-13             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-124                [-1, 256, 14, 14]         262,144
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-125           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-126                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-127                [-1, 256, 14, 14]         589,824
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-128           [-1, 256, 14, 14]         512
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─ReLU: 3-129                  [-1, 256, 14, 14]         --
+2025-10-17 10:09:28,271 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-130                [-1, 1024, 14, 14]        262,144
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-131           [-1, 1024, 14, 14]        2,048
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-132                  [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-133             [-1, 1024, 14, 14]        --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - ├─Sequential: 1-8                        [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-14             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-134                [-1, 512, 14, 14]         524,288
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-135           [-1, 512, 14, 14]         1,024
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-136                  [-1, 512, 14, 14]         --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-137                [-1, 512, 7, 7]           2,359,296
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-138           [-1, 512, 7, 7]           1,024
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-139                  [-1, 512, 7, 7]           --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-140                [-1, 2048, 7, 7]          1,048,576
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-141           [-1, 2048, 7, 7]          4,096
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Sequential: 3-142            [-1, 2048, 7, 7]          2,101,248
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-143                  [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-144             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-15             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-145                [-1, 512, 7, 7]           1,048,576
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-146           [-1, 512, 7, 7]           1,024
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-147                  [-1, 512, 7, 7]           --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-148                [-1, 512, 7, 7]           2,359,296
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-149           [-1, 512, 7, 7]           1,024
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-150                  [-1, 512, 7, 7]           --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-151                [-1, 2048, 7, 7]          1,048,576
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-152           [-1, 2048, 7, 7]          4,096
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─ReLU: 3-153                  [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-154             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-16             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,272 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-155                [-1, 512, 7, 7]           1,048,576
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-156           [-1, 512, 7, 7]           1,024
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─ReLU: 3-157                  [-1, 512, 7, 7]           --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-158                [-1, 512, 7, 7]           2,359,296
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-159           [-1, 512, 7, 7]           1,024
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─ReLU: 3-160                  [-1, 512, 7, 7]           --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-161                [-1, 2048, 7, 7]          1,048,576
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-162           [-1, 2048, 7, 7]          4,096
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─ReLU: 3-163                  [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-164             [-1, 2048, 7, 7]          --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ├─AdaptiveAvgPool2d: 1-9                 [-1, 2048, 1, 1]          --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ├─Dropout: 1-10                          [-1, 2048]                --
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ├─Linear: 1-11                           [-1, 1000]                2,049,000
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Total params: 25,557,032
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Trainable params: 25,557,032
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Non-trainable params: 0
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Total mult-adds (G): 4.14
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Input size (MB): 0.57
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Forward/backward pass size (MB): 169.59
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Params size (MB): 97.49
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Estimated Total Size (MB): 267.66
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - ======================================================================
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Model dropout rate: 0.02
+2025-10-17 10:09:28,273 - ImageNet_Training - INFO - Initializing trainer with Mixup/Cutmix...
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Using device: cuda
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Loss function: CrossEntropyLoss
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Mixed Precision (AMP): True
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Gradient Accumulation Steps: 4
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Starting Phase 2 fine-tuning...
+2025-10-17 10:09:28,275 - ImageNet_Training - INFO - Initializing training...
+2025-10-17 10:09:28,276 - ImageNet_Training - INFO - Starting Epoch 1/50
+2025-10-17 10:27:43,853 - ImageNet_Training - INFO - Epoch   1: Train Loss: 6.7844, Train Top-1: 0.42%, Train Top-5: 1.80% | Test Loss: 6.5184, Test Top-1: 1.24%, Test Top-5: 4.45% | LR: 0.104375 | Gap: -0.82% | GPU: 2089MB
+2025-10-17 10:27:44,118 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch001.pt
+2025-10-17 10:27:44,119 - ImageNet_Training - INFO - Starting Epoch 2/50
+2025-10-17 10:46:01,059 - ImageNet_Training - INFO - Epoch   2: Train Loss: 6.2842, Train Top-1: 1.96%, Train Top-5: 7.04% | Test Loss: 5.9569, Test Top-1: 4.03%, Test Top-5: 13.10% | LR: 0.117309 | Gap: -2.07% | GPU: 2089MB
+2025-10-17 10:46:01,316 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch002.pt
+2025-10-17 10:46:01,316 - ImageNet_Training - INFO - Starting Epoch 3/50
+2025-10-17 11:04:18,685 - ImageNet_Training - INFO - Epoch   3: Train Loss: 5.8894, Train Top-1: 4.52%, Train Top-5: 13.73% | Test Loss: 5.6069, Test Top-1: 6.32%, Test Top-5: 18.73% | LR: 0.138236 | Gap: -1.80% | GPU: 2089MB
+2025-10-17 11:04:18,940 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch003.pt
+2025-10-17 11:04:18,940 - ImageNet_Training - INFO - Starting Epoch 4/50
+2025-10-17 11:22:35,516 - ImageNet_Training - INFO - Epoch   4: Train Loss: 5.5739, Train Top-1: 7.54%, Train Top-5: 20.21% | Test Loss: 5.1350, Test Top-1: 11.35%, Test Top-5: 29.08% | LR: 0.166240 | Gap: -3.81% | GPU: 2089MB
+2025-10-17 11:22:35,776 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch004.pt
+2025-10-17 11:22:35,777 - ImageNet_Training - INFO - Starting Epoch 5/50
+2025-10-17 11:40:52,887 - ImageNet_Training - INFO - Epoch   5: Train Loss: 5.3403, Train Top-1: 10.04%, Train Top-5: 25.35% | Test Loss: 4.8978, Test Top-1: 14.41%, Test Top-5: 34.23% | LR: 0.200097 | Gap: -4.38% | GPU: 2089MB
+2025-10-17 11:40:53,141 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch005.pt
+2025-10-17 11:40:53,396 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 5): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch005.pt
+2025-10-17 11:40:53,397 - ImageNet_Training - INFO - Starting Epoch 6/50
+2025-10-17 11:59:10,053 - ImageNet_Training - INFO - Epoch   6: Train Loss: 5.1713, Train Top-1: 12.21%, Train Top-5: 29.20% | Test Loss: 4.7231, Test Top-1: 17.00%, Test Top-5: 38.36% | LR: 0.238324 | Gap: -4.78% | GPU: 2089MB
+2025-10-17 11:59:10,307 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch006.pt
+2025-10-17 11:59:10,308 - ImageNet_Training - INFO - Starting Epoch 7/50
+2025-10-17 12:17:26,542 - ImageNet_Training - INFO - Epoch   7: Train Loss: 5.0587, Train Top-1: 13.77%, Train Top-5: 31.76% | Test Loss: 4.6805, Test Top-1: 18.04%, Test Top-5: 40.02% | LR: 0.279250 | Gap: -4.27% | GPU: 2089MB
+2025-10-17 12:17:26,796 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch007.pt
+2025-10-17 12:17:26,797 - ImageNet_Training - INFO - Starting Epoch 8/50
+2025-10-17 12:35:43,018 - ImageNet_Training - INFO - Epoch   8: Train Loss: 4.9765, Train Top-1: 14.95%, Train Top-5: 33.56% | Test Loss: 4.5480, Test Top-1: 20.00%, Test Top-5: 42.97% | LR: 0.321083 | Gap: -5.04% | GPU: 2089MB
+2025-10-17 12:35:43,282 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch008.pt
+2025-10-17 12:35:43,283 - ImageNet_Training - INFO - Starting Epoch 9/50
+2025-10-17 12:53:59,456 - ImageNet_Training - INFO - Epoch   9: Train Loss: 4.9080, Train Top-1: 15.86%, Train Top-5: 35.23% | Test Loss: 4.5073, Test Top-1: 20.68%, Test Top-5: 44.14% | LR: 0.361994 | Gap: -4.81% | GPU: 2089MB
+2025-10-17 12:53:59,707 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch009.pt
+2025-10-17 12:53:59,707 - ImageNet_Training - INFO - Starting Epoch 10/50
+2025-10-17 13:12:16,088 - ImageNet_Training - INFO - Epoch  10: Train Loss: 4.8670, Train Top-1: 16.52%, Train Top-5: 36.05% | Test Loss: 4.4414, Test Top-1: 21.32%, Test Top-5: 45.66% | LR: 0.400193 | Gap: -4.81% | GPU: 2089MB
+2025-10-17 13:12:16,342 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch010.pt
+2025-10-17 13:12:16,598 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 10): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch010.pt
+2025-10-17 13:12:16,599 - ImageNet_Training - INFO - Starting Epoch 11/50
+2025-10-17 13:30:33,127 - ImageNet_Training - INFO - Epoch  11: Train Loss: 4.8378, Train Top-1: 16.94%, Train Top-5: 36.92% | Test Loss: 4.4588, Test Top-1: 20.92%, Test Top-5: 45.04% | LR: 0.434009 | Gap: -3.98% | GPU: 2089MB
+2025-10-17 13:30:33,128 - ImageNet_Training - INFO - Starting Epoch 12/50
+2025-10-17 13:48:49,525 - ImageNet_Training - INFO - Epoch  12: Train Loss: 4.8047, Train Top-1: 17.40%, Train Top-5: 37.59% | Test Loss: 4.4676, Test Top-1: 22.02%, Test Top-5: 45.61% | LR: 0.461961 | Gap: -4.62% | GPU: 2089MB
+2025-10-17 13:48:49,778 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch012.pt
+2025-10-17 13:48:49,778 - ImageNet_Training - INFO - Starting Epoch 13/50
+2025-10-17 14:07:05,782 - ImageNet_Training - INFO - Epoch  13: Train Loss: 4.7805, Train Top-1: 17.93%, Train Top-5: 38.18% | Test Loss: 4.4116, Test Top-1: 22.88%, Test Top-5: 46.91% | LR: 0.482827 | Gap: -4.95% | GPU: 2089MB
+2025-10-17 14:07:06,036 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch013.pt
+2025-10-17 14:07:06,037 - ImageNet_Training - INFO - Starting Epoch 14/50
+2025-10-17 14:09:13,766 - ImageNet_Training - WARNING - Training interrupted by user

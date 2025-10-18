@@ -1,18 +1,12 @@
 """
-Phase 2: ImageNet ResNet-50 Fine-Tuning with Advanced Augmentation
-Fine-tune Phase 1 model with dropout, Mixup, Cutmix, and RandAugment.
+Phase 1: ImageNet ResNet-50 Training on 20% Subset
+Train on stratified 20% subset to validate approach and find optimal hyperparameters.
 
-Improvements:
-- Dropout: 0.02
-- Mixup augmentation
-- Cutmix augmentation
-- RandAugment
-
-Target: 65-70% top-1 accuracy with improved generalization
-Strategy: Load Phase 1 best model and fine-tune with regularization
+Target: 50-60% top-1 accuracy on subset
+Strategy: Fast iteration, LR finding, baseline performance
 
 Author: Krishnakanth
-Date: 2025-10-16
+Date: 2025-10-13
 """
 
 import sys
@@ -33,20 +27,54 @@ from core.data_manager import ImageNetDataManager
 from core.model import ResNet50, ModelBuilder
 from core.trainer import ImageNetTrainer
 
+# Import services
+from services.lr_finder import LRFinder
+
 # Import utils
 from utils.visualization import TrainingVisualizer
 from utils.metrics import PerformanceTracker
 
 
+def run_lr_finder(model, train_loader, device, save_dir):
+    """Run LR finder before training."""
+    print("\n" + "="*70)
+    print("RUNNING LR FINDER")
+    print("="*70)
+    
+    # Create temporary optimizer for LR finding
+    temp_optimizer = torch.optim.Adam(model.parameters(), lr=1e-7)
+    criterion = F.nll_loss
+    
+    # Initialize LR finder
+    lr_finder = LRFinder(model, temp_optimizer, criterion, device)
+    
+    # Run range test
+    suggested_lr, suggested_max_lr = lr_finder.find_lr(
+        train_loader,
+        start_lr=1e-7,
+        end_lr=1.0,
+        num_iter=100,
+        save_path=os.path.join(save_dir, 'lr_finder_results.png')
+    )
+    
+    print("="*70)
+    print(f"LR Finder completed!")
+    print(f"  Suggested LR: {suggested_lr:.2e}")
+    print(f"  Suggested Max LR: {suggested_max_lr:.2e}")
+    print("="*70)
+    
+    return suggested_lr, suggested_max_lr
+
+
 def main():
     """
-    Main function for Phase 2 fine-tuning with advanced augmentation.
+    Main function for Phase 1 training.
     """
     print("="*70)
-    print("IMAGENET RESNET-50 - PHASE 2: FINE-TUNING WITH ADVANCED AUGMENTATION")
+    print("IMAGENET RESNET-50 - PHASE 1: 20% SUBSET TRAINING")
     print("="*70)
-    print("Goal: Fine-tune with Mixup, Cutmix, RandAugment, and Dropout")
-    print("Target: 65-70% top-1 accuracy with improved generalization")
+    print("Goal: Validate approach and establish baseline performance")
+    print("Target: 50-60% top-1 accuracy on 20% stratified subset")
     print("="*70)
     
     # =========================================================================
@@ -56,70 +84,52 @@ def main():
     config = Config()
     
     # Data configuration
-    config.data.data_dir = '../../data/imagenet'  # Adjust path as needed
-    config.data.batch_size = 32  # Keep same as Phase 1
+    config.data.data_dir = '/home/ubuntu/data/imagenet'  # Adjust path as needed
+    config.data.batch_size = 32  # Small batch for VRAM efficiency
     config.data.num_workers = 8
-    config.data.input_size = 224  # Increase to full ImageNet size
-    config.data.use_subset = True  # Still using subset for Phase 2
-    config.data.subset_percentage = 0.2  # Same 20% subset
+    #config.data.input_size = 128  # Start with smaller size for faster training
+    config.data.use_subset = True
+    config.data.subset_percentage = 0.2  # 20% stratified sampling
     config.data.subset_seed = 42
     config.data.cache_subset_indices = True
-    
-    # Enable advanced augmentations
-    config.data.use_randaugment = True
-    config.data.randaugment_n = 2  # Number of augmentation transformations to apply
-    config.data.randaugment_m = 9  # Magnitude of augmentations
-    
-    # Mixup and Cutmix (configured in training, not data)
-    config.training.use_mixup = True
-    config.training.mixup_alpha = 0.2
-    config.training.use_cutmix = True
-    config.training.cutmix_alpha = 1.0
     
     # Model configuration
     config.model.model_name = 'resnet50'
     config.model.num_classes = 1000
-    config.model.dropout_rate = 0.02  # Add dropout for regularization
-    config.model.use_pretrained = True  # Load Phase 1 checkpoint
-    
-    # Set path to Phase 1 best model
-    phase1_model_path = '../phase1_subset_20pct/models/best_model.pth'
-    if os.path.exists(phase1_model_path):
-        config.model.pretrained_path = phase1_model_path
-        print(f"\n✓ Found Phase 1 model: {phase1_model_path}")
-    else:
-        print(f"\n⚠ Warning: Phase 1 model not found at {phase1_model_path}")
-        print("  Training from scratch instead")
-        config.model.use_pretrained = False
+    config.model.dropout_rate = 0.01  # No dropout initially
+    config.model.use_pretrained = False  # Train from scratch
     
     # Training configuration
-    config.training.epochs = 50  # More epochs for fine-tuning
-    config.training.learning_rate = 0.0001  # Lower LR for fine-tuning
-    config.training.optimizer_type = 'AdamW'  # Better for fine-tuning
-    config.training.weight_decay = 1e-4
-    config.training.gradient_accumulation_steps = 4  # Effective batch = 32*4 = 128
+    config.training.epochs = 60  # Fast iteration on subset
+    config.training.learning_rate = 0.05  # Will be updated by LR finder
+    config.training.optimizer_type = 'SGD'
+    config.training.weight_decay = 2e-4
+    config.training.gradient_accumulation_steps = 8  # Effective batch = 32*4 = 128
     config.training.use_amp = True  # Mixed precision for speed
     config.training.max_grad_norm = 1.0
     config.training.label_smoothing = 0.1
-    
+
     # Loss function configuration
     config.training.loss_function = 'CrossEntropyLoss'
     
-    # Scheduler configuration - use Cosine for fine-tuning
-    config.training.scheduler_type = 'CosineAnnealingLR'
-    config.training.cosine_t_max = 50  # Match epochs
-    config.training.cosine_eta_min = 1e-6
+    # Scheduler configuration
+    config.training.scheduler_type = 'OneCycleLR'
+    config.training.onecycle_max_lr = 0.25  # Will be updated by LR finder
+    config.training.onecycle_pct_start = 0.05
+    config.training.onecycle_div_factor = 10.0
+    config.training.onecycle_final_div_factor = 1000.0
     
     # Checkpointing
     config.training.save_every_n_epochs = 5
     config.training.keep_best_n_checkpoints = 3
-    config.training.early_stopping_patience = 15  # More patience for fine-tuning
+    config.training.early_stopping_patience = 10
+    config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch021.pt'
     
     # Logging configuration
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config.logging.log_dir = os.path.join(script_dir, 'logs')
     config.logging.model_save_dir = os.path.join(script_dir, 'models')
-    config.logging.experiment_name = 'phase2_finetune'
+    config.logging.experiment_name = 'phase1_subset_20pct'
     
     print("\nConfiguration Summary:")
     print(f"  Data Directory: {config.data.data_dir}")
@@ -128,12 +138,8 @@ def main():
     print(f"  Gradient Accumulation: {config.training.gradient_accumulation_steps}")
     print(f"  Effective Batch Size: {config.get_effective_batch_size()}")
     print(f"  Input Size: {config.data.input_size}x{config.data.input_size}")
-    print(f"  Dropout Rate: {config.model.dropout_rate}")
-    print(f"  RandAugment: Enabled (N={config.data.randaugment_n}, M={config.data.randaugment_m})")
-    print(f"  Mixup: {'Enabled' if config.training.use_mixup else 'Disabled'} (alpha={config.training.mixup_alpha})")
-    print(f"  Cutmix: {'Enabled' if config.training.use_cutmix else 'Disabled'} (alpha={config.training.cutmix_alpha})")
     print(f"  Epochs: {config.training.epochs}")
-    print(f"  Learning Rate: {config.training.learning_rate}")
+    print(f"  Mixed Precision: {config.training.use_amp}")
     print(f"  Optimizer: {config.training.optimizer_type}")
     print(f"  Scheduler: {config.training.scheduler_type}")
     print("="*70)
@@ -158,7 +164,7 @@ def main():
     # DATA LOADING
     # =========================================================================
     
-    logger.info("Setting up data with advanced augmentation...")
+    logger.info("Setting up data...")
     data_manager = ImageNetDataManager(config.data, logger)
     
     try:
@@ -182,7 +188,7 @@ def main():
     # MODEL SETUP
     # =========================================================================
     
-    logger.info("Building ResNet-50 model with dropout...")
+    logger.info("Building ResNet-50 model...")
     builder = ModelBuilder()
     model = builder.build_resnet50(config.model).build()
     model = model.to(device)
@@ -190,18 +196,30 @@ def main():
     # Get model summary
     model_info = model.get_model_summary((3, config.data.input_size, config.data.input_size), logger)
     
-    logger.info(f"Model dropout rate: {config.model.dropout_rate}")
+    # =========================================================================
+    # LR FINDER (Optional - uncomment to run)
+    # =========================================================================
+    
+    # Uncomment the following lines to run LR finder before training
+    # suggested_lr, suggested_max_lr = run_lr_finder(model, train_loader, device, config.logging.log_dir)
+    # 
+    # # Update config with suggested values
+    # if suggested_lr:
+    #     config.training.learning_rate = suggested_lr
+    #     config.training.onecycle_max_lr = suggested_max_lr / 10  # Conservative max LR
+    #     logger.info(f"Updated LR from LR finder: {config.training.learning_rate:.2e}")
+    #     logger.info(f"Updated max LR: {config.training.onecycle_max_lr:.2e}")
     
     # =========================================================================
     # TRAINING
     # =========================================================================
     
-    logger.info("Initializing trainer with Mixup/Cutmix...")
+    logger.info("Initializing trainer...")
     trainer = ImageNetTrainer(config.training, logger, config.logging.model_save_dir)
     
-    logger.info("Starting Phase 2 fine-tuning...")
+    logger.info("Starting training...")
     print("\n" + "="*70)
-    print("PHASE 2 FINE-TUNING STARTED")
+    print("TRAINING STARTED")
     print("="*70)
     
     try:
@@ -254,7 +272,7 @@ def main():
         final_metrics = metrics.get_final_metrics()
         
         print("\n" + "="*70)
-        print("PHASE 2 FINE-TUNING COMPLETED!")
+        print("PHASE 1 TRAINING COMPLETED!")
         print("="*70)
         print(f"Final Results:")
         print(f"  Train Top-1 Accuracy: {final_metrics['final_train_accuracy']:.2f}%")
@@ -264,19 +282,11 @@ def main():
         print(f"  Best Val Top-1: {final_metrics['best_test_accuracy']:.2f}% (Epoch {final_metrics['best_epoch']})")
         print(f"  Best Val Top-5: {final_metrics['best_test_top5_accuracy']:.2f}%")
         print("="*70)
-        print(f"\nImprovements Applied:")
-        print(f"  ✓ Dropout (0.02)")
-        print(f"  ✓ RandAugment (N={config.data.randaugment_n}, M={config.data.randaugment_m})")
-        print(f"  ✓ Mixup (alpha={config.training.mixup_alpha})")
-        print(f"  ✓ Cutmix (alpha={config.training.cutmix_alpha})")
-        print(f"  ✓ Larger input size ({config.data.input_size}x{config.data.input_size})")
-        print("="*70)
         print(f"\nNext Steps:")
         print(f"  1. Review training curves: {curves_path}")
         print(f"  2. Check best model: {config.logging.model_save_dir}/best_model.pth")
-        print(f"  3. Compare with Phase 1 results")
-        print(f"  4. Run Grad-CAM analysis on misclassifications")
-        print(f"  5. Proceed to Phase 3 for full dataset training")
+        print(f"  3. Run Grad-CAM analysis to identify improvements")
+        print(f"  4. Proceed to Phase 2 with enhanced augmentation")
         print("="*70)
         
     except KeyboardInterrupt:
@@ -292,4 +302,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
