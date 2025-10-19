@@ -25,6 +25,7 @@ import glob
 from .config import TrainingConfig
 from .logger import Logger
 from .augmentations import MixupCutmix, mixup_criterion
+import math
 
 
 class TrainingMetrics:
@@ -220,8 +221,11 @@ class ImageNetTrainer:
                         steps_per_epoch: int) -> Any:
         """Create learning rate scheduler."""
         if self.config.scheduler_type == 'OneCycleLR':
-            # Adjust for gradient accumulation
-            effective_steps = steps_per_epoch // self.config.gradient_accumulation_steps
+            # Adjust for gradient accumulation — use ceil to match actual optimizer steps
+            effective_steps = math.ceil(steps_per_epoch / float(self.config.gradient_accumulation_steps))
+            # ensure at least one step to avoid zero-division / invalid scheduler
+            if effective_steps <= 0:
+                effective_steps = 1
             
             return OneCycleLR(
                 optimizer,
