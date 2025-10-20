@@ -114,7 +114,7 @@ def main():
     
     # Scheduler configuration
     config.training.scheduler_type = 'OneCycleLR'
-    config.training.onecycle_max_lr = 1  # Will be updated by LR finder
+    config.training.onecycle_max_lr = 0.4  # Will be updated by LR finder
     config.training.onecycle_pct_start = 0.15
     config.training.onecycle_div_factor = 10.0
     config.training.onecycle_final_div_factor = 1000.0
@@ -122,7 +122,7 @@ def main():
     # Checkpointing
     config.training.save_every_n_epochs = 5
     config.training.keep_best_n_checkpoints = 3
-    config.training.early_stopping_patience = 10
+    config.training.early_stopping_patience = 15
     #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch021.pt'
     
     # Logging configuration
