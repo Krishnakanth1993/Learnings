@@ -1,0 +1,560 @@
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO - Logger initialized. Log file: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/logs/20251021_055722_imagenet_training.log
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO - Configuration Summary:
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Dataset: ImageNet-1k
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Model: resnet50
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Input Size: 224x224
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Num Classes: 1000
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Batch Size: 32
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Gradient Accumulation: 8
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Effective Batch Size: 256
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Num Workers: 8
+2025-10-21 05:57:22,300 - ImageNet_Training - INFO -   Using Subset: 20.0% (stratified)
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Epochs: 100
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Learning Rate: 0.05
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Optimizer: SGD
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Scheduler: OneCycleLR
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Weight Decay: 0.0002
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Mixed Precision: True
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Gradient Clipping: 1.0
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Label Smoothing: 0.1
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Dropout Rate: 0.01
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO -   Use Pretrained: False
+2025-10-21 05:57:22,301 - ImageNet_Training - INFO - ======================================================================
+2025-10-21 05:57:22,523 - ImageNet_Training - INFO - Using device: cuda
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - GPU: Tesla T4
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - GPU Memory: 14.6 GB
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - Setting up data...
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-21 05:57:22,550 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-21 05:57:22,552 - ImageNet_Training - INFO - RandAugment enabled: N=10, M=6
+2025-10-21 05:57:25,251 - ImageNet_Training - INFO - Creating stratified 20.0% subset...
+2025-10-21 05:57:25,264 - ImageNet_Training - INFO - Subset created: 256190 / 1281167 samples
+2025-10-21 05:57:25,264 - ImageNet_Training - INFO - Validation samples: 50000
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO - ImageNet data loaders created successfully!
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Train batches: 8006
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Val batches: 1563
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO - Computing dataset statistics...
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO - Dataset Statistics:
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Train samples: 256,190
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Val samples: 50,000
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Num classes: 1000
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Batch size: 32
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Input size: 224x224
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO -   Subset: 20.0% stratified
+2025-10-21 05:57:25,265 - ImageNet_Training - INFO - Verifying stratified subset distribution...
+2025-10-21 05:57:25,343 - ImageNet_Training - INFO - Subset contains 1000 classes
+2025-10-21 05:57:25,344 - ImageNet_Training - INFO - Samples per class - Min: 732, Max: 1300, Mean: 1281.2, Std: 70.2
+2025-10-21 05:57:25,344 - ImageNet_Training - INFO - Building ResNet-50 model...
+2025-10-21 05:57:25,925 - ImageNet_Training - INFO - Generating RESNET50 summary...
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - RESNET50 Architecture Summary:
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Total Parameters: 25,557,032
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Trainable Parameters: 25,557,032
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Model Size: 97.49 MB
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Batch Normalization: Yes
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Dropout: Yes
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   FC Layers: Yes
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO -   Global Pooling: Yes
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - ======================================================================
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - DETAILED MODEL ARCHITECTURE
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - ======================================================================
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - Layer (type:depth-idx)                   Output Shape              Param #
+2025-10-21 05:57:26,715 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - ├─Conv2d: 1-1                            [-1, 64, 112, 112]        9,408
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - ├─BatchNorm2d: 1-2                       [-1, 64, 112, 112]        128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - ├─ReLU: 1-3                              [-1, 64, 112, 112]        --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - ├─MaxPool2d: 1-4                         [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - ├─Sequential: 1-5                        [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-1              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-1                  [-1, 64, 56, 56]          4,096
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-2             [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-3                    [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-4                  [-1, 64, 56, 56]          36,864
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-5             [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-6                    [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-7                  [-1, 256, 56, 56]         16,384
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-8             [-1, 256, 56, 56]         512
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Sequential: 3-9              [-1, 256, 56, 56]         16,896
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-10                   [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-11              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-2              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-12                 [-1, 64, 56, 56]          16,384
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-13            [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-14                   [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-15                 [-1, 64, 56, 56]          36,864
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-16            [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-17                   [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-18                 [-1, 256, 56, 56]         16,384
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-19            [-1, 256, 56, 56]         512
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-20                   [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-21              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-3              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-22                 [-1, 64, 56, 56]          16,384
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-23            [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,716 - ImageNet_Training - INFO - |    |    └─ReLU: 3-24                   [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-25                 [-1, 64, 56, 56]          36,864
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-26            [-1, 64, 56, 56]          128
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-27                   [-1, 64, 56, 56]          --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-28                 [-1, 256, 56, 56]         16,384
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-29            [-1, 256, 56, 56]         512
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-30                   [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-31              [-1, 256, 56, 56]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - ├─Sequential: 1-6                        [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-4              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-32                 [-1, 128, 56, 56]         32,768
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-33            [-1, 128, 56, 56]         256
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-34                   [-1, 128, 56, 56]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-35                 [-1, 128, 28, 28]         147,456
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-36            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-37                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-38                 [-1, 512, 28, 28]         65,536
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-39            [-1, 512, 28, 28]         1,024
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Sequential: 3-40             [-1, 512, 28, 28]         132,096
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-41                   [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-42              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-5              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-43                 [-1, 128, 28, 28]         65,536
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-44            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─ReLU: 3-45                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-46                 [-1, 128, 28, 28]         147,456
+2025-10-21 05:57:26,717 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-47            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-48                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-49                 [-1, 512, 28, 28]         65,536
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-50            [-1, 512, 28, 28]         1,024
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-51                   [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-52              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-6              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-53                 [-1, 128, 28, 28]         65,536
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-54            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-55                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-56                 [-1, 128, 28, 28]         147,456
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-57            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-58                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-59                 [-1, 512, 28, 28]         65,536
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-60            [-1, 512, 28, 28]         1,024
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-61                   [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-62              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-7              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-63                 [-1, 128, 28, 28]         65,536
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-64            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-65                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-66                 [-1, 128, 28, 28]         147,456
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-67            [-1, 128, 28, 28]         256
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─ReLU: 3-68                   [-1, 128, 28, 28]         --
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-69                 [-1, 512, 28, 28]         65,536
+2025-10-21 05:57:26,718 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-70            [-1, 512, 28, 28]         1,024
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-71                   [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-72              [-1, 512, 28, 28]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - ├─Sequential: 1-7                        [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-8              [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-73                 [-1, 256, 28, 28]         131,072
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-74            [-1, 256, 28, 28]         512
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-75                   [-1, 256, 28, 28]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-76                 [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-77            [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-78                   [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-79                 [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-80            [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Sequential: 3-81             [-1, 1024, 14, 14]        526,336
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-82                   [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-83              [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-9              [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-84                 [-1, 256, 14, 14]         262,144
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-85            [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-86                   [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-87                 [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-88            [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─ReLU: 3-89                   [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,719 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-90                 [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-91            [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-92                   [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-93              [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-10             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-94                 [-1, 256, 14, 14]         262,144
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-95            [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-96                   [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-97                 [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-98            [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-99                   [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-100                [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-101           [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-102                  [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-103             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-11             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-104                [-1, 256, 14, 14]         262,144
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-105           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-106                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-107                [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-108           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─ReLU: 3-109                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,720 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-110                [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-111           [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-112                  [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-113             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-12             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-114                [-1, 256, 14, 14]         262,144
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-115           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-116                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-117                [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-118           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-119                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-120                [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-121           [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-122                  [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-123             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-13             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-124                [-1, 256, 14, 14]         262,144
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-125           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-126                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-127                [-1, 256, 14, 14]         589,824
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-128           [-1, 256, 14, 14]         512
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-129                  [-1, 256, 14, 14]         --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-130                [-1, 1024, 14, 14]        262,144
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-131           [-1, 1024, 14, 14]        2,048
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-132                  [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-133             [-1, 1024, 14, 14]        --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - ├─Sequential: 1-8                        [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-14             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-134                [-1, 512, 14, 14]         524,288
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-135           [-1, 512, 14, 14]         1,024
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─ReLU: 3-136                  [-1, 512, 14, 14]         --
+2025-10-21 05:57:26,721 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-137                [-1, 512, 7, 7]           2,359,296
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-138           [-1, 512, 7, 7]           1,024
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-139                  [-1, 512, 7, 7]           --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-140                [-1, 2048, 7, 7]          1,048,576
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-141           [-1, 2048, 7, 7]          4,096
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Sequential: 3-142            [-1, 2048, 7, 7]          2,101,248
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-143                  [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-144             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-15             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-145                [-1, 512, 7, 7]           1,048,576
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-146           [-1, 512, 7, 7]           1,024
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-147                  [-1, 512, 7, 7]           --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-148                [-1, 512, 7, 7]           2,359,296
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-149           [-1, 512, 7, 7]           1,024
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-150                  [-1, 512, 7, 7]           --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-151                [-1, 2048, 7, 7]          1,048,576
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-152           [-1, 2048, 7, 7]          4,096
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-153                  [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-154             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    └─BottleneckBlock: 2-16             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-155                [-1, 512, 7, 7]           1,048,576
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-156           [-1, 512, 7, 7]           1,024
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-157                  [-1, 512, 7, 7]           --
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-158                [-1, 512, 7, 7]           2,359,296
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-159           [-1, 512, 7, 7]           1,024
+2025-10-21 05:57:26,722 - ImageNet_Training - INFO - |    |    └─ReLU: 3-160                  [-1, 512, 7, 7]           --
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - |    |    └─Conv2d: 3-161                [-1, 2048, 7, 7]          1,048,576
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - |    |    └─BatchNorm2d: 3-162           [-1, 2048, 7, 7]          4,096
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - |    |    └─ReLU: 3-163                  [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - |    |    └─Dropout2d: 3-164             [-1, 2048, 7, 7]          --
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ├─AdaptiveAvgPool2d: 1-9                 [-1, 2048, 1, 1]          --
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ├─Dropout: 1-10                          [-1, 2048]                --
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ├─Linear: 1-11                           [-1, 1000]                2,049,000
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Total params: 25,557,032
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Trainable params: 25,557,032
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Non-trainable params: 0
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Total mult-adds (G): 4.14
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Input size (MB): 0.57
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Forward/backward pass size (MB): 169.59
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Params size (MB): 97.49
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - Estimated Total Size (MB): 267.66
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ==========================================================================================
+2025-10-21 05:57:26,723 - ImageNet_Training - INFO - ======================================================================
+2025-10-21 05:57:26,724 - ImageNet_Training - INFO - Initializing trainer...
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Using device: cuda
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Loss function: CrossEntropyLoss
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Mixed Precision (AMP): True
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Gradient Accumulation Steps: 8
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Starting training...
+2025-10-21 05:57:26,729 - ImageNet_Training - INFO - Initializing training...
+2025-10-21 05:57:26,730 - ImageNet_Training - INFO - Starting Epoch 1/100
+2025-10-21 06:15:18,491 - ImageNet_Training - INFO - Epoch   1: Train Loss: 6.8346, Train Top-1: 0.34%, Train Top-5: 1.44% | Test Loss: 6.7228, Test Top-1: 0.79%, Test Top-5: 3.43% | LR: 0.027464 | Gap: -0.45% | GPU: 2086MB
+2025-10-21 06:15:19,303 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch001.pt
+2025-10-21 06:15:19,304 - ImageNet_Training - INFO - Starting Epoch 2/100
+2025-10-21 06:33:09,962 - ImageNet_Training - INFO - Epoch   2: Train Loss: 6.4066, Train Top-1: 1.32%, Train Top-5: 5.03% | Test Loss: 6.4153, Test Top-1: 2.64%, Test Top-5: 9.02% | LR: 0.034747 | Gap: -1.32% | GPU: 2086MB
+2025-10-21 06:33:10,750 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch002.pt
+2025-10-21 06:33:10,751 - ImageNet_Training - INFO - Starting Epoch 3/100
+2025-10-21 06:51:02,625 - ImageNet_Training - INFO - Epoch   3: Train Loss: 6.0820, Train Top-1: 2.85%, Train Top-5: 9.69% | Test Loss: 6.0709, Test Top-1: 4.91%, Test Top-5: 15.19% | LR: 0.046530 | Gap: -2.06% | GPU: 2086MB
+2025-10-21 06:51:03,414 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch003.pt
+2025-10-21 06:51:03,415 - ImageNet_Training - INFO - Starting Epoch 4/100
+2025-10-21 07:08:55,550 - ImageNet_Training - INFO - Epoch   4: Train Loss: 5.7934, Train Top-1: 5.02%, Train Top-5: 15.11% | Test Loss: 8.0810, Test Top-1: 8.02%, Test Top-5: 22.50% | LR: 0.062298 | Gap: -2.99% | GPU: 2086MB
+2025-10-21 07:08:56,339 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch004.pt
+2025-10-21 07:08:56,340 - ImageNet_Training - INFO - Starting Epoch 5/100
+2025-10-21 07:26:48,756 - ImageNet_Training - INFO - Epoch   5: Train Loss: 5.5418, Train Top-1: 7.43%, Train Top-5: 20.30% | Test Loss: 5.1616, Test Top-1: 11.60%, Test Top-5: 28.95% | LR: 0.081359 | Gap: -4.17% | GPU: 2086MB
+2025-10-21 07:26:49,556 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch005.pt
+2025-10-21 07:26:51,104 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 5): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch005.pt
+2025-10-21 07:26:51,105 - ImageNet_Training - INFO - Starting Epoch 6/100
+2025-10-21 07:44:42,790 - ImageNet_Training - INFO - Epoch   6: Train Loss: 5.3239, Train Top-1: 9.81%, Train Top-5: 25.29% | Test Loss: 4.8257, Test Top-1: 15.11%, Test Top-5: 35.73% | LR: 0.102879 | Gap: -5.30% | GPU: 2086MB
+2025-10-21 07:44:43,577 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch006.pt
+2025-10-21 07:44:43,578 - ImageNet_Training - INFO - Starting Epoch 7/100
+2025-10-21 08:02:35,339 - ImageNet_Training - INFO - Epoch   7: Train Loss: 5.1392, Train Top-1: 12.24%, Train Top-5: 29.42% | Test Loss: 4.7306, Test Top-1: 16.31%, Test Top-5: 37.86% | LR: 0.125916 | Gap: -4.06% | GPU: 2086MB
+2025-10-21 08:02:36,129 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch007.pt
+2025-10-21 08:02:36,129 - ImageNet_Training - INFO - Starting Epoch 8/100
+2025-10-21 08:20:27,325 - ImageNet_Training - INFO - Epoch   8: Train Loss: 4.9993, Train Top-1: 14.05%, Train Top-5: 32.80% | Test Loss: 4.5371, Test Top-1: 19.64%, Test Top-5: 42.73% | LR: 0.149459 | Gap: -5.59% | GPU: 2086MB
+2025-10-21 08:20:28,110 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch008.pt
+2025-10-21 08:20:28,111 - ImageNet_Training - INFO - Starting Epoch 9/100
+2025-10-21 08:38:18,566 - ImageNet_Training - INFO - Epoch   9: Train Loss: 4.8748, Train Top-1: 15.92%, Train Top-5: 35.64% | Test Loss: 4.4557, Test Top-1: 20.89%, Test Top-5: 44.94% | LR: 0.172479 | Gap: -4.97% | GPU: 2086MB
+2025-10-21 08:38:19,357 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch009.pt
+2025-10-21 08:38:19,358 - ImageNet_Training - INFO - Starting Epoch 10/100
+2025-10-21 08:56:09,289 - ImageNet_Training - INFO - Epoch  10: Train Loss: 4.7885, Train Top-1: 17.20%, Train Top-5: 37.73% | Test Loss: 4.3830, Test Top-1: 21.77%, Test Top-5: 46.47% | LR: 0.193968 | Gap: -4.57% | GPU: 2086MB
+2025-10-21 08:56:10,072 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch010.pt
+2025-10-21 08:56:11,629 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 10): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch010.pt
+2025-10-21 08:56:11,630 - ImageNet_Training - INFO - Starting Epoch 11/100
+2025-10-21 09:14:01,136 - ImageNet_Training - INFO - Epoch  11: Train Loss: 4.7265, Train Top-1: 18.20%, Train Top-5: 39.13% | Test Loss: 4.2894, Test Top-1: 23.45%, Test Top-5: 48.47% | LR: 0.212982 | Gap: -5.24% | GPU: 2086MB
+2025-10-21 09:14:01,917 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch011.pt
+2025-10-21 09:14:01,918 - ImageNet_Training - INFO - Starting Epoch 12/100
+2025-10-21 09:31:51,492 - ImageNet_Training - INFO - Epoch  12: Train Loss: 4.6731, Train Top-1: 19.03%, Train Top-5: 40.46% | Test Loss: 4.2676, Test Top-1: 24.36%, Test Top-5: 49.44% | LR: 0.228691 | Gap: -5.33% | GPU: 2086MB
+2025-10-21 09:31:52,274 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch012.pt
+2025-10-21 09:31:52,275 - ImageNet_Training - INFO - Starting Epoch 13/100
+2025-10-21 09:49:41,549 - ImageNet_Training - INFO - Epoch  13: Train Loss: 4.6217, Train Top-1: 19.91%, Train Top-5: 41.63% | Test Loss: 4.1928, Test Top-1: 25.43%, Test Top-5: 50.92% | LR: 0.240406 | Gap: -5.52% | GPU: 2086MB
+2025-10-21 09:49:42,337 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch013.pt
+2025-10-21 09:49:42,337 - ImageNet_Training - INFO - Starting Epoch 14/100
+2025-10-21 10:07:31,538 - ImageNet_Training - INFO - Epoch  14: Train Loss: 4.5793, Train Top-1: 20.46%, Train Top-5: 42.62% | Test Loss: 4.0979, Test Top-1: 27.30%, Test Top-5: 53.67% | LR: 0.247614 | Gap: -6.84% | GPU: 2086MB
+2025-10-21 10:07:32,318 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch014.pt
+2025-10-21 10:07:32,319 - ImageNet_Training - INFO - Starting Epoch 15/100
+2025-10-21 10:25:21,385 - ImageNet_Training - INFO - Epoch  15: Train Loss: 4.5363, Train Top-1: 21.14%, Train Top-5: 43.53% | Test Loss: 4.1567, Test Top-1: 26.62%, Test Top-5: 52.41% | LR: 0.250000 | Gap: -5.48% | GPU: 2086MB
+2025-10-21 10:25:22,167 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 15): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch015.pt
+2025-10-21 10:25:22,168 - ImageNet_Training - INFO - Starting Epoch 16/100
+2025-10-21 10:43:11,188 - ImageNet_Training - INFO - Epoch  16: Train Loss: 4.4983, Train Top-1: 21.96%, Train Top-5: 44.44% | Test Loss: 4.0374, Test Top-1: 28.15%, Test Top-5: 54.99% | LR: 0.249912 | Gap: -6.19% | GPU: 2086MB
+2025-10-21 10:43:11,975 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch016.pt
+2025-10-21 10:43:11,975 - ImageNet_Training - INFO - Starting Epoch 17/100
+2025-10-21 11:01:00,953 - ImageNet_Training - INFO - Epoch  17: Train Loss: 4.4723, Train Top-1: 22.36%, Train Top-5: 45.13% | Test Loss: 4.0620, Test Top-1: 28.51%, Test Top-5: 54.51% | LR: 0.249653 | Gap: -6.15% | GPU: 2086MB
+2025-10-21 11:01:01,734 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch017.pt
+2025-10-21 11:01:01,735 - ImageNet_Training - INFO - Starting Epoch 18/100
+2025-10-21 11:18:50,879 - ImageNet_Training - INFO - Epoch  18: Train Loss: 4.4478, Train Top-1: 22.77%, Train Top-5: 45.49% | Test Loss: 4.0244, Test Top-1: 28.78%, Test Top-5: 55.43% | LR: 0.249223 | Gap: -6.01% | GPU: 2086MB
+2025-10-21 11:18:51,664 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch018.pt
+2025-10-21 11:18:51,665 - ImageNet_Training - INFO - Starting Epoch 19/100
+2025-10-21 11:36:40,702 - ImageNet_Training - INFO - Epoch  19: Train Loss: 4.4026, Train Top-1: 23.56%, Train Top-5: 46.74% | Test Loss: 3.9425, Test Top-1: 29.89%, Test Top-5: 57.13% | LR: 0.248623 | Gap: -6.33% | GPU: 2086MB
+2025-10-21 11:36:41,483 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch019.pt
+2025-10-21 11:36:41,483 - ImageNet_Training - INFO - Starting Epoch 20/100
+2025-10-21 11:54:30,248 - ImageNet_Training - INFO - Epoch  20: Train Loss: 4.3910, Train Top-1: 23.76%, Train Top-5: 46.90% | Test Loss: 3.9065, Test Top-1: 30.62%, Test Top-5: 58.09% | LR: 0.247854 | Gap: -6.86% | GPU: 2086MB
+2025-10-21 11:54:31,034 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch020.pt
+2025-10-21 11:54:32,596 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 20): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch020.pt
+2025-10-21 11:54:32,597 - ImageNet_Training - INFO - Starting Epoch 21/100
+2025-10-21 12:24:21,289 - ImageNet_Training - INFO - Epoch  21: Train Loss: 4.3765, Train Top-1: 24.13%, Train Top-5: 47.38% | Test Loss: 3.9666, Test Top-1: 29.41%, Test Top-5: 56.80% | LR: 0.246917 | Gap: -5.28% | GPU: 2086MB
+2025-10-21 12:24:21,289 - ImageNet_Training - INFO - Starting Epoch 22/100
+2025-10-21 13:02:40,829 - ImageNet_Training - INFO - Epoch  22: Train Loss: 4.3513, Train Top-1: 24.47%, Train Top-5: 47.78% | Test Loss: 3.8976, Test Top-1: 30.98%, Test Top-5: 58.30% | LR: 0.245813 | Gap: -6.51% | GPU: 2086MB
+2025-10-21 13:02:41,716 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch022.pt
+2025-10-21 13:02:41,717 - ImageNet_Training - INFO - Starting Epoch 23/100
+2025-10-21 13:41:03,069 - ImageNet_Training - INFO - Epoch  23: Train Loss: 4.3438, Train Top-1: 24.64%, Train Top-5: 48.09% | Test Loss: 3.8601, Test Top-1: 31.61%, Test Top-5: 58.91% | LR: 0.244544 | Gap: -6.97% | GPU: 2086MB
+2025-10-21 13:41:04,008 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch023.pt
+2025-10-21 13:41:04,009 - ImageNet_Training - INFO - Starting Epoch 24/100
+2025-10-21 14:19:25,528 - ImageNet_Training - INFO - Epoch  24: Train Loss: 4.3320, Train Top-1: 24.93%, Train Top-5: 48.30% | Test Loss: 3.8819, Test Top-1: 31.91%, Test Top-5: 58.95% | LR: 0.243111 | Gap: -6.98% | GPU: 2086MB
+2025-10-21 14:19:25,779 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch024.pt
+2025-10-21 14:19:25,779 - ImageNet_Training - INFO - Starting Epoch 25/100
+2025-10-21 14:57:47,981 - ImageNet_Training - INFO - Epoch  25: Train Loss: 4.3034, Train Top-1: 25.33%, Train Top-5: 48.86% | Test Loss: 4.0061, Test Top-1: 28.89%, Test Top-5: 55.59% | LR: 0.241516 | Gap: -3.56% | GPU: 2086MB
+2025-10-21 14:57:48,899 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 25): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch025.pt
+2025-10-21 14:57:48,899 - ImageNet_Training - INFO - Starting Epoch 26/100
+2025-10-21 15:36:09,019 - ImageNet_Training - INFO - Epoch  26: Train Loss: 4.3026, Train Top-1: 25.32%, Train Top-5: 49.06% | Test Loss: 3.8079, Test Top-1: 32.77%, Test Top-5: 59.94% | LR: 0.239763 | Gap: -7.46% | GPU: 2086MB
+2025-10-21 15:36:09,920 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch026.pt
+2025-10-21 15:36:09,920 - ImageNet_Training - INFO - Starting Epoch 27/100
+2025-10-21 16:14:32,466 - ImageNet_Training - INFO - Epoch  27: Train Loss: 4.2898, Train Top-1: 25.56%, Train Top-5: 49.25% | Test Loss: 3.8038, Test Top-1: 32.76%, Test Top-5: 60.25% | LR: 0.237852 | Gap: -7.20% | GPU: 2086MB
+2025-10-21 16:14:32,466 - ImageNet_Training - INFO - Starting Epoch 28/100
+2025-10-21 16:52:55,039 - ImageNet_Training - INFO - Epoch  28: Train Loss: 4.2767, Train Top-1: 25.87%, Train Top-5: 49.54% | Test Loss: 3.8957, Test Top-1: 31.73%, Test Top-5: 58.67% | LR: 0.235786 | Gap: -5.87% | GPU: 2086MB
+2025-10-21 16:52:55,039 - ImageNet_Training - INFO - Starting Epoch 29/100
+2025-10-21 17:31:17,478 - ImageNet_Training - INFO - Epoch  29: Train Loss: 4.2711, Train Top-1: 25.90%, Train Top-5: 49.70% | Test Loss: 3.7946, Test Top-1: 33.73%, Test Top-5: 60.79% | LR: 0.233569 | Gap: -7.84% | GPU: 2086MB
+2025-10-21 17:31:18,415 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch029.pt
+2025-10-21 17:31:18,415 - ImageNet_Training - INFO - Starting Epoch 30/100
+2025-10-21 18:09:40,289 - ImageNet_Training - INFO - Epoch  30: Train Loss: 4.2622, Train Top-1: 26.06%, Train Top-5: 49.89% | Test Loss: 3.8422, Test Top-1: 32.57%, Test Top-5: 59.35% | LR: 0.231204 | Gap: -6.51% | GPU: 2086MB
+2025-10-21 18:09:41,179 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 30): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch030.pt
+2025-10-21 18:09:41,180 - ImageNet_Training - INFO - Starting Epoch 31/100
+2025-10-21 18:47:59,480 - ImageNet_Training - INFO - Epoch  31: Train Loss: 4.2450, Train Top-1: 26.44%, Train Top-5: 50.29% | Test Loss: 3.8077, Test Top-1: 32.51%, Test Top-5: 60.06% | LR: 0.228693 | Gap: -6.07% | GPU: 2086MB
+2025-10-21 18:47:59,481 - ImageNet_Training - INFO - Starting Epoch 32/100
+2025-10-21 19:26:19,496 - ImageNet_Training - INFO - Epoch  32: Train Loss: 4.2413, Train Top-1: 26.56%, Train Top-5: 50.39% | Test Loss: 3.7537, Test Top-1: 34.10%, Test Top-5: 61.76% | LR: 0.226040 | Gap: -7.54% | GPU: 2086MB
+2025-10-21 19:26:19,745 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch032.pt
+2025-10-21 19:26:19,746 - ImageNet_Training - INFO - Starting Epoch 33/100
+2025-10-21 20:04:39,458 - ImageNet_Training - INFO - Epoch  33: Train Loss: 4.2361, Train Top-1: 26.63%, Train Top-5: 50.49% | Test Loss: 3.7207, Test Top-1: 34.55%, Test Top-5: 62.04% | LR: 0.223249 | Gap: -7.92% | GPU: 2086MB
+2025-10-21 20:04:40,325 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch033.pt
+2025-10-21 20:04:40,325 - ImageNet_Training - INFO - Starting Epoch 34/100
+2025-10-21 20:43:00,537 - ImageNet_Training - INFO - Epoch  34: Train Loss: 4.2199, Train Top-1: 26.75%, Train Top-5: 50.83% | Test Loss: 3.7855, Test Top-1: 33.12%, Test Top-5: 60.91% | LR: 0.220323 | Gap: -6.37% | GPU: 2086MB
+2025-10-21 20:43:00,538 - ImageNet_Training - INFO - Starting Epoch 35/100
+2025-10-21 21:21:20,679 - ImageNet_Training - INFO - Epoch  35: Train Loss: 4.2185, Train Top-1: 26.89%, Train Top-5: 50.85% | Test Loss: 3.7715, Test Top-1: 33.64%, Test Top-5: 61.25% | LR: 0.217267 | Gap: -6.75% | GPU: 2086MB
+2025-10-21 21:21:21,552 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 35): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch035.pt
+2025-10-21 21:21:21,553 - ImageNet_Training - INFO - Starting Epoch 36/100
+2025-10-21 21:59:39,865 - ImageNet_Training - INFO - Epoch  36: Train Loss: 4.2189, Train Top-1: 26.92%, Train Top-5: 50.79% | Test Loss: 3.7264, Test Top-1: 34.90%, Test Top-5: 62.21% | LR: 0.214085 | Gap: -7.98% | GPU: 2086MB
+2025-10-21 21:59:40,766 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch036.pt
+2025-10-21 21:59:40,767 - ImageNet_Training - INFO - Starting Epoch 37/100
+2025-10-21 22:38:01,258 - ImageNet_Training - INFO - Epoch  37: Train Loss: 4.2034, Train Top-1: 27.19%, Train Top-5: 51.17% | Test Loss: 3.7617, Test Top-1: 34.04%, Test Top-5: 61.44% | LR: 0.210781 | Gap: -6.84% | GPU: 2086MB
+2025-10-21 22:38:01,258 - ImageNet_Training - INFO - Starting Epoch 38/100
+2025-10-21 23:16:22,522 - ImageNet_Training - INFO - Epoch  38: Train Loss: 4.1953, Train Top-1: 27.42%, Train Top-5: 51.38% | Test Loss: 3.7292, Test Top-1: 34.38%, Test Top-5: 62.11% | LR: 0.207359 | Gap: -6.96% | GPU: 2086MB
+2025-10-21 23:16:22,523 - ImageNet_Training - INFO - Starting Epoch 39/100
+2025-10-21 23:54:43,351 - ImageNet_Training - INFO - Epoch  39: Train Loss: 4.1801, Train Top-1: 27.58%, Train Top-5: 51.66% | Test Loss: 3.6887, Test Top-1: 35.39%, Test Top-5: 63.21% | LR: 0.203825 | Gap: -7.81% | GPU: 2086MB
+2025-10-21 23:54:44,277 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch039.pt
+2025-10-21 23:54:44,278 - ImageNet_Training - INFO - Starting Epoch 40/100
+2025-10-22 00:33:05,622 - ImageNet_Training - INFO - Epoch  40: Train Loss: 4.1826, Train Top-1: 27.65%, Train Top-5: 51.68% | Test Loss: 3.7102, Test Top-1: 34.96%, Test Top-5: 62.98% | LR: 0.200183 | Gap: -7.31% | GPU: 2086MB
+2025-10-22 00:33:06,538 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 40): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch040.pt
+2025-10-22 00:33:06,539 - ImageNet_Training - INFO - Starting Epoch 41/100
+2025-10-22 01:11:26,990 - ImageNet_Training - INFO - Epoch  41: Train Loss: 4.1728, Train Top-1: 27.59%, Train Top-5: 51.98% | Test Loss: 3.6328, Test Top-1: 36.16%, Test Top-5: 64.37% | LR: 0.196438 | Gap: -8.57% | GPU: 2086MB
+2025-10-22 01:11:27,908 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch041.pt
+2025-10-22 01:11:27,909 - ImageNet_Training - INFO - Starting Epoch 42/100
+2025-10-22 01:49:49,130 - ImageNet_Training - INFO - Epoch  42: Train Loss: 4.1646, Train Top-1: 27.92%, Train Top-5: 52.10% | Test Loss: 3.6991, Test Top-1: 35.25%, Test Top-5: 63.17% | LR: 0.192595 | Gap: -7.33% | GPU: 2086MB
+2025-10-22 01:49:49,131 - ImageNet_Training - INFO - Starting Epoch 43/100
+2025-10-22 02:28:10,538 - ImageNet_Training - INFO - Epoch  43: Train Loss: 4.1573, Train Top-1: 28.10%, Train Top-5: 52.18% | Test Loss: 3.6523, Test Top-1: 35.97%, Test Top-5: 63.81% | LR: 0.188660 | Gap: -7.87% | GPU: 2086MB
+2025-10-22 02:28:10,539 - ImageNet_Training - INFO - Starting Epoch 44/100
+2025-10-22 03:06:30,484 - ImageNet_Training - INFO - Epoch  44: Train Loss: 4.1433, Train Top-1: 28.24%, Train Top-5: 52.52% | Test Loss: 3.6529, Test Top-1: 35.86%, Test Top-5: 63.86% | LR: 0.184638 | Gap: -7.62% | GPU: 2086MB
+2025-10-22 03:06:30,485 - ImageNet_Training - INFO - Starting Epoch 45/100
+2025-10-22 03:44:51,290 - ImageNet_Training - INFO - Epoch  45: Train Loss: 4.1372, Train Top-1: 28.42%, Train Top-5: 52.60% | Test Loss: 3.6647, Test Top-1: 36.22%, Test Top-5: 63.40% | LR: 0.180534 | Gap: -7.80% | GPU: 2086MB
+2025-10-22 03:44:52,199 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch045.pt
+2025-10-22 03:44:54,063 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 45): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch045.pt
+2025-10-22 03:44:54,067 - ImageNet_Training - INFO - Starting Epoch 46/100
+2025-10-22 04:23:14,054 - ImageNet_Training - INFO - Epoch  46: Train Loss: 4.1298, Train Top-1: 28.69%, Train Top-5: 52.85% | Test Loss: 3.6273, Test Top-1: 36.31%, Test Top-5: 64.29% | LR: 0.176354 | Gap: -7.62% | GPU: 2086MB
+2025-10-22 04:23:14,972 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch046.pt
+2025-10-22 04:23:14,974 - ImageNet_Training - INFO - Starting Epoch 47/100
+2025-10-22 05:01:35,930 - ImageNet_Training - INFO - Epoch  47: Train Loss: 4.1180, Train Top-1: 28.75%, Train Top-5: 53.07% | Test Loss: 3.6693, Test Top-1: 35.96%, Test Top-5: 63.76% | LR: 0.172104 | Gap: -7.21% | GPU: 2086MB
+2025-10-22 05:01:35,930 - ImageNet_Training - INFO - Starting Epoch 48/100
+2025-10-22 05:39:55,203 - ImageNet_Training - INFO - Epoch  48: Train Loss: 4.1132, Train Top-1: 28.76%, Train Top-5: 53.26% | Test Loss: 3.6018, Test Top-1: 37.50%, Test Top-5: 64.99% | LR: 0.167789 | Gap: -8.74% | GPU: 2086MB
+2025-10-22 05:39:56,105 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch048.pt
+2025-10-22 05:39:56,111 - ImageNet_Training - INFO - Starting Epoch 49/100
+2025-10-22 06:18:16,488 - ImageNet_Training - INFO - Epoch  49: Train Loss: 4.1054, Train Top-1: 28.89%, Train Top-5: 53.38% | Test Loss: 3.5732, Test Top-1: 37.46%, Test Top-5: 65.53% | LR: 0.163416 | Gap: -8.57% | GPU: 2086MB
+2025-10-22 06:18:16,489 - ImageNet_Training - INFO - Starting Epoch 50/100
+2025-10-22 06:56:35,972 - ImageNet_Training - INFO - Epoch  50: Train Loss: 4.1007, Train Top-1: 29.20%, Train Top-5: 53.51% | Test Loss: 3.6451, Test Top-1: 36.22%, Test Top-5: 63.94% | LR: 0.158990 | Gap: -7.02% | GPU: 2086MB
+2025-10-22 06:56:36,868 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 50): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch050.pt
+2025-10-22 06:56:36,869 - ImageNet_Training - INFO - Starting Epoch 51/100
+2025-10-22 07:34:55,983 - ImageNet_Training - INFO - Epoch  51: Train Loss: 4.0868, Train Top-1: 29.35%, Train Top-5: 53.90% | Test Loss: 3.6698, Test Top-1: 35.66%, Test Top-5: 63.34% | LR: 0.154518 | Gap: -6.31% | GPU: 2086MB
+2025-10-22 07:34:55,984 - ImageNet_Training - INFO - Starting Epoch 52/100
+2025-10-22 08:13:15,912 - ImageNet_Training - INFO - Epoch  52: Train Loss: 4.0805, Train Top-1: 29.64%, Train Top-5: 53.98% | Test Loss: 3.5763, Test Top-1: 37.31%, Test Top-5: 65.21% | LR: 0.150005 | Gap: -7.67% | GPU: 2086MB
+2025-10-22 08:13:15,913 - ImageNet_Training - INFO - Starting Epoch 53/100
+2025-10-22 08:51:35,234 - ImageNet_Training - INFO - Epoch  53: Train Loss: 4.0793, Train Top-1: 29.50%, Train Top-5: 53.98% | Test Loss: 3.5474, Test Top-1: 38.30%, Test Top-5: 66.37% | LR: 0.145459 | Gap: -8.80% | GPU: 2086MB
+2025-10-22 08:51:36,143 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch053.pt
+2025-10-22 08:51:36,144 - ImageNet_Training - INFO - Starting Epoch 54/100
+2025-10-22 09:29:56,463 - ImageNet_Training - INFO - Epoch  54: Train Loss: 4.0469, Train Top-1: 30.17%, Train Top-5: 54.68% | Test Loss: 3.5868, Test Top-1: 37.36%, Test Top-5: 65.21% | LR: 0.140884 | Gap: -7.19% | GPU: 2086MB
+2025-10-22 09:29:56,464 - ImageNet_Training - INFO - Starting Epoch 55/100
+2025-10-22 10:08:17,217 - ImageNet_Training - INFO - Epoch  55: Train Loss: 4.0473, Train Top-1: 30.20%, Train Top-5: 54.77% | Test Loss: 3.5449, Test Top-1: 38.30%, Test Top-5: 66.38% | LR: 0.136287 | Gap: -8.10% | GPU: 2086MB
+2025-10-22 10:08:18,140 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch055.pt
+2025-10-22 10:08:20,085 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 55): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch055.pt
+2025-10-22 10:08:20,086 - ImageNet_Training - INFO - Starting Epoch 56/100
+2025-10-22 10:46:37,538 - ImageNet_Training - INFO - Epoch  56: Train Loss: 4.0399, Train Top-1: 30.33%, Train Top-5: 54.87% | Test Loss: 3.5187, Test Top-1: 38.67%, Test Top-5: 66.50% | LR: 0.131675 | Gap: -8.35% | GPU: 2086MB
+2025-10-22 10:46:38,425 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch056.pt
+2025-10-22 10:46:38,425 - ImageNet_Training - INFO - Starting Epoch 57/100
+2025-10-22 11:24:58,774 - ImageNet_Training - INFO - Epoch  57: Train Loss: 4.0263, Train Top-1: 30.70%, Train Top-5: 55.07% | Test Loss: 3.5280, Test Top-1: 38.55%, Test Top-5: 66.58% | LR: 0.127054 | Gap: -7.86% | GPU: 2086MB
+2025-10-22 11:24:58,775 - ImageNet_Training - INFO - Starting Epoch 58/100
+2025-10-22 12:03:18,954 - ImageNet_Training - INFO - Epoch  58: Train Loss: 4.0084, Train Top-1: 30.87%, Train Top-5: 55.53% | Test Loss: 3.5207, Test Top-1: 39.10%, Test Top-5: 67.24% | LR: 0.122430 | Gap: -8.24% | GPU: 2086MB
+2025-10-22 12:03:19,859 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch058.pt
+2025-10-22 12:03:19,859 - ImageNet_Training - INFO - Starting Epoch 59/100
+2025-10-22 12:41:39,275 - ImageNet_Training - INFO - Epoch  59: Train Loss: 3.9940, Train Top-1: 31.09%, Train Top-5: 55.79% | Test Loss: 3.4592, Test Top-1: 40.20%, Test Top-5: 67.76% | LR: 0.117810 | Gap: -9.11% | GPU: 2086MB
+2025-10-22 12:41:40,186 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch059.pt
+2025-10-22 12:41:40,187 - ImageNet_Training - INFO - Starting Epoch 60/100
+2025-10-22 13:19:59,366 - ImageNet_Training - INFO - Epoch  60: Train Loss: 3.9892, Train Top-1: 31.27%, Train Top-5: 56.01% | Test Loss: 3.4551, Test Top-1: 40.40%, Test Top-5: 68.01% | LR: 0.113200 | Gap: -9.13% | GPU: 2086MB
+2025-10-22 13:20:00,303 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch060.pt
+2025-10-22 13:20:02,269 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 60): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch060.pt
+2025-10-22 13:20:02,270 - ImageNet_Training - INFO - Starting Epoch 61/100
+2025-10-22 13:58:21,249 - ImageNet_Training - INFO - Epoch  61: Train Loss: 3.9718, Train Top-1: 31.58%, Train Top-5: 56.30% | Test Loss: 3.4472, Test Top-1: 40.20%, Test Top-5: 68.09% | LR: 0.108605 | Gap: -8.62% | GPU: 2086MB
+2025-10-22 13:58:21,250 - ImageNet_Training - INFO - Starting Epoch 62/100
+2025-10-22 14:36:40,892 - ImageNet_Training - INFO - Epoch  62: Train Loss: 3.9628, Train Top-1: 31.75%, Train Top-5: 56.66% | Test Loss: 3.4337, Test Top-1: 40.39%, Test Top-5: 68.48% | LR: 0.104033 | Gap: -8.64% | GPU: 2086MB
+2025-10-22 14:36:40,893 - ImageNet_Training - INFO - Starting Epoch 63/100
+2025-10-22 15:15:00,778 - ImageNet_Training - INFO - Epoch  63: Train Loss: 3.9476, Train Top-1: 32.11%, Train Top-5: 56.86% | Test Loss: 3.4244, Test Top-1: 40.85%, Test Top-5: 68.53% | LR: 0.099490 | Gap: -8.74% | GPU: 2086MB
+2025-10-22 15:15:01,644 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch063.pt
+2025-10-22 15:15:01,645 - ImageNet_Training - INFO - Starting Epoch 64/100
+2025-10-22 15:53:21,994 - ImageNet_Training - INFO - Epoch  64: Train Loss: 3.9351, Train Top-1: 32.31%, Train Top-5: 57.11% | Test Loss: 3.4473, Test Top-1: 40.78%, Test Top-5: 67.98% | LR: 0.094982 | Gap: -8.48% | GPU: 2086MB
+2025-10-22 15:53:21,995 - ImageNet_Training - INFO - Starting Epoch 65/100
+2025-10-22 16:31:41,312 - ImageNet_Training - INFO - Epoch  65: Train Loss: 3.9100, Train Top-1: 32.94%, Train Top-5: 57.65% | Test Loss: 3.3934, Test Top-1: 41.32%, Test Top-5: 69.05% | LR: 0.090515 | Gap: -8.38% | GPU: 2086MB
+2025-10-22 16:31:42,232 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch065.pt
+2025-10-22 16:31:44,120 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 65): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch065.pt
+2025-10-22 16:31:44,120 - ImageNet_Training - INFO - Starting Epoch 66/100
+2025-10-22 17:10:01,931 - ImageNet_Training - INFO - Epoch  66: Train Loss: 3.8987, Train Top-1: 33.14%, Train Top-5: 57.83% | Test Loss: 3.3747, Test Top-1: 41.87%, Test Top-5: 69.67% | LR: 0.086095 | Gap: -8.73% | GPU: 2086MB
+2025-10-22 17:10:02,822 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch066.pt
+2025-10-22 17:10:02,825 - ImageNet_Training - INFO - Starting Epoch 67/100
+2025-10-22 17:48:21,379 - ImageNet_Training - INFO - Epoch  67: Train Loss: 3.8766, Train Top-1: 33.57%, Train Top-5: 58.35% | Test Loss: 3.3043, Test Top-1: 43.68%, Test Top-5: 71.23% | LR: 0.081728 | Gap: -10.10% | GPU: 2086MB
+2025-10-22 17:48:21,633 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch067.pt
+2025-10-22 17:48:21,633 - ImageNet_Training - INFO - Starting Epoch 68/100
+2025-10-22 18:26:41,300 - ImageNet_Training - INFO - Epoch  68: Train Loss: 3.8610, Train Top-1: 33.81%, Train Top-5: 58.70% | Test Loss: 3.3079, Test Top-1: 43.42%, Test Top-5: 71.09% | LR: 0.077421 | Gap: -9.61% | GPU: 2086MB
+2025-10-22 18:26:41,300 - ImageNet_Training - INFO - Starting Epoch 69/100
+2025-10-22 19:05:00,643 - ImageNet_Training - INFO - Epoch  69: Train Loss: 3.8418, Train Top-1: 34.15%, Train Top-5: 59.06% | Test Loss: 3.3220, Test Top-1: 42.98%, Test Top-5: 70.62% | LR: 0.073179 | Gap: -8.83% | GPU: 2086MB
+2025-10-22 19:05:00,644 - ImageNet_Training - INFO - Starting Epoch 70/100
+2025-10-22 19:43:17,643 - ImageNet_Training - INFO - Epoch  70: Train Loss: 3.8249, Train Top-1: 34.58%, Train Top-5: 59.49% | Test Loss: 3.3195, Test Top-1: 43.26%, Test Top-5: 70.70% | LR: 0.069007 | Gap: -8.68% | GPU: 2086MB
+2025-10-22 19:43:18,541 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 70): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch070.pt
+2025-10-22 19:43:18,542 - ImageNet_Training - INFO - Starting Epoch 71/100
+2025-10-22 20:21:34,749 - ImageNet_Training - INFO - Epoch  71: Train Loss: 3.8000, Train Top-1: 35.17%, Train Top-5: 60.01% | Test Loss: 3.2624, Test Top-1: 44.51%, Test Top-5: 71.61% | LR: 0.064913 | Gap: -9.34% | GPU: 2086MB
+2025-10-22 20:21:35,667 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch071.pt
+2025-10-22 20:21:35,668 - ImageNet_Training - INFO - Starting Epoch 72/100
+2025-10-22 20:59:54,859 - ImageNet_Training - INFO - Epoch  72: Train Loss: 3.7839, Train Top-1: 35.46%, Train Top-5: 60.40% | Test Loss: 3.2393, Test Top-1: 45.16%, Test Top-5: 72.61% | LR: 0.060900 | Gap: -9.70% | GPU: 2086MB
+2025-10-22 20:59:55,740 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch072.pt
+2025-10-22 20:59:55,741 - ImageNet_Training - INFO - Starting Epoch 73/100
+2025-10-22 21:38:14,506 - ImageNet_Training - INFO - Epoch  73: Train Loss: 3.7653, Train Top-1: 35.84%, Train Top-5: 60.82% | Test Loss: 3.2333, Test Top-1: 45.07%, Test Top-5: 72.49% | LR: 0.056976 | Gap: -9.22% | GPU: 2086MB
+2025-10-22 21:38:14,508 - ImageNet_Training - INFO - Starting Epoch 74/100
+2025-10-22 22:16:34,675 - ImageNet_Training - INFO - Epoch  74: Train Loss: 3.7360, Train Top-1: 36.36%, Train Top-5: 61.43% | Test Loss: 3.2129, Test Top-1: 45.51%, Test Top-5: 72.82% | LR: 0.053144 | Gap: -9.16% | GPU: 2086MB
+2025-10-22 22:16:34,933 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch074.pt
+2025-10-22 22:16:34,933 - ImageNet_Training - INFO - Starting Epoch 75/100
+2025-10-22 22:54:54,680 - ImageNet_Training - INFO - Epoch  75: Train Loss: 3.7103, Train Top-1: 37.12%, Train Top-5: 62.03% | Test Loss: 3.1908, Test Top-1: 46.04%, Test Top-5: 73.12% | LR: 0.049411 | Gap: -8.93% | GPU: 2086MB
+2025-10-22 22:54:55,548 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch075.pt
+2025-10-22 22:54:57,340 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 75): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch075.pt
+2025-10-22 22:54:57,341 - ImageNet_Training - INFO - Starting Epoch 76/100
+2025-10-22 23:33:16,254 - ImageNet_Training - INFO - Epoch  76: Train Loss: 3.6813, Train Top-1: 37.55%, Train Top-5: 62.68% | Test Loss: 3.1458, Test Top-1: 47.08%, Test Top-5: 74.09% | LR: 0.045781 | Gap: -9.53% | GPU: 2086MB
+2025-10-22 23:33:17,119 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch076.pt
+2025-10-22 23:33:17,120 - ImageNet_Training - INFO - Starting Epoch 77/100
+2025-10-23 00:11:35,751 - ImageNet_Training - INFO - Epoch  77: Train Loss: 3.6523, Train Top-1: 38.32%, Train Top-5: 63.16% | Test Loss: 3.1134, Test Top-1: 47.56%, Test Top-5: 74.67% | LR: 0.042260 | Gap: -9.24% | GPU: 2086MB
+2025-10-23 00:11:36,652 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch077.pt
+2025-10-23 00:11:36,653 - ImageNet_Training - INFO - Starting Epoch 78/100
+2025-10-23 00:49:55,175 - ImageNet_Training - INFO - Epoch  78: Train Loss: 3.6376, Train Top-1: 38.63%, Train Top-5: 63.56% | Test Loss: 3.1106, Test Top-1: 47.70%, Test Top-5: 74.45% | LR: 0.038852 | Gap: -9.06% | GPU: 2086MB
+2025-10-23 00:49:56,046 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch078.pt
+2025-10-23 00:49:56,046 - ImageNet_Training - INFO - Starting Epoch 79/100
+2025-10-23 01:28:14,124 - ImageNet_Training - INFO - Epoch  79: Train Loss: 3.6009, Train Top-1: 39.29%, Train Top-5: 64.38% | Test Loss: 3.0530, Test Top-1: 49.09%, Test Top-5: 75.71% | LR: 0.035562 | Gap: -9.80% | GPU: 2086MB
+2025-10-23 01:28:15,010 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch079.pt
+2025-10-23 01:28:15,010 - ImageNet_Training - INFO - Starting Epoch 80/100
+2025-10-23 02:06:34,228 - ImageNet_Training - INFO - Epoch  80: Train Loss: 3.5720, Train Top-1: 40.01%, Train Top-5: 64.94% | Test Loss: 3.0360, Test Top-1: 49.63%, Test Top-5: 76.02% | LR: 0.032394 | Gap: -9.62% | GPU: 2086MB
+2025-10-23 02:06:35,139 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch080.pt
+2025-10-23 02:06:36,988 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 80): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch080.pt
+2025-10-23 02:06:36,990 - ImageNet_Training - INFO - Starting Epoch 81/100
+2025-10-23 02:44:53,146 - ImageNet_Training - INFO - Epoch  81: Train Loss: 3.5428, Train Top-1: 40.81%, Train Top-5: 65.42% | Test Loss: 2.9919, Test Top-1: 50.53%, Test Top-5: 76.66% | LR: 0.029353 | Gap: -9.72% | GPU: 2086MB
+2025-10-23 02:44:54,049 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch081.pt
+2025-10-23 02:44:54,050 - ImageNet_Training - INFO - Starting Epoch 82/100
+2025-10-23 03:23:11,534 - ImageNet_Training - INFO - Epoch  82: Train Loss: 3.4998, Train Top-1: 41.49%, Train Top-5: 66.50% | Test Loss: 2.9796, Test Top-1: 50.32%, Test Top-5: 77.03% | LR: 0.026443 | Gap: -8.84% | GPU: 2086MB
+2025-10-23 03:23:11,535 - ImageNet_Training - INFO - Starting Epoch 83/100
+2025-10-23 04:01:30,477 - ImageNet_Training - INFO - Epoch  83: Train Loss: 3.4679, Train Top-1: 42.33%, Train Top-5: 67.02% | Test Loss: 2.9303, Test Top-1: 51.94%, Test Top-5: 77.90% | LR: 0.023668 | Gap: -9.61% | GPU: 2086MB
+2025-10-23 04:01:31,363 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch083.pt
+2025-10-23 04:01:31,364 - ImageNet_Training - INFO - Starting Epoch 84/100
+2025-10-23 04:39:48,904 - ImageNet_Training - INFO - Epoch  84: Train Loss: 3.4288, Train Top-1: 43.17%, Train Top-5: 67.91% | Test Loss: 2.9048, Test Top-1: 52.50%, Test Top-5: 78.20% | LR: 0.021031 | Gap: -9.33% | GPU: 2086MB
+2025-10-23 04:39:49,169 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch084.pt
+2025-10-23 04:39:49,169 - ImageNet_Training - INFO - Starting Epoch 85/100
+2025-10-23 05:18:07,496 - ImageNet_Training - INFO - Epoch  85: Train Loss: 3.3895, Train Top-1: 44.12%, Train Top-5: 68.65% | Test Loss: 2.8783, Test Top-1: 53.06%, Test Top-5: 78.79% | LR: 0.018537 | Gap: -8.94% | GPU: 2086MB
+2025-10-23 05:18:07,750 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch085.pt
+2025-10-23 05:18:08,024 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 85): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch085.pt
+2025-10-23 05:18:08,024 - ImageNet_Training - INFO - Starting Epoch 86/100
+2025-10-23 05:56:26,324 - ImageNet_Training - INFO - Epoch  86: Train Loss: 3.3578, Train Top-1: 44.87%, Train Top-5: 69.30% | Test Loss: 2.8206, Test Top-1: 54.31%, Test Top-5: 79.72% | LR: 0.016189 | Gap: -9.44% | GPU: 2086MB
+2025-10-23 05:56:26,572 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch086.pt
+2025-10-23 05:56:26,573 - ImageNet_Training - INFO - Starting Epoch 87/100
+2025-10-23 06:34:45,447 - ImageNet_Training - INFO - Epoch  87: Train Loss: 3.3145, Train Top-1: 45.73%, Train Top-5: 70.22% | Test Loss: 2.7985, Test Top-1: 54.83%, Test Top-5: 80.17% | LR: 0.013990 | Gap: -9.10% | GPU: 2086MB
+2025-10-23 06:34:45,704 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch087.pt
+2025-10-23 06:34:45,705 - ImageNet_Training - INFO - Starting Epoch 88/100
+2025-10-23 07:13:04,260 - ImageNet_Training - INFO - Epoch  88: Train Loss: 3.2765, Train Top-1: 46.66%, Train Top-5: 70.93% | Test Loss: 2.7840, Test Top-1: 55.07%, Test Top-5: 80.42% | LR: 0.011942 | Gap: -8.41% | GPU: 2086MB
+2025-10-23 07:13:04,525 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch088.pt
+2025-10-23 07:13:04,526 - ImageNet_Training - INFO - Starting Epoch 89/100
+2025-10-23 07:51:24,010 - ImageNet_Training - INFO - Epoch  89: Train Loss: 3.2293, Train Top-1: 47.78%, Train Top-5: 71.92% | Test Loss: 2.7496, Test Top-1: 55.95%, Test Top-5: 81.19% | LR: 0.010049 | Gap: -8.17% | GPU: 2086MB
+2025-10-23 07:51:24,279 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch089.pt
+2025-10-23 07:51:24,280 - ImageNet_Training - INFO - Starting Epoch 90/100
+2025-10-23 08:29:44,434 - ImageNet_Training - INFO - Epoch  90: Train Loss: 3.1916, Train Top-1: 48.62%, Train Top-5: 72.69% | Test Loss: 2.7064, Test Top-1: 56.94%, Test Top-5: 81.76% | LR: 0.008314 | Gap: -8.32% | GPU: 2086MB
+2025-10-23 08:29:44,701 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch090.pt
+2025-10-23 08:29:44,956 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 90): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch090.pt
+2025-10-23 08:29:44,957 - ImageNet_Training - INFO - Starting Epoch 91/100
+2025-10-23 09:08:02,860 - ImageNet_Training - INFO - Epoch  91: Train Loss: 3.1540, Train Top-1: 49.47%, Train Top-5: 73.33% | Test Loss: 2.6752, Test Top-1: 57.74%, Test Top-5: 82.03% | LR: 0.006738 | Gap: -8.28% | GPU: 2086MB
+2025-10-23 09:08:03,115 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch091.pt
+2025-10-23 09:08:03,116 - ImageNet_Training - INFO - Starting Epoch 92/100
+2025-10-23 09:46:19,224 - ImageNet_Training - INFO - Epoch  92: Train Loss: 3.1105, Train Top-1: 50.59%, Train Top-5: 74.09% | Test Loss: 2.6470, Test Top-1: 58.39%, Test Top-5: 82.53% | LR: 0.005324 | Gap: -7.79% | GPU: 2086MB
+2025-10-23 09:46:19,489 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch092.pt
+2025-10-23 09:46:19,490 - ImageNet_Training - INFO - Starting Epoch 93/100
+2025-10-23 10:24:37,915 - ImageNet_Training - INFO - Epoch  93: Train Loss: 3.0749, Train Top-1: 51.36%, Train Top-5: 74.85% | Test Loss: 2.6309, Test Top-1: 58.74%, Test Top-5: 82.92% | LR: 0.004074 | Gap: -7.38% | GPU: 2086MB
+2025-10-23 10:24:38,213 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch093.pt
+2025-10-23 10:24:38,214 - ImageNet_Training - INFO - Starting Epoch 94/100
+2025-10-23 11:02:57,769 - ImageNet_Training - INFO - Epoch  94: Train Loss: 3.0365, Train Top-1: 52.31%, Train Top-5: 75.57% | Test Loss: 2.6073, Test Top-1: 59.36%, Test Top-5: 83.23% | LR: 0.002990 | Gap: -7.05% | GPU: 2086MB
+2025-10-23 11:02:58,028 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch094.pt
+2025-10-23 11:02:58,028 - ImageNet_Training - INFO - Starting Epoch 95/100
+2025-10-23 11:41:17,423 - ImageNet_Training - INFO - Epoch  95: Train Loss: 3.0143, Train Top-1: 52.82%, Train Top-5: 75.99% | Test Loss: 2.5859, Test Top-1: 59.72%, Test Top-5: 83.57% | LR: 0.002072 | Gap: -6.90% | GPU: 2086MB
+2025-10-23 11:41:17,677 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch095.pt
+2025-10-23 11:41:17,956 - ImageNet_Training - INFO - Saved Checkpoint (Epoch 95): /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/checkpoint_epoch095.pt
+2025-10-23 11:41:17,957 - ImageNet_Training - INFO - Starting Epoch 96/100
+2025-10-23 12:19:34,564 - ImageNet_Training - INFO - Epoch  96: Train Loss: 2.9778, Train Top-1: 53.74%, Train Top-5: 76.71% | Test Loss: 2.5747, Test Top-1: 60.00%, Test Top-5: 83.86% | LR: 0.001323 | Gap: -6.27% | GPU: 2086MB
+2025-10-23 12:19:34,849 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch096.pt
+2025-10-23 12:19:34,850 - ImageNet_Training - INFO - Starting Epoch 97/100
+2025-10-23 12:57:53,941 - ImageNet_Training - INFO - Epoch  97: Train Loss: 2.9565, Train Top-1: 54.31%, Train Top-5: 77.09% | Test Loss: 2.5622, Test Top-1: 60.44%, Test Top-5: 84.03% | LR: 0.000743 | Gap: -6.13% | GPU: 2086MB
+2025-10-23 12:57:54,197 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch097.pt
+2025-10-23 12:57:54,197 - ImageNet_Training - INFO - Starting Epoch 98/100
+2025-10-23 13:36:12,686 - ImageNet_Training - INFO - Epoch  98: Train Loss: 2.9472, Train Top-1: 54.47%, Train Top-5: 77.26% | Test Loss: 2.5551, Test Top-1: 60.55%, Test Top-5: 84.10% | LR: 0.000333 | Gap: -6.08% | GPU: 2086MB
+2025-10-23 13:36:12,972 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/phase2_finetune/models/best_checkpoint_epoch098.pt
+2025-10-23 13:36:12,972 - ImageNet_Training - INFO - Starting Epoch 99/100
+2025-10-23 14:14:31,592 - ImageNet_Training - INFO - Epoch  99: Train Loss: 2.9349, Train Top-1: 54.73%, Train Top-5: 77.44% | Test Loss: 2.5550, Test Top-1: 60.49%, Test Top-5: 84.15% | LR: 0.000094 | Gap: -5.75% | GPU: 2086MB
+2025-10-23 14:14:31,593 - ImageNet_Training - INFO - Starting Epoch 100/100
+2025-10-23 14:46:53,473 - ImageNet_Training - ERROR - Training failed: Tried to step 100001 times. The specified number of total steps is 100000

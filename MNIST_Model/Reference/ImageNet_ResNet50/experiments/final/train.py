@@ -89,7 +89,7 @@ def main():
     config.data.num_workers = 8
     #config.data.input_size = 128  # Start with smaller size for faster training
     config.data.use_subset = True
-    config.data.subset_percentage = 0.2  # 20% stratified sampling
+    config.data.subset_percentage = 1.0  # 20% stratified sampling
     config.data.subset_seed = 42
     config.data.cache_subset_indices = True
     
@@ -133,8 +133,8 @@ def main():
 
     # Enable advanced augmentations
     config.data.use_randaugment = True
-    config.data.randaugment_n = 10  # Number of augmentation transformations to apply
-    config.data.randaugment_m = 6  # Magnitude of augmentations
+    config.data.randaugment_n = 5  # Number of augmentation transformations to apply
+    config.data.randaugment_m = 8  # Magnitude of augmentations
     
     print("\nConfiguration Summary:")
     print(f"  Data Directory: {config.data.data_dir}")
