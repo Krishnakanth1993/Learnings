@@ -129,7 +129,7 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config.logging.log_dir = os.path.join(script_dir, 'logs')
     config.logging.model_save_dir = os.path.join(script_dir, 'models')
-    config.logging.experiment_name = 'final_1024_BS'
+    config.logging.experiment_name = 'phase1_subset_20pct'
 
     # Enable advanced augmentations
     config.data.use_randaugment = True

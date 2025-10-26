@@ -1,0 +1,30 @@
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO - Logger initialized. Log file: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/logs/20251025_022051_imagenet_training.log
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO - Configuration Summary:
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Dataset: ImageNet-1k
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Model: resnet50
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Input Size: 224x224
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Num Classes: 1000
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Batch Size: 32
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Gradient Accumulation: 16
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Effective Batch Size: 512
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Num Workers: 8
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Using Subset: 100.0% (stratified)
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Epochs: 100
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Learning Rate: 0.05
+2025-10-25 02:20:51,217 - ImageNet_Training - INFO -   Optimizer: SGD
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Scheduler: OneCycleLR
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Weight Decay: 0.0002
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Mixed Precision: True
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Gradient Clipping: 1.0
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Label Smoothing: 0.1
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Dropout Rate: 0.01
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO -   Use Pretrained: False
+2025-10-25 02:20:51,218 - ImageNet_Training - INFO - ======================================================================
+2025-10-25 02:20:51,339 - ImageNet_Training - INFO - Using device: cuda
+2025-10-25 02:20:51,363 - ImageNet_Training - INFO - GPU: Tesla T4
+2025-10-25 02:20:51,363 - ImageNet_Training - INFO - GPU Memory: 14.6 GB
+2025-10-25 02:20:51,363 - ImageNet_Training - INFO - Setting up data...
+2025-10-25 02:20:51,364 - ImageNet_Training - INFO - Loading ImageNet dataset...
+2025-10-25 02:20:51,364 - ImageNet_Training - INFO - Train directory: /home/ubuntu/data/imagenet/train
+2025-10-25 02:20:51,364 - ImageNet_Training - INFO - Val directory: /home/ubuntu/data/imagenet/val
+2025-10-25 02:20:51,365 - ImageNet_Training - INFO - RandAugment enabled: N=5, M=8
