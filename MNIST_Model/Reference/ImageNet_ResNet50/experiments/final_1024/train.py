@@ -114,7 +114,7 @@ def main():
     
     # Scheduler configuration
     config.training.scheduler_type = 'OneCycleLR'
-    config.training.onecycle_max_lr = 0.25  # Will be updated by LR finder
+    config.training.onecycle_max_lr = 0.5  # Will be updated by LR finder
     config.training.onecycle_pct_start = 0.25
     config.training.onecycle_div_factor = 10.0
     config.training.onecycle_final_div_factor = 1000.0

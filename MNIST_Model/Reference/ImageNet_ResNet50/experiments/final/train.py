@@ -101,10 +101,10 @@ def main():
     
     # Training configuration
     config.training.epochs = 100  # Fast iteration on subset
-    config.training.learning_rate = 0.05  # Will be updated by LR finder
+    config.training.learning_rate = 0.15  # Will be updated by LR finder
     config.training.optimizer_type = 'SGD'
     config.training.weight_decay = 2e-4
-    config.training.gradient_accumulation_steps = 16  # Effective batch = 32*4 = 128
+    config.training.gradient_accumulation_steps = 8  # Effective batch = 32*4 = 128
     config.training.use_amp = True  # Mixed precision for speed
     config.training.max_grad_norm = 1.0
     config.training.label_smoothing = 0.1
@@ -114,16 +114,23 @@ def main():
     
     # Scheduler configuration
     config.training.scheduler_type = 'OneCycleLR'
-    config.training.onecycle_max_lr = 0.25  # Will be updated by LR finder
-    config.training.onecycle_pct_start = 0.25
+    # config.training.scheduler_params = {
+    #     'mode': 'min',
+    #     'factor': 0.5,
+    #     'patience': 5,
+    #     'verbose': True,
+    #     'min_lr': 1e-6
+    # }
+    config.training.onecycle_max_lr = 0.1  # Will be updated by LR finder
+    config.training.onecycle_pct_start = 0.3
     config.training.onecycle_div_factor = 10.0
     config.training.onecycle_final_div_factor = 1000.0
     
     # Checkpointing
-    config.training.save_every_n_epochs = 5
+    config.training.save_every_n_epochs = 2
     config.training.keep_best_n_checkpoints = 3
     config.training.early_stopping_patience = 15
-    #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/best_checkpoint_epoch007.pt'
+    #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/checkpoint_epoch010.pt'
     
     # Logging configuration
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -135,9 +142,6 @@ def main():
     config.data.use_randaugment = True
     config.data.randaugment_n = 5  # Number of augmentation transformations to apply
     config.data.randaugment_m = 8  # Magnitude of augmentations
-
-    config.data.use_mixup = True
-    config.data.mixup_alpha = 0.2
     
     print("\nConfiguration Summary:")
     print(f"  Data Directory: {config.data.data_dir}")

@@ -272,3 +272,7 @@
 2025-10-26 04:52:41,608 - ImageNet_Training - INFO - Starting training...
 2025-10-26 04:52:41,608 - ImageNet_Training - INFO - Initializing training...
 2025-10-26 04:52:41,609 - ImageNet_Training - INFO - Starting Epoch 1/100
+2025-10-26 07:59:51,080 - ImageNet_Training - INFO - Epoch   1: Train Loss: 6.3381, Train Top-1: 2.14%, Train Top-5: 7.12% | Test Loss: 5.8453, Test Top-1: 6.87%, Test Top-5: 19.56% | LR: 0.025888 | Gap: -4.73% | GPU: 2086MB
+2025-10-26 07:59:52,056 - ImageNet_Training - INFO - Saved BEST MODEL: /home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/best_checkpoint_epoch001.pt
+2025-10-26 07:59:52,058 - ImageNet_Training - INFO - Starting Epoch 2/100
+2025-10-26 08:09:13,847 - ImageNet_Training - WARNING - Training interrupted by user

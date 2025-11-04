@@ -446,6 +446,14 @@ class ImageNetTrainer:
             # Non-fatal: continue without scheduler state
             pass
 
+        # Add AMP GradScaler state if using AMP
+        if self.scaler is not None:
+            try:
+                checkpoint['scaler_state_dict'] = self.scaler.state_dict()
+            except Exception:
+                # Non-fatal: continue without scaler state
+                pass
+
         # Filename & path
         filename = f"checkpoint_epoch{epoch:03d}.pt"
         if is_best:
@@ -471,16 +479,26 @@ class ImageNetTrainer:
     
     def _cleanup_old_checkpoints(self):
         """Remove old checkpoints, keeping only the N most recent."""
-        checkpoint_pattern = os.path.join(self.model_save_dir, 'checkpoint_epoch_*.pth')
+        # Match the per-epoch checkpoint filenames created by save_checkpoint (e.g. checkpoint_epoch001.pt)
+        checkpoint_pattern = os.path.join(self.model_save_dir, 'checkpoint_epoch*.pt')
         checkpoints = glob.glob(checkpoint_pattern)
-        
-        if len(checkpoints) > self.config.keep_best_n_checkpoints:
-            # Sort by modification time
+
+        # If there are more epoch checkpoints than configured to keep, remove the oldest ones.
+        try:
+            keep_n = int(getattr(self.config, 'keep_best_n_checkpoints', 0))
+        except Exception:
+            keep_n = 0
+
+        if keep_n > 0 and len(checkpoints) > keep_n:
+            # Sort by modification time (oldest first)
             checkpoints.sort(key=os.path.getmtime)
-            # Remove oldest
-            for old_checkpoint in checkpoints[:-self.config.keep_best_n_checkpoints]:
-                os.remove(old_checkpoint)
-                self.logger.debug(f"Removed old checkpoint: {old_checkpoint}")
+            # Remove oldest until only keep_n remain
+            for old_checkpoint in checkpoints[:-keep_n]:
+                try:
+                    os.remove(old_checkpoint)
+                    self.logger.debug(f"Removed old checkpoint: {old_checkpoint}")
+                except Exception as e:
+                    self.logger.warning(f"Failed to remove old checkpoint {old_checkpoint}: {e}")
     
     def load_checkpoint(self, model: nn.Module, optimizer: optim.Optimizer,
                        scheduler: Any, checkpoint_path: str) -> int:
@@ -491,23 +509,32 @@ class ImageNetTrainer:
             epoch to resume from
         """
         self.logger.info(f"Loading checkpoint from: {checkpoint_path}")
-        
-        checkpoint = torch.load(checkpoint_path, map_location=self.device, weights_only=False)
-        
+
+        # Load the checkpoint
+        checkpoint = torch.load(checkpoint_path, map_location=self.device)
+
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        
+
         if scheduler and checkpoint.get('scheduler_state_dict'):
-            scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
-        
-        if self.scaler and checkpoint.get('scaler_state_dict'):
-            self.scaler.load_state_dict(checkpoint['scaler_state_dict'])
-        
+            try:
+                scheduler.load_state_dict(checkpoint['scheduler_state_dict'])
+            except Exception:
+                # Non-fatal: continue without scheduler state
+                pass
+
+        if self.scaler is not None and checkpoint.get('scaler_state_dict'):
+            try:
+                self.scaler.load_state_dict(checkpoint['scaler_state_dict'])
+            except Exception:
+                # Non-fatal: continue without scaler state
+                pass
+
         epoch = checkpoint['epoch']
         metrics = checkpoint.get('metrics', {})
-        
+
         self.logger.log_checkpoint_load(checkpoint_path, epoch, metrics)
-        
+
         return epoch
     
     def train(self, model: nn.Module, train_loader: DataLoader, 
@@ -569,18 +596,16 @@ class ImageNetTrainer:
                 val_loss, val_acc, val_acc_top5, current_lr, acc_diff, gpu_mem
             )
             
-            # Save checkpoint
+            # Save checkpoint for every completed epoch (mark best when applicable)
             is_best = val_acc > best_accuracy
             if is_best:
                 best_accuracy = val_acc
                 epochs_no_improve = 0
-                self.save_checkpoint(model, optimizer, scheduler, current_epoch, is_best=True)
             else:
                 epochs_no_improve += 1
-            
-            # Save periodic checkpoint
-            if current_epoch % self.config.save_every_n_epochs == 0:
-                self.save_checkpoint(model, optimizer, scheduler, current_epoch, is_best=False)
+
+            # Always save per-epoch checkpoint; if it's the best it will be flagged
+            self.save_checkpoint(model, optimizer, scheduler, current_epoch, is_best=is_best)
             
             # Early stopping check
             if epochs_no_improve >= self.config.early_stopping_patience:
