@@ -130,7 +130,7 @@ def main():
     config.training.save_every_n_epochs = 2
     config.training.keep_best_n_checkpoints = 3
     config.training.early_stopping_patience = 15
-    #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/checkpoint_epoch010.pt'
+    config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/best_checkpoint_epoch093.pt'
     
     # Logging configuration
     script_dir = os.path.dirname(os.path.abspath(__file__))

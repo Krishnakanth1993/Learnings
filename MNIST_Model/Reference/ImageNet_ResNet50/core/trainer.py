@@ -510,8 +510,9 @@ class ImageNetTrainer:
         """
         self.logger.info(f"Loading checkpoint from: {checkpoint_path}")
 
-        # Load the checkpoint
-        checkpoint = torch.load(checkpoint_path, map_location=self.device)
+        # Load the checkpoint using our safe loading utility
+        from .checkpoint_utils import load_checkpoint_safely
+        checkpoint = load_checkpoint_safely(checkpoint_path, device=self.device)
 
         model.load_state_dict(checkpoint['model_state_dict'])
         optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
