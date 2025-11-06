@@ -16,6 +16,7 @@ from torch.optim.lr_scheduler import (
     ReduceLROnPlateau, OneCycleLR
 )
 from torch.cuda.amp import autocast, GradScaler
+from torch.optim.swa_utils import AveragedModel, SWALR, update_bn
 from tqdm import tqdm
 from typing import Tuple, Dict, Any, Optional, List
 import os
@@ -114,6 +115,8 @@ class ImageNetTrainer:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.scaler = GradScaler() if config.use_amp else None
         self.start_epoch = 0
+        self.swa_model = None
+        self.swa_scheduler = None
 
          # Create loss function
         self.criterion = self.create_loss_function()
@@ -572,6 +575,17 @@ class ImageNetTrainer:
             
             # Validate
             val_loss, val_acc, val_acc_top5 = self.validate_epoch(model, val_loader)
+
+            # Initialize SWA at epoch 96
+            if current_epoch == 96:
+                self.logger.info("Initializing SWA model at epoch 96")
+                self.swa_model = AveragedModel(model).to(self.device)
+                self.swa_scheduler = SWALR(optimizer, swa_lr=0.0005)
+
+            # Update SWA model and scheduler if active
+            if current_epoch >= 96:
+                self.swa_model.update_parameters(model)
+                self.swa_scheduler.step()
             
             # Update non-OneCycleLR schedulers
             if self.config.scheduler_type == 'ReduceLROnPlateau':
@@ -614,6 +628,28 @@ class ImageNetTrainer:
                 break
         
         # Log final results
+        # Evaluate SWA model if it was used
+        if self.swa_model is not None:
+            self.logger.info("Updating batch normalization statistics for SWA model...")
+            update_bn(train_loader, self.swa_model, device=self.device)
+            
+            self.logger.info("Evaluating SWA model...")
+            swa_loss, swa_acc, swa_acc_top5 = self.validate_epoch(self.swa_model, val_loader)
+            self.logger.info(f"SWA Model Results - Top-1: {swa_acc:.2f}%, Top-5: {swa_acc_top5:.2f}%")
+            
+            # Save SWA model
+            swa_checkpoint = {
+                'model_state_dict': self.swa_model.state_dict(),
+                'metrics': {
+                    'val_acc': swa_acc,
+                    'val_acc_top5': swa_acc_top5,
+                    'val_loss': swa_loss
+                }
+            }
+            swa_path = os.path.join(self.model_save_dir, 'swa_model.pt')
+            torch.save(swa_checkpoint, swa_path)
+            self.logger.info(f"SWA model saved to {swa_path}")
+
         final_metrics = self.metrics.get_final_metrics()
         self.logger.log_training_complete(final_metrics)
         
