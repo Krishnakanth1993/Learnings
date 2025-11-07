@@ -577,13 +577,13 @@ class ImageNetTrainer:
             val_loss, val_acc, val_acc_top5 = self.validate_epoch(model, val_loader)
 
             # Initialize SWA at epoch 96
-            if current_epoch == 96:
-                self.logger.info("Initializing SWA model at epoch 96")
+            if current_epoch == 75:
+                self.logger.info("Initializing SWA model at epoch 75")
                 self.swa_model = AveragedModel(model).to(self.device)
                 self.swa_scheduler = SWALR(optimizer, swa_lr=0.0005)
 
             # Update SWA model and scheduler if active
-            if current_epoch >= 96:
+            if current_epoch >= 75:
                 self.swa_model.update_parameters(model)
                 self.swa_scheduler.step()
             
