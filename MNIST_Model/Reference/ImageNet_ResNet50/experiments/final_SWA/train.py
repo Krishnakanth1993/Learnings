@@ -19,6 +19,7 @@ sys.path.insert(0, project_root)
 import torch
 import torch.nn.functional as F
 from datetime import datetime
+from torch.optim.swa_utils import AveragedModel, SWALR, update_bn
 
 # Import core modules
 from core.config import Config, DataConfig, ModelConfig, TrainingConfig, LoggingConfig
@@ -121,16 +122,17 @@ def main():
     #     'verbose': True,
     #     'min_lr': 1e-6
     # }
-    config.training.onecycle_max_lr = 0.1  # Will be updated by LR finder
+    config.training.onecycle_max_lr = 0.04          # Standard for BS=256
     config.training.onecycle_pct_start = 0.3
-    config.training.onecycle_div_factor = 10.0
-    config.training.onecycle_final_div_factor = 1000.0
+    config.training.onecycle_div_factor = 25.0
+    config.training.onecycle_final_div_factor = 1e4  # 10,000 → final_lr = 1e-6
+    
     
     # Checkpointing
     config.training.save_every_n_epochs = 2
     config.training.keep_best_n_checkpoints = 3
     config.training.early_stopping_patience = 15
-    config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/best_checkpoint_epoch093.pt'
+    #config.training.resume_from_checkpoint = '/home/ubuntu/repos/Learnings/MNIST_Model/Reference/ImageNet_ResNet50/experiments/final/models/best_checkpoint_epoch095.pt'
     
     # Logging configuration
     script_dir = os.path.dirname(os.path.abspath(__file__))
