@@ -1,0 +1,37 @@
+:root {
+  --token-padding: 0.35rem 0.45rem;
+  --token-radius: 0.5rem;
+  --token-gap: 0.35rem;
+}
+
+.token {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--token-padding);
+  border-radius: var(--token-radius);
+  margin: 0.1rem;
+  font-family: "Noto Sans Kannada", "Tunga", "Kedage", sans-serif;
+  font-size: 1.05rem;
+  color: #222;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.token[data-token-id]::after {
+  content: attr(data-token-id);
+  font-size: 0.65rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-left: 0.5rem;
+  font-family: "JetBrains Mono", monospace;
+}
+
+footer {
+  opacity: 0.85;
+}
+
+.gradio-container {
+  max-width: 960px !important;
+  margin: auto;
+}
+
+
