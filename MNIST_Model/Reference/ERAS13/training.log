@@ -1,0 +1,616 @@
+using device: cuda
+Model parameters: 135.18M
+loaded 338025 tokens
+1 epoch = 165 batches
+Starting training...
+step 0 | loss: 10.8725 | dt: 1274.74ms | tok/sec: 1606.61
+step 10 | loss: 7.9941 | dt: 2626.35ms | tok/sec: 779.79
+step 20 | loss: 6.9462 | dt: 2627.22ms | tok/sec: 779.53
+step 30 | loss: 6.7740 | dt: 3246.48ms | tok/sec: 630.84
+step 40 | loss: 6.9956 | dt: 2638.15ms | tok/sec: 776.30
+step 50 | loss: 6.8735 | dt: 2615.98ms | tok/sec: 782.88
+step 60 | loss: 6.5163 | dt: 2640.97ms | tok/sec: 775.47
+step 70 | loss: 6.5162 | dt: 2637.36ms | tok/sec: 776.53
+step 80 | loss: 6.4836 | dt: 2661.23ms | tok/sec: 769.57
+step 90 | loss: 6.5255 | dt: 2643.36ms | tok/sec: 774.77
+step 100 | loss: 6.2876 | dt: 2677.88ms | tok/sec: 764.78
+step 110 | loss: 6.5272 | dt: 2666.03ms | tok/sec: 768.18
+step 120 | loss: 6.1898 | dt: 2824.14ms | tok/sec: 725.18
+step 130 | loss: 6.1057 | dt: 2646.03ms | tok/sec: 773.99
+step 140 | loss: 5.9576 | dt: 2632.82ms | tok/sec: 777.87
+step 150 | loss: 6.4212 | dt: 2637.88ms | tok/sec: 776.38
+step 160 | loss: 6.4857 | dt: 2641.72ms | tok/sec: 775.25
+step 170 | loss: 6.2381 | dt: 2624.55ms | tok/sec: 780.32
+step 180 | loss: 5.6074 | dt: 2650.12ms | tok/sec: 772.80
+step 190 | loss: 6.0601 | dt: 2657.61ms | tok/sec: 770.62
+step 200 | loss: 5.5407 | dt: 2856.74ms | tok/sec: 716.90
+step 210 | loss: 5.8250 | dt: 2647.57ms | tok/sec: 773.54
+step 220 | loss: 6.0356 | dt: 2635.08ms | tok/sec: 777.21
+step 230 | loss: 5.7742 | dt: 2637.31ms | tok/sec: 776.55
+step 240 | loss: 5.8564 | dt: 2645.37ms | tok/sec: 774.18
+step 250 | loss: 5.4802 | dt: 2660.91ms | tok/sec: 769.66
+step 260 | loss: 5.6751 | dt: 2632.88ms | tok/sec: 777.85
+step 270 | loss: 5.9273 | dt: 2733.56ms | tok/sec: 749.21
+step 280 | loss: 5.9138 | dt: 2626.31ms | tok/sec: 779.80
+step 290 | loss: 5.6861 | dt: 2638.67ms | tok/sec: 776.15
+step 300 | loss: 5.2012 | dt: 2642.88ms | tok/sec: 774.91
+step 310 | loss: 5.6114 | dt: 2649.90ms | tok/sec: 772.86
+step 320 | loss: 5.0033 | dt: 2688.08ms | tok/sec: 761.88
+step 330 | loss: 5.6259 | dt: 2682.14ms | tok/sec: 763.57
+step 340 | loss: 5.1127 | dt: 2650.79ms | tok/sec: 772.60
+step 350 | loss: 5.3045 | dt: 2678.00ms | tok/sec: 764.75
+step 360 | loss: 5.2118 | dt: 2666.44ms | tok/sec: 768.06
+step 370 | loss: 5.4723 | dt: 2639.73ms | tok/sec: 775.84
+step 380 | loss: 5.4257 | dt: 2653.49ms | tok/sec: 771.81
+step 390 | loss: 5.0813 | dt: 2623.92ms | tok/sec: 780.51
+step 400 | loss: 5.0538 | dt: 2637.88ms | tok/sec: 776.38
+step 410 | loss: 5.0351 | dt: 2708.26ms | tok/sec: 756.20
+step 420 | loss: 5.0659 | dt: 2661.11ms | tok/sec: 769.60
+step 430 | loss: 4.9364 | dt: 2685.40ms | tok/sec: 762.64
+step 440 | loss: 5.3093 | dt: 2632.10ms | tok/sec: 778.08
+step 450 | loss: 5.0675 | dt: 2653.00ms | tok/sec: 771.96
+step 460 | loss: 4.9092 | dt: 2668.73ms | tok/sec: 767.41
+step 470 | loss: 4.5785 | dt: 2700.87ms | tok/sec: 758.28
+step 480 | loss: 5.1269 | dt: 2705.93ms | tok/sec: 756.86
+step 490 | loss: 5.4856 | dt: 2653.12ms | tok/sec: 771.92
+step 500 | loss: 5.2739 | dt: 2679.78ms | tok/sec: 764.24
+
+--- Generating text at step 500 ---
+!ua any cons mocking
+I they have we be passion so his all
+Redpt' grip:' the grave,An thy work!
+For embr, old Capitol, goodout than coming,
+When thet vir Rome daughter to the chance
+-----------------------------------
+
+step 510 | loss: 4.6435 | dt: 2697.87ms | tok/sec: 759.12
+step 520 | loss: 4.9901 | dt: 2688.89ms | tok/sec: 761.65
+step 530 | loss: 4.5844 | dt: 2703.14ms | tok/sec: 757.64
+step 540 | loss: 4.9779 | dt: 2663.58ms | tok/sec: 768.89
+step 550 | loss: 5.1966 | dt: 2714.69ms | tok/sec: 754.42
+step 560 | loss: 4.9851 | dt: 2695.66ms | tok/sec: 759.74
+step 570 | loss: 5.2129 | dt: 2698.44ms | tok/sec: 758.96
+step 580 | loss: 4.7397 | dt: 2714.69ms | tok/sec: 754.41
+step 590 | loss: 4.9552 | dt: 2692.72ms | tok/sec: 760.57
+step 600 | loss: 5.2714 | dt: 2713.71ms | tok/sec: 754.69
+step 610 | loss: 5.2913 | dt: 2653.37ms | tok/sec: 771.85
+step 620 | loss: 5.0200 | dt: 2701.37ms | tok/sec: 758.13
+step 630 | loss: 4.3609 | dt: 2689.80ms | tok/sec: 761.39
+step 640 | loss: 4.9107 | dt: 2769.70ms | tok/sec: 739.43
+step 650 | loss: 4.3624 | dt: 2707.07ms | tok/sec: 756.54
+step 660 | loss: 5.0022 | dt: 2720.41ms | tok/sec: 752.83
+step 670 | loss: 4.4913 | dt: 2680.64ms | tok/sec: 764.00
+step 680 | loss: 4.7648 | dt: 2673.28ms | tok/sec: 766.10
+step 690 | loss: 4.6267 | dt: 2671.13ms | tok/sec: 766.72
+step 700 | loss: 4.8468 | dt: 2683.00ms | tok/sec: 763.33
+step 710 | loss: 4.8544 | dt: 2678.93ms | tok/sec: 764.48
+step 720 | loss: 4.5148 | dt: 2698.22ms | tok/sec: 759.02
+step 730 | loss: 4.4280 | dt: 2694.01ms | tok/sec: 760.21
+step 740 | loss: 4.4265 | dt: 2681.62ms | tok/sec: 763.72
+step 750 | loss: 4.4757 | dt: 2671.03ms | tok/sec: 766.75
+step 760 | loss: 4.3867 | dt: 2712.16ms | tok/sec: 755.12
+step 770 | loss: 4.8252 | dt: 2681.40ms | tok/sec: 763.78
+step 780 | loss: 4.6916 | dt: 2861.17ms | tok/sec: 715.79
+step 790 | loss: 4.3555 | dt: 2682.62ms | tok/sec: 763.43
+step 800 | loss: 4.0581 | dt: 2695.10ms | tok/sec: 759.90
+step 810 | loss: 4.5024 | dt: 2718.02ms | tok/sec: 753.49
+step 820 | loss: 4.9491 | dt: 2688.01ms | tok/sec: 761.90
+step 830 | loss: 4.7404 | dt: 2688.48ms | tok/sec: 761.77
+step 840 | loss: 4.1571 | dt: 2683.11ms | tok/sec: 763.29
+step 850 | loss: 4.2970 | dt: 2673.24ms | tok/sec: 766.11
+step 860 | loss: 4.1351 | dt: 2673.66ms | tok/sec: 765.99
+step 870 | loss: 4.5339 | dt: 2723.79ms | tok/sec: 751.89
+step 880 | loss: 4.7270 | dt: 2655.06ms | tok/sec: 771.36
+step 890 | loss: 4.5174 | dt: 2654.60ms | tok/sec: 771.49
+step 900 | loss: 4.7254 | dt: 2671.42ms | tok/sec: 766.63
+step 910 | loss: 4.2173 | dt: 2706.20ms | tok/sec: 756.78
+step 920 | loss: 4.4660 | dt: 2687.33ms | tok/sec: 762.09
+step 930 | loss: 4.8292 | dt: 2668.57ms | tok/sec: 767.45
+step 940 | loss: 4.8714 | dt: 2681.79ms | tok/sec: 763.67
+step 950 | loss: 4.5977 | dt: 2689.44ms | tok/sec: 761.50
+step 960 | loss: 3.9432 | dt: 2693.87ms | tok/sec: 760.24
+step 970 | loss: 4.4277 | dt: 2685.85ms | tok/sec: 762.51
+step 980 | loss: 3.9359 | dt: 2665.88ms | tok/sec: 768.23
+step 990 | loss: 4.6091 | dt: 2693.13ms | tok/sec: 760.45
+step 1000 | loss: 4.0868 | dt: 2702.22ms | tok/sec: 757.90
+
+--- Generating text at step 1000 ---
+! then he did you
+And pray them have be devour carries meet
+And dare man, general's true.
+
+LidINIUS:
+'I can I hope with you were access with call me.
+
+HONAN
+-----------------------------------
+
+step 1010 | loss: 4.4185 | dt: 2691.11ms | tok/sec: 761.03
+step 1020 | loss: 4.2212 | dt: 2687.50ms | tok/sec: 762.05
+step 1030 | loss: 4.4616 | dt: 2670.47ms | tok/sec: 766.91
+step 1040 | loss: 4.4004 | dt: 2662.88ms | tok/sec: 769.09
+step 1050 | loss: 4.1682 | dt: 2705.36ms | tok/sec: 757.02
+step 1060 | loss: 4.0242 | dt: 2722.96ms | tok/sec: 752.12
+step 1070 | loss: 4.0509 | dt: 2717.44ms | tok/sec: 753.65
+step 1080 | loss: 4.0544 | dt: 2667.92ms | tok/sec: 767.64
+step 1090 | loss: 4.0126 | dt: 2740.84ms | tok/sec: 747.22
+step 1100 | loss: 4.4749 | dt: 2762.05ms | tok/sec: 741.48
+step 1110 | loss: 4.3578 | dt: 2634.24ms | tok/sec: 777.45
+step 1120 | loss: 4.0779 | dt: 2677.47ms | tok/sec: 764.90
+step 1130 | loss: 3.7411 | dt: 2685.44ms | tok/sec: 762.63
+step 1140 | loss: 4.1268 | dt: 2690.60ms | tok/sec: 761.17
+step 1150 | loss: 4.5661 | dt: 2719.96ms | tok/sec: 752.95
+step 1160 | loss: 4.3289 | dt: 2666.21ms | tok/sec: 768.13
+step 1170 | loss: 3.8129 | dt: 2671.28ms | tok/sec: 766.67
+step 1180 | loss: 3.8706 | dt: 2717.71ms | tok/sec: 753.58
+step 1190 | loss: 3.8226 | dt: 2669.59ms | tok/sec: 767.16
+step 1200 | loss: 4.1762 | dt: 2666.23ms | tok/sec: 768.13
+step 1210 | loss: 4.3757 | dt: 2708.58ms | tok/sec: 756.12
+step 1220 | loss: 4.1351 | dt: 2685.38ms | tok/sec: 762.65
+step 1230 | loss: 4.3564 | dt: 2687.16ms | tok/sec: 762.14
+step 1240 | loss: 3.7988 | dt: 2675.93ms | tok/sec: 765.34
+step 1250 | loss: 4.1403 | dt: 2686.86ms | tok/sec: 762.23
+step 1260 | loss: 4.4226 | dt: 2667.90ms | tok/sec: 767.64
+step 1270 | loss: 4.4887 | dt: 2739.30ms | tok/sec: 747.64
+step 1280 | loss: 4.2127 | dt: 2691.33ms | tok/sec: 760.96
+step 1290 | loss: 3.6873 | dt: 2672.71ms | tok/sec: 766.26
+step 1300 | loss: 4.0008 | dt: 2696.75ms | tok/sec: 759.43
+step 1310 | loss: 3.6128 | dt: 2662.96ms | tok/sec: 769.07
+step 1320 | loss: 4.2900 | dt: 2656.27ms | tok/sec: 771.01
+step 1330 | loss: 3.8012 | dt: 2660.07ms | tok/sec: 769.91
+step 1340 | loss: 4.1523 | dt: 2642.03ms | tok/sec: 775.16
+step 1350 | loss: 3.9300 | dt: 2683.45ms | tok/sec: 763.20
+step 1360 | loss: 4.1542 | dt: 2639.64ms | tok/sec: 775.86
+step 1370 | loss: 4.0666 | dt: 2660.70ms | tok/sec: 769.72
+step 1380 | loss: 3.8962 | dt: 2655.70ms | tok/sec: 771.17
+step 1390 | loss: 3.7736 | dt: 2637.29ms | tok/sec: 776.55
+step 1400 | loss: 3.7997 | dt: 2647.38ms | tok/sec: 773.59
+step 1410 | loss: 3.7525 | dt: 2629.39ms | tok/sec: 778.89
+step 1420 | loss: 3.6936 | dt: 2688.40ms | tok/sec: 761.79
+step 1430 | loss: 4.1674 | dt: 2638.92ms | tok/sec: 776.07
+step 1440 | loss: 4.1046 | dt: 2648.60ms | tok/sec: 773.24
+step 1450 | loss: 3.8131 | dt: 2636.89ms | tok/sec: 776.67
+step 1460 | loss: 3.4866 | dt: 2659.35ms | tok/sec: 770.11
+step 1470 | loss: 3.7860 | dt: 2638.77ms | tok/sec: 776.12
+step 1480 | loss: 4.1924 | dt: 2632.46ms | tok/sec: 777.98
+step 1490 | loss: 4.0126 | dt: 2635.47ms | tok/sec: 777.09
+step 1500 | loss: 3.4828 | dt: 2633.86ms | tok/sec: 777.57
+
+--- Generating text at step 1500 ---
+! we rid,
+my thing was so done.
+
+GLUUS:
+F mercy in mocked itUS;
+But rest at Rome,iances for him: but
+Masters are worse, proud to the people,
+And for your
+-----------------------------------
+
+step 1510 | loss: 3.6085 | dt: 2699.83ms | tok/sec: 758.57
+step 1520 | loss: 3.5473 | dt: 2703.50ms | tok/sec: 757.54
+step 1530 | loss: 3.8369 | dt: 2704.69ms | tok/sec: 757.20
+step 1540 | loss: 4.0431 | dt: 2699.75ms | tok/sec: 758.59
+step 1550 | loss: 3.8126 | dt: 2697.98ms | tok/sec: 759.09
+step 1560 | loss: 4.0581 | dt: 2708.62ms | tok/sec: 756.10
+step 1570 | loss: 3.4292 | dt: 2701.01ms | tok/sec: 758.23
+step 1580 | loss: 3.8859 | dt: 2701.13ms | tok/sec: 758.20
+step 1590 | loss: 4.0481 | dt: 2708.01ms | tok/sec: 756.27
+step 1600 | loss: 4.1384 | dt: 2723.99ms | tok/sec: 751.84
+step 1610 | loss: 3.9161 | dt: 2718.54ms | tok/sec: 753.35
+step 1620 | loss: 3.3759 | dt: 2728.75ms | tok/sec: 750.53
+step 1630 | loss: 3.6518 | dt: 2700.32ms | tok/sec: 758.43
+step 1640 | loss: 3.3208 | dt: 2696.71ms | tok/sec: 759.44
+step 1650 | loss: 3.9156 | dt: 2707.93ms | tok/sec: 756.30
+step 1660 | loss: 3.5364 | dt: 2725.21ms | tok/sec: 751.50
+step 1670 | loss: 3.8675 | dt: 2708.14ms | tok/sec: 756.24
+step 1680 | loss: 3.6225 | dt: 2702.13ms | tok/sec: 757.92
+step 1690 | loss: 3.8710 | dt: 2694.93ms | tok/sec: 759.95
+step 1700 | loss: 3.7588 | dt: 2696.90ms | tok/sec: 759.39
+step 1710 | loss: 3.6354 | dt: 2727.15ms | tok/sec: 750.97
+step 1720 | loss: 3.5004 | dt: 2710.80ms | tok/sec: 755.50
+step 1730 | loss: 3.5569 | dt: 2736.50ms | tok/sec: 748.40
+step 1740 | loss: 3.4937 | dt: 2700.68ms | tok/sec: 758.33
+step 1750 | loss: 3.4585 | dt: 2704.23ms | tok/sec: 757.33
+step 1760 | loss: 3.8912 | dt: 2718.99ms | tok/sec: 753.22
+step 1770 | loss: 3.9121 | dt: 2759.54ms | tok/sec: 742.15
+step 1780 | loss: 3.5978 | dt: 2701.65ms | tok/sec: 758.06
+step 1790 | loss: 3.2438 | dt: 2705.15ms | tok/sec: 757.08
+step 1800 | loss: 3.4297 | dt: 2697.91ms | tok/sec: 759.11
+step 1810 | loss: 3.8631 | dt: 2723.87ms | tok/sec: 751.87
+step 1820 | loss: 3.7029 | dt: 2717.25ms | tok/sec: 753.70
+step 1830 | loss: 3.2425 | dt: 2727.89ms | tok/sec: 750.76
+step 1840 | loss: 3.3572 | dt: 2722.87ms | tok/sec: 752.15
+step 1850 | loss: 3.2716 | dt: 2707.57ms | tok/sec: 756.40
+step 1860 | loss: 3.5134 | dt: 2699.27ms | tok/sec: 758.73
+step 1870 | loss: 3.7097 | dt: 2723.70ms | tok/sec: 751.92
+step 1880 | loss: 3.5368 | dt: 2721.65ms | tok/sec: 752.48
+step 1890 | loss: 3.7578 | dt: 2698.47ms | tok/sec: 758.95
+step 1900 | loss: 3.2360 | dt: 2703.24ms | tok/sec: 757.61
+step 1910 | loss: 3.5294 | dt: 2695.89ms | tok/sec: 759.68
+step 1920 | loss: 3.7359 | dt: 2723.54ms | tok/sec: 751.96
+step 1930 | loss: 3.8138 | dt: 2696.43ms | tok/sec: 759.52
+step 1940 | loss: 3.6550 | dt: 2704.04ms | tok/sec: 757.38
+step 1950 | loss: 3.0794 | dt: 2704.37ms | tok/sec: 757.29
+step 1960 | loss: 3.3290 | dt: 2702.23ms | tok/sec: 757.89
+step 1970 | loss: 3.0204 | dt: 2734.40ms | tok/sec: 748.98
+step 1980 | loss: 3.5516 | dt: 2703.91ms | tok/sec: 757.42
+step 1990 | loss: 3.3070 | dt: 2706.01ms | tok/sec: 756.83
+step 2000 | loss: 3.5758 | dt: 2726.00ms | tok/sec: 751.28
+
+--- Generating text at step 2000 ---
+!,
+if I put thee due by! see I do not weep
+Thy thing in this heels hits them,
+That neverYour valour should be in pride,
+Call him more deity tears;Signiorio
+In time of tears
+-----------------------------------
+
+step 2010 | loss: 3.3916 | dt: 2700.63ms | tok/sec: 758.34
+step 2020 | loss: 3.5364 | dt: 2709.72ms | tok/sec: 755.80
+step 2030 | loss: 3.4518 | dt: 2708.71ms | tok/sec: 756.08
+step 2040 | loss: 3.2968 | dt: 2699.77ms | tok/sec: 758.58
+step 2050 | loss: 3.1897 | dt: 2705.14ms | tok/sec: 757.08
+step 2060 | loss: 3.2544 | dt: 2695.59ms | tok/sec: 759.76
+step 2070 | loss: 3.1843 | dt: 2699.45ms | tok/sec: 758.67
+step 2080 | loss: 3.1527 | dt: 2697.34ms | tok/sec: 759.27
+step 2090 | loss: 3.5361 | dt: 2698.70ms | tok/sec: 758.88
+step 2100 | loss: 3.6072 | dt: 2698.23ms | tok/sec: 759.02
+step 2110 | loss: 3.2871 | dt: 2697.04ms | tok/sec: 759.35
+step 2120 | loss: 2.9393 | dt: 2715.87ms | tok/sec: 754.09
+step 2130 | loss: 3.0962 | dt: 2706.66ms | tok/sec: 756.65
+step 2140 | loss: 3.4452 | dt: 2705.67ms | tok/sec: 756.93
+step 2150 | loss: 3.2900 | dt: 2707.68ms | tok/sec: 756.37
+step 2160 | loss: 2.9626 | dt: 2707.08ms | tok/sec: 756.54
+step 2170 | loss: 3.0681 | dt: 2702.33ms | tok/sec: 757.86
+step 2180 | loss: 2.9747 | dt: 2702.98ms | tok/sec: 757.68
+step 2190 | loss: 3.1063 | dt: 2716.67ms | tok/sec: 753.87
+step 2200 | loss: 3.3207 | dt: 2703.48ms | tok/sec: 757.54
+step 2210 | loss: 3.1918 | dt: 2701.67ms | tok/sec: 758.05
+step 2220 | loss: 3.3162 | dt: 2703.80ms | tok/sec: 757.45
+step 2230 | loss: 2.8865 | dt: 2705.55ms | tok/sec: 756.96
+step 2240 | loss: 3.1759 | dt: 2717.99ms | tok/sec: 753.50
+step 2250 | loss: 3.3846 | dt: 2703.64ms | tok/sec: 757.50
+step 2260 | loss: 3.3697 | dt: 2732.82ms | tok/sec: 749.41
+step 2270 | loss: 3.2227 | dt: 2703.69ms | tok/sec: 757.48
+step 2280 | loss: 2.8169 | dt: 2706.62ms | tok/sec: 756.66
+step 2290 | loss: 2.9860 | dt: 2700.74ms | tok/sec: 758.31
+step 2300 | loss: 2.7406 | dt: 2711.47ms | tok/sec: 755.31
+step 2310 | loss: 3.1365 | dt: 2706.79ms | tok/sec: 756.62
+step 2320 | loss: 2.9496 | dt: 2699.63ms | tok/sec: 758.62
+step 2330 | loss: 3.2225 | dt: 2702.71ms | tok/sec: 757.76
+step 2340 | loss: 3.0330 | dt: 2710.74ms | tok/sec: 755.51
+step 2350 | loss: 3.1792 | dt: 2704.27ms | tok/sec: 757.32
+step 2360 | loss: 3.0794 | dt: 2709.94ms | tok/sec: 755.74
+step 2370 | loss: 2.9420 | dt: 2697.96ms | tok/sec: 759.09
+step 2380 | loss: 2.8587 | dt: 2695.43ms | tok/sec: 759.80
+step 2390 | loss: 2.8747 | dt: 2695.93ms | tok/sec: 759.66
+step 2400 | loss: 2.8319 | dt: 2711.99ms | tok/sec: 755.16
+step 2410 | loss: 2.8368 | dt: 2736.55ms | tok/sec: 748.39
+step 2420 | loss: 3.1382 | dt: 2693.63ms | tok/sec: 760.31
+step 2430 | loss: 3.2540 | dt: 2703.97ms | tok/sec: 757.41
+step 2440 | loss: 2.8659 | dt: 2702.61ms | tok/sec: 757.79
+step 2450 | loss: 2.6254 | dt: 2700.30ms | tok/sec: 758.43
+step 2460 | loss: 2.7329 | dt: 2706.12ms | tok/sec: 756.80
+step 2470 | loss: 3.0561 | dt: 2704.39ms | tok/sec: 757.29
+step 2480 | loss: 2.8807 | dt: 2705.39ms | tok/sec: 757.01
+step 2490 | loss: 2.6715 | dt: 2699.49ms | tok/sec: 758.66
+step 2500 | loss: 2.6661 | dt: 2701.31ms | tok/sec: 758.15
+
+--- Generating text at step 2500 ---
+! wasBoy
+'s one heinous to purchase with us and fold'd
+Than is of lips for your time his son,
+Which my conscience did forsworn,
+It like a friendly that owe'd their go
+But, afterced his
+-----------------------------------
+
+step 2510 | loss: 2.6807 | dt: 2698.79ms | tok/sec: 758.86
+step 2520 | loss: 2.8045 | dt: 2696.69ms | tok/sec: 759.45
+step 2530 | loss: 2.9238 | dt: 2701.84ms | tok/sec: 758.00
+step 2540 | loss: 2.7829 | dt: 2696.82ms | tok/sec: 759.41
+step 2550 | loss: 2.8688 | dt: 2713.57ms | tok/sec: 754.72
+step 2560 | loss: 2.5317 | dt: 2700.27ms | tok/sec: 758.44
+step 2570 | loss: 2.8389 | dt: 2694.92ms | tok/sec: 759.95
+step 2580 | loss: 2.8973 | dt: 2700.89ms | tok/sec: 758.27
+step 2590 | loss: 2.9376 | dt: 2701.52ms | tok/sec: 758.09
+step 2600 | loss: 2.8337 | dt: 2734.45ms | tok/sec: 748.96
+step 2610 | loss: 2.3944 | dt: 2696.95ms | tok/sec: 759.38
+step 2620 | loss: 2.5720 | dt: 2705.58ms | tok/sec: 756.95
+step 2630 | loss: 2.3286 | dt: 2726.76ms | tok/sec: 751.07
+step 2640 | loss: 2.6583 | dt: 2712.49ms | tok/sec: 755.03
+step 2650 | loss: 2.5653 | dt: 2706.73ms | tok/sec: 756.63
+step 2660 | loss: 2.8053 | dt: 2709.10ms | tok/sec: 755.97
+step 2670 | loss: 2.6431 | dt: 2696.00ms | tok/sec: 759.64
+step 2680 | loss: 2.6953 | dt: 2746.24ms | tok/sec: 745.75
+step 2690 | loss: 2.6361 | dt: 2716.29ms | tok/sec: 753.97
+step 2700 | loss: 2.4590 | dt: 2774.52ms | tok/sec: 738.15
+step 2710 | loss: 2.3923 | dt: 2749.37ms | tok/sec: 744.90
+step 2720 | loss: 2.4924 | dt: 2701.07ms | tok/sec: 758.22
+step 2730 | loss: 2.4631 | dt: 2711.96ms | tok/sec: 755.17
+step 2740 | loss: 2.4050 | dt: 2718.98ms | tok/sec: 753.22
+step 2750 | loss: 2.6518 | dt: 2697.21ms | tok/sec: 759.30
+step 2760 | loss: 2.7260 | dt: 2876.82ms | tok/sec: 711.90
+step 2770 | loss: 2.3956 | dt: 2746.34ms | tok/sec: 745.72
+step 2780 | loss: 2.1536 | dt: 2684.97ms | tok/sec: 762.76
+step 2790 | loss: 2.2741 | dt: 2954.08ms | tok/sec: 693.28
+step 2800 | loss: 2.5598 | dt: 2906.71ms | tok/sec: 704.58
+step 2810 | loss: 2.2911 | dt: 2680.05ms | tok/sec: 764.16
+step 2820 | loss: 2.1884 | dt: 2682.93ms | tok/sec: 763.34
+step 2830 | loss: 2.2343 | dt: 2675.76ms | tok/sec: 765.39
+step 2840 | loss: 2.2411 | dt: 2695.51ms | tok/sec: 759.78
+step 2850 | loss: 2.2290 | dt: 2864.33ms | tok/sec: 715.00
+step 2860 | loss: 2.2985 | dt: 2659.26ms | tok/sec: 770.14
+step 2870 | loss: 2.2090 | dt: 2667.58ms | tok/sec: 767.74
+step 2880 | loss: 2.2442 | dt: 2657.60ms | tok/sec: 770.62
+step 2890 | loss: 2.0802 | dt: 2673.51ms | tok/sec: 766.03
+step 2900 | loss: 2.2653 | dt: 2668.15ms | tok/sec: 767.57
+step 2910 | loss: 2.2835 | dt: 2662.19ms | tok/sec: 769.29
+step 2920 | loss: 2.1685 | dt: 2660.40ms | tok/sec: 769.81
+step 2930 | loss: 2.1162 | dt: 2660.61ms | tok/sec: 769.75
+step 2940 | loss: 1.8274 | dt: 2661.90ms | tok/sec: 769.38
+step 2950 | loss: 1.8564 | dt: 2703.16ms | tok/sec: 757.63
+step 2960 | loss: 1.7792 | dt: 2658.62ms | tok/sec: 770.32
+step 2970 | loss: 2.0663 | dt: 2662.07ms | tok/sec: 769.33
+step 2980 | loss: 1.9452 | dt: 2660.27ms | tok/sec: 769.85
+step 2990 | loss: 2.1067 | dt: 2664.71ms | tok/sec: 768.56
+step 3000 | loss: 1.9999 | dt: 2669.69ms | tok/sec: 767.13
+
+--- Generating text at step 3000 ---
+! thrive lives, the rage d
+Endiciansed in the wind O very danger!
+
+First Murderer:
+What commend thee well that are this!
+
+First Murderer:
+On my poor lord,
+I'll follow thee better
+-----------------------------------
+
+step 3010 | loss: 1.9782 | dt: 2669.18ms | tok/sec: 767.28
+step 3020 | loss: 1.9162 | dt: 2816.11ms | tok/sec: 727.24
+step 3030 | loss: 1.7600 | dt: 2748.60ms | tok/sec: 745.11
+step 3040 | loss: 1.7559 | dt: 3330.35ms | tok/sec: 614.95
+step 3050 | loss: 1.8405 | dt: 2766.42ms | tok/sec: 740.31
+step 3060 | loss: 1.8245 | dt: 2675.78ms | tok/sec: 765.38
+step 3070 | loss: 1.7706 | dt: 2834.19ms | tok/sec: 722.61
+step 3080 | loss: 1.8807 | dt: 2701.07ms | tok/sec: 758.22
+step 3090 | loss: 1.9564 | dt: 2774.91ms | tok/sec: 738.04
+step 3100 | loss: 1.6477 | dt: 2787.13ms | tok/sec: 734.81
+step 3110 | loss: 1.5303 | dt: 2768.86ms | tok/sec: 739.65
+step 3120 | loss: 1.5144 | dt: 2668.25ms | tok/sec: 767.54
+step 3130 | loss: 1.6874 | dt: 2684.58ms | tok/sec: 762.87
+step 3140 | loss: 1.5967 | dt: 2672.88ms | tok/sec: 766.22
+step 3150 | loss: 1.4894 | dt: 2685.02ms | tok/sec: 762.75
+step 3160 | loss: 1.5369 | dt: 2780.46ms | tok/sec: 736.57
+step 3170 | loss: 1.5521 | dt: 2766.64ms | tok/sec: 740.25
+step 3180 | loss: 1.5144 | dt: 2710.92ms | tok/sec: 755.46
+step 3190 | loss: 1.5083 | dt: 2749.40ms | tok/sec: 744.89
+step 3200 | loss: 1.4799 | dt: 2678.04ms | tok/sec: 764.74
+step 3210 | loss: 1.5245 | dt: 2707.56ms | tok/sec: 756.40
+step 3220 | loss: 1.3773 | dt: 2688.40ms | tok/sec: 761.79
+step 3230 | loss: 1.5153 | dt: 2684.65ms | tok/sec: 762.86
+step 3240 | loss: 1.4807 | dt: 2753.05ms | tok/sec: 743.90
+step 3250 | loss: 1.4735 | dt: 2755.05ms | tok/sec: 743.36
+step 3260 | loss: 1.3735 | dt: 2719.84ms | tok/sec: 752.98
+step 3270 | loss: 1.2075 | dt: 2843.99ms | tok/sec: 720.12
+step 3280 | loss: 1.2305 | dt: 2703.84ms | tok/sec: 757.44
+step 3290 | loss: 1.1408 | dt: 2739.76ms | tok/sec: 747.51
+step 3300 | loss: 1.2520 | dt: 2892.35ms | tok/sec: 708.07
+step 3310 | loss: 1.3056 | dt: 2716.91ms | tok/sec: 753.80
+step 3320 | loss: 1.2803 | dt: 2681.74ms | tok/sec: 763.68
+step 3330 | loss: 1.2850 | dt: 2725.97ms | tok/sec: 751.29
+step 3340 | loss: 1.2028 | dt: 2692.16ms | tok/sec: 760.73
+step 3350 | loss: 1.1584 | dt: 2698.27ms | tok/sec: 759.00
+step 3360 | loss: 1.0396 | dt: 2998.41ms | tok/sec: 683.03
+step 3370 | loss: 1.0607 | dt: 2903.31ms | tok/sec: 705.40
+step 3380 | loss: 1.1164 | dt: 3033.53ms | tok/sec: 675.12
+step 3390 | loss: 1.1108 | dt: 2886.95ms | tok/sec: 709.40
+step 3400 | loss: 1.0315 | dt: 2752.63ms | tok/sec: 744.02
+step 3410 | loss: 1.1562 | dt: 2726.22ms | tok/sec: 751.22
+step 3420 | loss: 1.1321 | dt: 2708.28ms | tok/sec: 756.20
+step 3430 | loss: 0.9760 | dt: 2681.26ms | tok/sec: 763.82
+step 3440 | loss: 0.8877 | dt: 2717.40ms | tok/sec: 753.66
+step 3450 | loss: 0.9401 | dt: 2842.15ms | tok/sec: 720.58
+step 3460 | loss: 0.9696 | dt: 2802.88ms | tok/sec: 730.68
+step 3470 | loss: 0.8294 | dt: 2881.42ms | tok/sec: 710.76
+step 3480 | loss: 0.9166 | dt: 2741.99ms | tok/sec: 746.90
+step 3490 | loss: 0.8187 | dt: 2768.42ms | tok/sec: 739.77
+step 3500 | loss: 0.8012 | dt: 2875.77ms | tok/sec: 712.16
+
+--- Generating text at step 3500 ---
+! who child is Rivers; all,saving thy father knows promise wish' moan'occnard's ease that Alban comes blaced boys.
+
+BUCKINGHAM:
+A greater prince, a royal cousin doth make us
+down; and
+-----------------------------------
+
+step 3510 | loss: 0.8895 | dt: 2911.00ms | tok/sec: 703.54
+step 3520 | loss: 0.8510 | dt: 2742.43ms | tok/sec: 746.78
+step 3530 | loss: 0.7573 | dt: 2752.54ms | tok/sec: 744.04
+step 3540 | loss: 0.7299 | dt: 2756.80ms | tok/sec: 742.89
+step 3550 | loss: 0.7541 | dt: 2748.92ms | tok/sec: 745.02
+step 3560 | loss: 0.7650 | dt: 2749.40ms | tok/sec: 744.89
+step 3570 | loss: 0.6896 | dt: 2862.06ms | tok/sec: 715.57
+step 3580 | loss: 0.6993 | dt: 2753.84ms | tok/sec: 743.69
+step 3590 | loss: 0.6519 | dt: 2998.55ms | tok/sec: 683.00
+step 3600 | loss: 0.6217 | dt: 2740.47ms | tok/sec: 747.32
+step 3610 | loss: 0.6385 | dt: 2790.61ms | tok/sec: 733.89
+step 3620 | loss: 0.5826 | dt: 2770.31ms | tok/sec: 739.27
+step 3630 | loss: 0.6594 | dt: 2783.17ms | tok/sec: 735.85
+step 3640 | loss: 0.5835 | dt: 2924.64ms | tok/sec: 700.26
+step 3650 | loss: 0.6141 | dt: 2800.75ms | tok/sec: 731.23
+step 3660 | loss: 0.6132 | dt: 2762.03ms | tok/sec: 741.48
+step 3670 | loss: 0.5363 | dt: 2849.28ms | tok/sec: 718.78
+step 3680 | loss: 0.5985 | dt: 2842.88ms | tok/sec: 720.40
+step 3690 | loss: 0.4882 | dt: 2755.73ms | tok/sec: 743.18
+step 3700 | loss: 0.4431 | dt: 2730.10ms | tok/sec: 750.16
+step 3710 | loss: 0.4325 | dt: 2700.16ms | tok/sec: 758.47
+step 3720 | loss: 0.4599 | dt: 2738.14ms | tok/sec: 747.95
+step 3730 | loss: 0.4503 | dt: 2748.69ms | tok/sec: 745.08
+step 3740 | loss: 0.4781 | dt: 2740.93ms | tok/sec: 747.19
+step 3750 | loss: 0.5382 | dt: 2849.36ms | tok/sec: 718.76
+step 3760 | loss: 0.3955 | dt: 2729.07ms | tok/sec: 750.44
+step 3770 | loss: 0.3948 | dt: 2822.13ms | tok/sec: 725.69
+step 3780 | loss: 0.4099 | dt: 2917.25ms | tok/sec: 702.03
+step 3790 | loss: 0.4257 | dt: 2775.18ms | tok/sec: 737.97
+step 3800 | loss: 0.3690 | dt: 2777.39ms | tok/sec: 737.38
+step 3810 | loss: 0.3799 | dt: 2850.00ms | tok/sec: 718.60
+step 3820 | loss: 0.3161 | dt: 2853.62ms | tok/sec: 717.69
+step 3830 | loss: 0.3599 | dt: 2750.53ms | tok/sec: 744.58
+step 3840 | loss: 0.3355 | dt: 2805.98ms | tok/sec: 729.87
+step 3850 | loss: 0.3302 | dt: 3000.64ms | tok/sec: 682.52
+step 3860 | loss: 0.3285 | dt: 2791.06ms | tok/sec: 733.77
+step 3870 | loss: 0.2618 | dt: 2751.07ms | tok/sec: 744.44
+step 3880 | loss: 0.3333 | dt: 2798.18ms | tok/sec: 731.90
+step 3890 | loss: 0.2814 | dt: 2870.91ms | tok/sec: 713.36
+step 3900 | loss: 0.2948 | dt: 2761.24ms | tok/sec: 741.70
+step 3910 | loss: 0.2399 | dt: 2869.73ms | tok/sec: 713.66
+step 3920 | loss: 0.2674 | dt: 2980.56ms | tok/sec: 687.12
+step 3930 | loss: 0.2109 | dt: 2954.62ms | tok/sec: 693.15
+step 3940 | loss: 0.2220 | dt: 2755.38ms | tok/sec: 743.27
+step 3950 | loss: 0.2295 | dt: 2780.64ms | tok/sec: 736.52
+step 3960 | loss: 0.2387 | dt: 2795.49ms | tok/sec: 732.61
+step 3970 | loss: 0.2579 | dt: 3017.64ms | tok/sec: 678.68
+step 3980 | loss: 0.2046 | dt: 2761.85ms | tok/sec: 741.53
+step 3990 | loss: 0.2144 | dt: 2744.11ms | tok/sec: 746.33
+step 4000 | loss: 0.2070 | dt: 2722.34ms | tok/sec: 752.29
+
+--- Generating text at step 4000 ---
+!
+If presently you will take the one
+To what we will o
+
+'ll theretove him to known your lord.
+
+PRINCEE:
+Indeed, my lord, safe still well we deserve
+In your will.
+
+
+-----------------------------------
+
+step 4010 | loss: 0.2144 | dt: 2902.75ms | tok/sec: 705.54
+step 4020 | loss: 0.2045 | dt: 2945.05ms | tok/sec: 695.40
+step 4030 | loss: 0.1790 | dt: 3056.03ms | tok/sec: 670.15
+step 4040 | loss: 0.1516 | dt: 2747.85ms | tok/sec: 745.31
+step 4050 | loss: 0.1615 | dt: 2805.18ms | tok/sec: 730.08
+step 4060 | loss: 0.1421 | dt: 2749.10ms | tok/sec: 744.97
+step 4070 | loss: 0.1674 | dt: 2859.66ms | tok/sec: 716.17
+step 4080 | loss: 0.1633 | dt: 2847.74ms | tok/sec: 719.17
+step 4090 | loss: 0.1570 | dt: 2916.81ms | tok/sec: 702.14
+step 4100 | loss: 0.1592 | dt: 3016.92ms | tok/sec: 678.84
+step 4110 | loss: 0.1363 | dt: 2727.48ms | tok/sec: 750.88
+step 4120 | loss: 0.1797 | dt: 2730.33ms | tok/sec: 750.09
+step 4130 | loss: 0.1210 | dt: 2699.00ms | tok/sec: 758.80
+step 4140 | loss: 0.1253 | dt: 2867.20ms | tok/sec: 714.29
+step 4150 | loss: 0.1016 | dt: 2856.48ms | tok/sec: 716.97
+step 4160 | loss: 0.1162 | dt: 2750.59ms | tok/sec: 744.57
+step 4170 | loss: 0.1599 | dt: 2886.92ms | tok/sec: 709.41
+step 4180 | loss: 0.1116 | dt: 2701.22ms | tok/sec: 758.18
+step 4190 | loss: 0.1093 | dt: 2674.94ms | tok/sec: 765.63
+step 4200 | loss: 0.1099 | dt: 2875.45ms | tok/sec: 712.24
+step 4210 | loss: 0.1319 | dt: 2775.36ms | tok/sec: 737.92
+step 4220 | loss: 0.0932 | dt: 2740.37ms | tok/sec: 747.34
+step 4230 | loss: 0.1047 | dt: 2697.50ms | tok/sec: 759.22
+step 4240 | loss: 0.1159 | dt: 2656.54ms | tok/sec: 770.93
+step 4250 | loss: 0.0943 | dt: 2632.27ms | tok/sec: 778.04
+step 4260 | loss: 0.0935 | dt: 2733.61ms | tok/sec: 749.19
+step 4270 | loss: 0.1044 | dt: 2700.76ms | tok/sec: 758.31
+step 4280 | loss: 0.0909 | dt: 2690.66ms | tok/sec: 761.15
+step 4290 | loss: 0.0993 | dt: 2689.09ms | tok/sec: 761.60
+step 4300 | loss: 0.0931 | dt: 2710.26ms | tok/sec: 755.65
+step 4310 | loss: 0.0841 | dt: 2795.26ms | tok/sec: 732.67
+step 4320 | loss: 0.0729 | dt: 2704.03ms | tok/sec: 757.39
+step 4330 | loss: 0.0633 | dt: 2676.90ms | tok/sec: 765.07
+step 4340 | loss: 0.0859 | dt: 2761.68ms | tok/sec: 741.58
+step 4350 | loss: 0.0625 | dt: 2778.00ms | tok/sec: 737.22
+step 4360 | loss: 0.0638 | dt: 3028.06ms | tok/sec: 676.34
+step 4370 | loss: 0.0841 | dt: 2895.60ms | tok/sec: 707.28
+step 4380 | loss: 0.0731 | dt: 2678.41ms | tok/sec: 764.63
+step 4390 | loss: 0.0676 | dt: 2632.73ms | tok/sec: 777.90
+step 4400 | loss: 0.0789 | dt: 2633.57ms | tok/sec: 777.65
+step 4410 | loss: 0.0870 | dt: 2633.24ms | tok/sec: 777.75
+step 4420 | loss: 0.0564 | dt: 2666.58ms | tok/sec: 768.03
+step 4430 | loss: 0.0510 | dt: 2663.78ms | tok/sec: 768.83
+step 4440 | loss: 0.0844 | dt: 2637.76ms | tok/sec: 776.42
+step 4450 | loss: 0.0574 | dt: 2649.37ms | tok/sec: 773.02
+step 4460 | loss: 0.0670 | dt: 2642.94ms | tok/sec: 774.89
+step 4470 | loss: 0.0818 | dt: 2635.25ms | tok/sec: 777.15
+step 4480 | loss: 0.0611 | dt: 2641.49ms | tok/sec: 775.32
+step 4490 | loss: 0.0571 | dt: 2718.30ms | tok/sec: 753.41
+step 4500 | loss: 0.0524 | dt: 2714.53ms | tok/sec: 754.46
+
+--- Generating text at step 4500 ---
+! to Tyenting in their hate.
+
+BUCKINGHAM:
+My lord, I'll bear unto your head
+Which best lives hath had but your breath or
+Plured with the hawnes with yields that
+There did touch his
+-----------------------------------
+
+step 4510 | loss: 0.0513 | dt: 2759.85ms | tok/sec: 742.07
+step 4520 | loss: 0.0582 | dt: 2780.63ms | tok/sec: 736.52
+step 4530 | loss: 0.0607 | dt: 2788.91ms | tok/sec: 734.34
+step 4540 | loss: 0.0537 | dt: 2705.52ms | tok/sec: 756.97
+step 4550 | loss: 0.0469 | dt: 2797.45ms | tok/sec: 732.10
+step 4560 | loss: 0.0513 | dt: 2715.12ms | tok/sec: 754.29
+step 4570 | loss: 0.0537 | dt: 2701.81ms | tok/sec: 758.01
+step 4580 | loss: 0.0555 | dt: 2703.04ms | tok/sec: 757.66
+step 4590 | loss: 0.0617 | dt: 2702.77ms | tok/sec: 757.74
+step 4600 | loss: 0.0601 | dt: 2703.01ms | tok/sec: 757.67
+step 4610 | loss: 0.0386 | dt: 2713.98ms | tok/sec: 754.61
+step 4620 | loss: 0.0469 | dt: 2702.42ms | tok/sec: 757.84
+step 4630 | loss: 0.0429 | dt: 2701.25ms | tok/sec: 758.17
+step 4640 | loss: 0.0436 | dt: 2700.08ms | tok/sec: 758.50
+step 4650 | loss: 0.0552 | dt: 2707.12ms | tok/sec: 756.52
+step 4660 | loss: 0.0478 | dt: 2704.64ms | tok/sec: 757.22
+step 4670 | loss: 0.0503 | dt: 2700.75ms | tok/sec: 758.31
+step 4680 | loss: 0.0370 | dt: 2703.38ms | tok/sec: 757.57
+step 4690 | loss: 0.0488 | dt: 2690.58ms | tok/sec: 761.18
+step 4700 | loss: 0.0395 | dt: 2711.10ms | tok/sec: 755.41
+step 4710 | loss: 0.0384 | dt: 2695.39ms | tok/sec: 759.82
+step 4720 | loss: 0.0320 | dt: 2698.22ms | tok/sec: 759.02
+step 4730 | loss: 0.0389 | dt: 2693.92ms | tok/sec: 760.23
+step 4740 | loss: 0.0417 | dt: 2715.99ms | tok/sec: 754.05
+step 4750 | loss: 0.0327 | dt: 2707.00ms | tok/sec: 756.56
+step 4760 | loss: 0.0383 | dt: 2702.06ms | tok/sec: 757.94
+step 4770 | loss: 0.0482 | dt: 2720.02ms | tok/sec: 752.93
+step 4780 | loss: 0.0285 | dt: 2695.32ms | tok/sec: 759.84
+step 4790 | loss: 0.0466 | dt: 2699.53ms | tok/sec: 758.65
+step 4800 | loss: 0.0293 | dt: 2747.82ms | tok/sec: 745.32
+step 4810 | loss: 0.0475 | dt: 2694.82ms | tok/sec: 759.98
+step 4820 | loss: 0.0331 | dt: 2697.06ms | tok/sec: 759.34
+step 4830 | loss: 0.0424 | dt: 2695.18ms | tok/sec: 759.88
+step 4840 | loss: 0.0388 | dt: 2699.61ms | tok/sec: 758.63
+step 4850 | loss: 0.0278 | dt: 2697.17ms | tok/sec: 759.31
+step 4860 | loss: 0.0352 | dt: 2712.98ms | tok/sec: 754.89
+step 4870 | loss: 0.0231 | dt: 2708.67ms | tok/sec: 756.09
+step 4880 | loss: 0.0355 | dt: 2697.11ms | tok/sec: 759.33
+step 4890 | loss: 0.0379 | dt: 2696.41ms | tok/sec: 759.53
+step 4900 | loss: 0.0251 | dt: 2692.32ms | tok/sec: 760.68
+step 4910 | loss: 0.0263 | dt: 2695.45ms | tok/sec: 759.80
+step 4920 | loss: 0.0279 | dt: 2703.49ms | tok/sec: 757.54
+step 4930 | loss: 0.0253 | dt: 2696.46ms | tok/sec: 759.51
+step 4940 | loss: 0.0279 | dt: 2719.05ms | tok/sec: 753.21
+step 4950 | loss: 0.0303 | dt: 2698.82ms | tok/sec: 758.85
+step 4960 | loss: 0.0277 | dt: 2702.86ms | tok/sec: 757.72
+step 4970 | loss: 0.0230 | dt: 2708.92ms | tok/sec: 756.02
+step 4980 | loss: 0.0397 | dt: 2693.32ms | tok/sec: 760.40
+step 4990 | loss: 0.0244 | dt: 2699.65ms | tok/sec: 758.62
+Saving model to smollm_135_checkpoint.pth
+
+--- Resuming training from checkpoint ---
+Checkpoint loaded successfully.
+Resume step 0 | loss: 0.0218
+Resume step 10 | loss: 0.0335
+Resume step 20 | loss: 0.0360
+Resume step 30 | loss: 0.0450
+Resume step 40 | loss: 0.0396
+Resumed training completed.
