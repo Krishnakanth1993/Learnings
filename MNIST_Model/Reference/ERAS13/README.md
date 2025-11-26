@@ -99,6 +99,75 @@ Saving model to smollm_135_checkpoint.pth
 
 ---
 
+### Checkpointing & Resume Training
+
+This implementation includes a robust checkpointing system that allows you to save and resume training at any point.
+
+#### What's Saved in the Checkpoint
+
+The checkpoint file (`smollm_135_checkpoint.pth`) contains:
+
+| Component | Description |
+|-----------|-------------|
+| `step` | Current training step number (e.g., 5000) |
+| `model_state_dict` | Complete model weights and parameters |
+| `optimizer_state_dict` | Optimizer state (learning rates, momentum, etc.) |
+| `data_loader_position` | Current position in the dataset |
+| `config` | Model configuration (architecture settings) |
+
+#### Saving a Checkpoint
+
+Checkpoints are automatically saved after training completes (at step 5000):
+
+```python
+checkpoint = {
+    'step': max_steps,
+    'model_state_dict': model.state_dict(),
+    'optimizer_state_dict': optimizer.state_dict(),
+    'data_loader_position': train_loader.current_position,
+    'config': config
+}
+torch.save(checkpoint, 'smollm_135_checkpoint.pth')
+```
+
+#### Resuming Training from Checkpoint
+
+To resume training from a saved checkpoint:
+
+```python
+# Load checkpoint
+checkpoint = torch.load('smollm_135_checkpoint.pth', weights_only=False)
+start_step = checkpoint['step']
+
+# Restore model
+model = SmolLM(config)
+model.to(device)
+model.load_state_dict(checkpoint['model_state_dict'])
+
+# Restore optimizer
+optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
+optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+
+# Restore data loader position
+train_loader.current_position = checkpoint['data_loader_position']
+
+# Continue training from step 5001
+for i in range(additional_steps):
+    current_step = start_step + i + 1
+    # ... training code ...
+```
+
+#### Resume Training Example
+
+The notebook demonstrates resuming training by:
+1. Loading the checkpoint saved at step 5000
+2. Restoring all training state (model, optimizer, data position)
+3. Continuing training for 50 more steps (5001 → 5050)
+
+This ensures seamless continuation without losing any training progress.
+
+---
+
 ### How to Run
 
 ```bash
@@ -140,7 +209,7 @@ python train.py
 - SwiGLU: [Shazeer, 2020](https://arxiv.org/abs/2002.05202)
 - RoPE: [Su et al., 2021](https://arxiv.org/abs/2104.09864)
 - GQA: [Ainslie et al., 2023](https://arxiv.org/abs/2305.13245)
-- Inspiration: Andrej Karpathy’s [nanoGPT](https://github.com/karpathy/nanoGPT)
+- Inspiration: Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT)
 
 ---
 
