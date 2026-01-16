@@ -2,7 +2,7 @@
 
 NeuralNav is an interactive reinforcement learning simulation where a self-driving car learns to navigate a city map using a **Deep Q-Network (DQN)**. This project is designed as an educational assignment for the **TSAI ERA** program, focusing on hyperparameter tuning and understanding RL dynamics.
 
-![NeuralNav UI](CityMap.png)
+![NeuralNav UI](Mangalore_CityMap.png)
 
 ## 🌟 Key Features
 
