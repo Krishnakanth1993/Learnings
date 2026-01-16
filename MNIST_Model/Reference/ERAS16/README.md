@@ -2,6 +2,8 @@
 
 A comprehensive implementation of the **Value Iteration algorithm** for a 4×4 GridWorld environment with real-time interactive visualization.
 
+![GridWorld Visualization](images/gridworld_snapshot.png)
+
 ## 📋 Overview
 
 This project demonstrates the **Bellman Equation** for value iteration in a reinforcement learning context. An agent starts at the top-left corner (state 0) and tries to reach the bottom-right corner (state 15) in a 4×4 grid. The agent moves with equal probability in all four directions (up, down, left, right).
@@ -312,7 +314,8 @@ The visualization features a **premium, modern design**:
 ## 🐛 Troubleshooting
 
 **Issue:** Visualization shows "No data - Run Python script first"
-- **Solution:** Make sure to run `gridworld_value_iteration.py` first to generate `gridworld_history.json`
+- **Solution 1:** Make sure to run `gridworld_value_iteration.py` first to generate `gridworld_history.json`.
+- **Solution 2 (CORS):** If you open the HTML file directly (via `file://`), browsers may block the automatic loading of the JSON file. Click the **"📁 Load Data"** button in the visualization and manually select the `gridworld_history.json` file.
 
 **Issue:** Web server port 8000 already in use
 - **Solution:** Use a different port: `python -m http.server 8080`

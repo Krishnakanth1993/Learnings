@@ -408,6 +408,8 @@
                     <button id="resetBtn" onclick="resetVisualization()">🔄 Reset</button>
                     <button id="stepBtn" onclick="stepVisualization()">⏭ Step</button>
                     <button class="toggle-policy" id="togglePolicyBtn" onclick="togglePolicy()" disabled>🎯 Show Policy</button>
+                    <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleFileSelect(event)">
+                    <button id="loadBtn" onclick="document.getElementById('jsonFileInput').click()" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">📁 Load Data</button>
                 </div>
 
                 <div class="stat-card" style="margin-top: 20px;">
@@ -541,22 +543,50 @@
         async function loadData() {
             try {
                 const response = await fetch('gridworld_history.json');
+                if (!response.ok) throw new Error('Fetch failed');
                 gridData = await response.json();
-                console.log('Data loaded:', gridData);
-                
-                // Display policy if available
-                if (gridData.final_policy) {
-                    displayPolicy();
-                    document.getElementById('togglePolicyBtn').disabled = false;
-                }
-                
-                updateStatus('Ready', 'stopped');
+                processLoadedData();
                 return true;
             } catch (error) {
-                console.error('Error loading data:', error);
-                updateStatus('No data - Run Python script first', 'stopped');
+                console.warn('Auto-load failed (likely CORS). Please use the "Load Data" button.', error);
+                updateStatus('Click "Load Data" to select gridworld_history.json', 'stopped');
                 return false;
             }
+        }
+
+        // Handle manual file selection
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    gridData = JSON.parse(e.target.result);
+                    processLoadedData();
+                    updateStatus('Data Loaded Successfully', 'stopped');
+                } catch (err) {
+                    console.error('Error parsing JSON:', err);
+                    alert('Invalid JSON file!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Process data after loading (either auto or manual)
+        function processLoadedData() {
+            console.log('Data processed:', gridData);
+            
+            // Display policy if available
+            if (gridData.final_policy) {
+                displayPolicy();
+                document.getElementById('togglePolicyBtn').disabled = false;
+            }
+            
+            updateStatus('Ready', 'stopped');
+            
+            // Reset visualization state
+            resetVisualization();
         }
 
         // Update status
