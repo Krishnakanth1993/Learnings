@@ -55,19 +55,54 @@ The application is designed to run on CPU (Hugging Face free tier) while maintai
 
 The core of this project uses **Stable Diffusion v1.4**, a Latent Diffusion Model that operates in a compressed latent space rather than pixel space.
 
-```
-Image Space (512×512×3) → VAE Encoder → Latent Space (64×64×4) → Diffusion → VAE Decoder → Image
+```mermaid
+flowchart LR
+    subgraph ImageSpace [Image Space]
+        Img1[Input Image<br/>512x512x3]
+        Img2[Output Image<br/>512x512x3]
+    end
+    
+    subgraph Latent [Latent Space]
+        L1[Encoded<br/>64x64x4]
+        L2[Diffusion<br/>Process]
+        L3[Denoised<br/>64x64x4]
+    end
+    
+    Img1 -->|VAE Encoder| L1
+    L1 --> L2
+    L2 --> L3
+    L3 -->|VAE Decoder| Img2
 ```
 
 **Key Components:**
-- **VAE (Variational Autoencoder)**: Compresses images to/from latent space
-- **U-Net**: Predicts noise at each denoising step
-- **CLIP Text Encoder**: Converts text prompts to embeddings
-- **Scheduler (LMS)**: Controls the denoising process
+
+| Component | Purpose | Size |
+|-----------|---------|------|
+| **VAE** | Compress/decompress images | 512×512 ↔ 64×64 |
+| **U-Net** | Predict noise at each step | 860M params |
+| **CLIP Text Encoder** | Convert text to embeddings | 77 tokens × 768 dim |
+| **LMS Scheduler** | Control denoising trajectory | 50 steps default |
 
 ### 2. Textual Inversion
 
 Textual Inversion learns new "words" (embeddings) that represent specific concepts or styles without modifying the model weights.
+
+```mermaid
+flowchart LR
+    subgraph Standard [Standard Flow]
+        P1[Prompt: A cat] --> T1[Tokenizer]
+        T1 --> E1[Existing Embeddings]
+        E1 --> TE1[Text Encoder]
+    end
+    
+    subgraph TI [With Textual Inversion]
+        P2["Prompt: A cat in style of ‹8bit›"] --> T2[Tokenizer]
+        BIN[8bit.bin] --> Inject[Inject Embedding]
+        T2 --> Inject
+        Inject --> E2[Modified Embeddings]
+        E2 --> TE2[Text Encoder]
+    end
+```
 
 ```python
 # Inject learned embedding into the text encoder
@@ -85,13 +120,34 @@ text_encoder.get_input_embeddings().weight[token_id] = style_embedding
 
 CFG improves image quality by combining conditional and unconditional predictions:
 
+```mermaid
+flowchart LR
+    subgraph Predictions
+        Latent[Latent Input] --> UNet1[U-Net with Text]
+        Latent --> UNet2[U-Net Empty Text]
+        UNet1 --> Cond[Conditional Noise]
+        UNet2 --> Uncond[Unconditional Noise]
+    end
+    
+    subgraph CFGFormula [CFG Combination]
+        Uncond --> Add[+]
+        Cond --> Sub[-]
+        Uncond --> Sub
+        Sub --> Mult[× guidance_scale]
+        Mult --> Add
+        Add --> Final[Final Noise Pred]
+    end
+```
+
 ```python
 noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
 ```
 
-- `guidance_scale = 1.0`: Pure unconditional generation
-- `guidance_scale = 7.5`: Balanced (default)
-- `guidance_scale > 10`: Stronger prompt adherence, may reduce diversity
+| Guidance Scale | Effect |
+|----------------|--------|
+| `1.0` | Pure unconditional generation |
+| `7.5` | Balanced quality/diversity (default) |
+| `> 10` | Stronger prompt adherence, less diversity |
 
 ### 4. Custom Loss Guidance (Ice Crystal Effect)
 
@@ -120,6 +176,25 @@ latents = latents - grad * sigma**2  # Apply guidance
 
 Python generators enable real-time updates during long-running generation:
 
+```mermaid
+sequenceDiagram
+    participant Generator
+    participant Gradio
+    participant User
+
+    Generator->>Generator: Start denoising loop
+    
+    loop Every N steps
+        Generator->>Generator: Decode latents to preview
+        Generator-->>Gradio: yield {step, image, None}
+        Gradio-->>User: Update live preview
+    end
+    
+    Generator->>Generator: Create GIF from frames
+    Generator-->>Gradio: yield {final, image, gif_path}
+    Gradio-->>User: Show final + download GIF
+```
+
 ```python
 def generate_with_style_streaming(...):
     for i, t in enumerate(scheduler.timesteps):
@@ -138,42 +213,118 @@ def generate_with_style_streaming(...):
 
 ### System Architecture
 
+```mermaid
+flowchart TB
+    subgraph UI [Gradio Interface]
+        StyleSelect[Style Selection]
+        Params[Parameters]
+        IceToggle[Ice Crystal Toggle]
+        GenBtn[Generate Button]
+    end
+
+    subgraph Pipeline [Generation Pipeline]
+        LoadEmbed[Load Style Embedding]
+        EncodePrompt[CLIP Encode Prompt]
+        InitLatents[Initialize Random Latents]
+        
+        subgraph Denoise [Denoising Loop - 50 Steps]
+            UNet[U-Net Predict Noise]
+            CFG[CFG Combine]
+            IceCrystal[Ice Crystal Guidance]
+            Scheduler[Scheduler Step]
+        end
+        
+        VAEDecode[VAE Decode]
+        CreateGIF[Create GIF]
+    end
+
+    subgraph Output [Outputs]
+        Preview[Live Preview]
+        FinalImage[Final Image]
+        GIF[Progress GIF]
+    end
+
+    UI --> LoadEmbed
+    LoadEmbed --> EncodePrompt
+    EncodePrompt --> InitLatents
+    InitLatents --> UNet
+    UNet --> CFG
+    CFG --> IceCrystal
+    IceCrystal --> Scheduler
+    Scheduler -->|Loop| UNet
+    Scheduler -->|Every N Steps| VAEDecode
+    VAEDecode --> Preview
+    Scheduler -->|Complete| VAEDecode
+    VAEDecode --> FinalImage
+    VAEDecode --> CreateGIF
+    CreateGIF --> GIF
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      Gradio Interface                            │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
-│  │ Style Select │  │ Parameters   │  │ Ice Crystal Toggle   │  │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                   Generation Pipeline                            │
-│  ┌────────────┐    ┌────────────┐    ┌────────────────────┐    │
-│  │ Load Style │ →  │ Encode     │ →  │ Initialize Latents │    │
-│  │ Embedding  │    │ Prompt     │    │                    │    │
-│  └────────────┘    └────────────┘    └────────────────────┘    │
-│                                              │                   │
-│                              ┌───────────────┘                   │
-│                              ▼                                   │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │                   Denoising Loop                          │  │
-│  │  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐  │  │
-│  │  │ U-Net   │ → │ CFG     │ → │ Ice     │ → │Scheduler│  │  │
-│  │  │ Predict │   │ Combine │   │ Crystal │   │ Step    │  │  │
-│  │  └─────────┘   └─────────┘   └─────────┘   └─────────┘  │  │
-│  │                     │                                     │  │
-│  │                     ▼ (every N steps)                    │  │
-│  │              ┌─────────────┐                              │  │
-│  │              │ VAE Decode  │ → Preview Image → yield     │  │
-│  │              └─────────────┘                              │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌────────────────┐    ┌────────────────┐                       │
-│  │ Final Decode   │ →  │ Create GIF     │ → Final Output        │
-│  └────────────────┘    └────────────────┘                       │
-└─────────────────────────────────────────────────────────────────┘
+
+### Denoising Process Detail
+
+```mermaid
+flowchart LR
+    subgraph Input
+        Noise[Random Noise t=T]
+    end
+    
+    subgraph Steps [Iterative Denoising]
+        S1[Step 1] --> S2[Step 2]
+        S2 --> S3[...]
+        S3 --> SN[Step 50]
+    end
+    
+    subgraph EachStep [Each Step Contains]
+        direction TB
+        A[Latent Input] --> B[U-Net Forward]
+        B --> C[Noise Prediction]
+        C --> D[CFG Scaling]
+        D --> E{Ice Crystal?}
+        E -->|Yes| F[Compute Loss Gradient]
+        F --> G[Modify Latents]
+        E -->|No| H[Skip]
+        G --> I[Scheduler Update]
+        H --> I
+    end
+    
+    subgraph Final [Output]
+        Image[Generated Image]
+    end
+    
+    Noise --> S1
+    SN --> Image
+```
+
+### Ice Crystal Guidance Flow
+
+```mermaid
+flowchart TD
+    Latents[Current Latents] --> Decode[VAE Decode to Image]
+    Decode --> Loss[Compute Ice Crystal Loss]
+    
+    subgraph LossComponents [Loss Components]
+        Edge[Sobel Edge Detection]
+        HiFreq[Laplacian High-Freq]
+        Bright[Selective Brightness]
+        Cool[Cool Tone Shift]
+        Texture[Texture Variance]
+    end
+    
+    Loss --> Edge
+    Loss --> HiFreq
+    Loss --> Bright
+    Loss --> Cool
+    Loss --> Texture
+    
+    Edge --> Combine[Weighted Sum]
+    HiFreq --> Combine
+    Bright --> Combine
+    Cool --> Combine
+    Texture --> Combine
+    
+    Combine --> Grad[Backprop Gradient]
+    Grad --> Update[Update Latents]
+    Update --> NewLatents[Modified Latents]
 ```
 
 ### File Structure
@@ -192,26 +343,90 @@ project/
     └── smiling-friend-style_learned_embeds.bin
 ```
 
+### Model Components
+
+```mermaid
+flowchart LR
+    subgraph TextProcessing [Text Processing]
+        Prompt[Text Prompt] --> Tokenizer[CLIP Tokenizer]
+        Tokenizer --> TextEnc[CLIP Text Encoder]
+        StyleEmbed[Style Embedding .bin] --> TextEnc
+        TextEnc --> Embeddings[Text Embeddings]
+    end
+
+    subgraph LatentSpace [Latent Space Operations]
+        Noise[Random Noise] --> Latents[Latents 64x64x4]
+        Embeddings --> UNet[U-Net]
+        Latents --> UNet
+        UNet --> NoisePred[Predicted Noise]
+        NoisePred --> Sched[LMS Scheduler]
+        Sched --> Latents
+    end
+
+    subgraph ImageSpace [Image Space]
+        Latents --> VAE[VAE Decoder]
+        VAE --> Image[Image 512x512x3]
+    end
+```
+
 ### Data Flow
 
-1. **Input Processing**
-   - User provides prompt with `<style>` placeholder
-   - Style embedding loaded and injected into text encoder
-   - Prompt tokenized and encoded via CLIP
+```mermaid
+sequenceDiagram
+    participant User
+    participant Gradio
+    participant Pipeline
+    participant Models
+    participant Output
 
-2. **Latent Initialization**
-   - Random latents generated from seed
-   - Scaled by scheduler's initial noise sigma
+    User->>Gradio: Enter prompt + select style
+    Gradio->>Pipeline: Start generation
+    
+    rect rgb(70, 70, 100)
+        Note over Pipeline: 1. Input Processing
+        Pipeline->>Models: Load style embedding
+        Pipeline->>Models: Encode prompt via CLIP
+    end
+    
+    rect rgb(70, 100, 70)
+        Note over Pipeline: 2. Initialize Latents
+        Pipeline->>Pipeline: Generate random noise from seed
+        Pipeline->>Pipeline: Scale by initial sigma
+    end
+    
+    rect rgb(100, 70, 70)
+        Note over Pipeline: 3. Denoising Loop (50 steps)
+        loop Each timestep
+            Pipeline->>Models: U-Net predict noise
+            Pipeline->>Pipeline: Apply CFG
+            Pipeline->>Pipeline: Optional Ice Crystal guidance
+            Pipeline->>Models: Scheduler step
+            alt Every N steps
+                Pipeline->>Models: VAE decode preview
+                Pipeline-->>Gradio: Yield preview image
+            end
+        end
+    end
+    
+    rect rgb(100, 100, 70)
+        Note over Pipeline: 4. Output Generation
+        Pipeline->>Models: VAE decode final image
+        Pipeline->>Pipeline: Create GIF from frames
+        Pipeline->>Output: Final image + GIF
+    end
+    
+    Output-->>Gradio: Display results
+    Gradio-->>User: Show image + download GIF
+```
 
-3. **Iterative Denoising** (50 steps default)
-   - U-Net predicts noise conditioned on text
-   - CFG combines conditional/unconditional predictions
-   - Optional: Ice crystal loss guides latents
-   - Scheduler computes previous latent state
+### Data Flow Summary
 
-4. **Output Generation**
-   - VAE decodes final latents to image
-   - Intermediate frames compiled to GIF
+| Phase | Description |
+|-------|-------------|
+| **1. Input Processing** | Load style embedding, inject into text encoder, encode prompt via CLIP |
+| **2. Latent Initialization** | Generate random latents from seed, scale by scheduler sigma |
+| **3. Iterative Denoising** | 50 steps: U-Net → CFG → Ice Crystal → Scheduler, yield previews |
+| **4. Output Generation** | VAE decode final latents, compile frames to GIF |
 
 ---
 
