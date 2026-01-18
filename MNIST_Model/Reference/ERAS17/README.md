@@ -187,25 +187,119 @@ We've created comprehensive guides to help you understand the concepts used in t
 
 ## 🏗️ Architecture
 
+### System Overview
+
+```mermaid
+flowchart TB
+    subgraph Environment["🌍 Environment"]
+        Map["City Map"]
+        Car["🚗 Car Agent"]
+        Target["🎯 Target"]
+    end
+
+    subgraph Sensors["📡 Perception"]
+        S0["Sensor 0"]
+        S1["Sensor 1"]
+        S2["Sensor 2"]
+        S3["Sensor 3"]
+        S4["Sensor 4"]
+        S5["Sensor 5"]
+        S6["Sensor 6"]
+    end
+
+    subgraph Brain["🧠 CarBrain (TD3)"]
+        Actor["Actor Network"]
+        Critic1["Critic 1"]
+        Critic2["Critic 2"]
+        Buffer["Replay Buffer"]
+    end
+
+    Car --> Sensors
+    Sensors --> |State| Actor
+    Actor --> |Action| Car
+    Car --> |Experience| Buffer
+    Buffer --> |Mini-batch| Critic1
+    Buffer --> |Mini-batch| Critic2
+    Critic1 --> |Q-values| Actor
+    Critic2 --> |Q-values| Actor
+```
+
 ### State Space (10 dimensions)
-```python
-[sensor_0, sensor_1, ..., sensor_6,  # 7 distance sensors
- sin(angle_to_target),                # Relative angle (sine)
- cos(angle_to_target),                # Relative angle (cosine)
- normalized_distance]                 # Distance to target
+
+```mermaid
+flowchart LR
+    subgraph Sensors["Distance Sensors (7)"]
+        direction TB
+        S0["sensor_0"]
+        S1["sensor_1"]
+        S2["sensor_2"]
+        S3["sensor_3"]
+        S4["sensor_4"]
+        S5["sensor_5"]
+        S6["sensor_6"]
+    end
+
+    subgraph Target["Target Info (3)"]
+        direction TB
+        Sin["sin(angle)"]
+        Cos["cos(angle)"]
+        Dist["norm_distance"]
+    end
+
+    Sensors --> State["State Vector\n(10 dims)"]
+    Target --> State
 ```
 
 ### Action Space (2 dimensions)
-```python
-[steering,  # Range: [-5.0, 5.0] degrees/step
- speed]     # Range: [0.5, 5.0] pixels/step
+
+```mermaid
+flowchart LR
+    subgraph Actions["Continuous Actions"]
+        Steering["🔄 Steering\n[-5.0, 5.0] deg/step"]
+        Speed["⚡ Speed\n[0.5, 5.0] px/step"]
+    end
+
+    Actor["Actor\nNetwork"] --> Actions
+    Actions --> Car["🚗 Car\nMovement"]
 ```
 
-### Neural Networks
+### Neural Network Architecture
+
+```mermaid
+flowchart LR
+    subgraph Actor["Actor Network (Policy)"]
+        direction LR
+        A_In["Input\n(10)"] --> A_H1["Hidden 1\n(400)\nReLU"]
+        A_H1 --> A_H2["Hidden 2\n(300)\nReLU"]
+        A_H2 --> A_Out["Output\n(2)\nTanh"]
+    end
+
+    subgraph Critic["Twin Critics (Q-Networks)"]
+        direction LR
+        C_In["State + Action\n(12)"] --> C_H1["Hidden 1\n(400)\nReLU"]
+        C_H1 --> C_H2["Hidden 2\n(300)\nReLU"]
+        C_H2 --> C_Out["Q-Value\n(1)"]
+    end
+
+    Actor -.-> |"Action"| Critic
 ```
-Actor:  State(10) → [400] → [300] → Action(2)
-Critic: State(10) + Action(2) → [400] → [300] → Q-value(1)
-        (Twin critics for reduced overestimation)
+
+### TD3 Training Flow
+
+```mermaid
+flowchart TD
+    subgraph Training["TD3 Training Loop"]
+        Sample["Sample Mini-batch\nfrom Replay Buffer"]
+        Sample --> Noise["Add Target Policy\nNoise (clipped)"]
+        Noise --> TargetQ["Compute Target Q\nmin(Q1', Q2')"]
+        TargetQ --> CriticLoss["Update Critics\n(MSE Loss)"]
+        CriticLoss --> Check{"Step % 2 == 0?"}
+        Check --> |Yes| ActorUpdate["Update Actor\n(Policy Gradient)"]
+        Check --> |No| Skip["Skip Actor Update"]
+        ActorUpdate --> Polyak["Soft Update\nTarget Networks\n(τ = 0.003)"]
+        Skip --> Next["Next Step"]
+        Polyak --> Next
+    end
 ```
 
 ---
@@ -376,19 +470,51 @@ Step 1000: AngleDiff=45.2, Turn=2.34, Speed=3.21, Dist=123.4, DistDiff=-5.2
 
 ### Code Structure
 
-```
-Autonomous_DrivingRL.py
-├── ReplayBuffer          # Experience storage
-├── Actor                 # Policy network (state → action)
-├── Critic                # Value network (state, action → Q-value)
-├── CarBrain              # Main RL agent
-│   ├── __init__()        # Network initialization
-│   ├── get_state()       # Sensor readings + target info
-│   ├── step()            # Apply action, compute reward
-│   ├── optimize()        # TD3 training step
-│   └── select_action()   # Choose action from policy
-└── NeuralNavApp          # PyQt6 GUI application
-    └── game_loop()       # Main training loop
+```mermaid
+classDiagram
+    class ReplayBuffer {
+        +storage: deque
+        +add(state, action, reward, next_state, done)
+        +sample(batch_size)
+    }
+
+    class Actor {
+        +fc1: Linear(10, 400)
+        +fc2: Linear(400, 300)
+        +fc3: Linear(300, 2)
+        +forward(state) → action
+    }
+
+    class Critic {
+        +fc1: Linear(12, 400)
+        +fc2: Linear(400, 300)
+        +fc3: Linear(300, 1)
+        +forward(state, action) → Q-value
+    }
+
+    class CarBrain {
+        +actor: Actor
+        +critic_1: Critic
+        +critic_2: Critic
+        +memory: ReplayBuffer
+        +__init__()
+        +get_state() → state
+        +step(action) → reward, done
+        +optimize()
+        +select_action(state) → action
+    }
+
+    class NeuralNavApp {
+        +brain: CarBrain
+        +game_loop()
+        +setup_ui()
+        +update_charts()
+    }
+
+    CarBrain --> Actor : uses
+    CarBrain --> Critic : uses (×2)
+    CarBrain --> ReplayBuffer : stores experience
+    NeuralNavApp --> CarBrain : controls
 ```
 
 ---
